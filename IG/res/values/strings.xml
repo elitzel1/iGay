@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">J</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string-array name = "drawable">
+        <item>Home</item>
+        <item>Populares</item>
+        <item>Categorías</item>
+        <item>Ajustes</item>
+        <item>Notificaciones</item>
+    </string-array>
+    
+    <string-array name = "categorias">
+        <item>Antro</item>
+        <item>Bar</item>
+        <item>Cultural</item>
+        <item>Restauran</item>
+        <item>Hotel</item>
+        <item>Playa</item>
+    </string-array>
+    
+	<string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+     <string name="action_search">Buscar</string>
+</resources>
