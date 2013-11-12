@@ -22,7 +22,7 @@ public class MapFragmetn extends Fragment {
 	LatLng coordenadas;
 	
 	private void setUpGPS(){
-		GPSTrakcer gps = new GPSTrakcer(getActivity().getApplicationContext());
+		GPSTrakcer gps = new GPSTrakcer(getActivity().getBaseContext());
 		if(gps.canGetLocation())
 		{
 			coordenadas = new LatLng(gps.getLatitude(), gps.getLongitude());
@@ -89,9 +89,9 @@ public class MapFragmetn extends Fragment {
 
 	public void setUpMarker(){
 		
-		//mapa.addMarker(new MarkerOptions().position(new LatLng(19.33283,-99.18557)).title("Las islas"));
-		//mapa.addMarker(new MarkerOptions().position(new LatLng(19.331473,-99.331473)).title("Algo aqui"));
-		//mapa.addMarker(new MarkerOptions().position(new LatLng(19.331924,-99.189216)).title("Aqui hay otra cosa"));
+		mapa.addMarker(new MarkerOptions().position(new LatLng(19.33283,-99.18557)).title("Las islas"));
+		mapa.addMarker(new MarkerOptions().position(new LatLng(19.331473,-99.331473)).title("Algo aqui"));
+		mapa.addMarker(new MarkerOptions().position(new LatLng(19.331924,-99.189216)).title("Aqui hay otra cosa"));
 
 	}
 }

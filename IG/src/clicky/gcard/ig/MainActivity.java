@@ -78,7 +78,23 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	private void setUpDrawer() {
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		toggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer,
-				R.string.drawer_open, R.string.drawer_close);
+				R.string.drawer_open, R.string.drawer_close){
+			
+			  public void onDrawerClosed(View arg0) {
+//				  ActionBar actionBar = getSupportActionBar();
+//			        actionBar.setTitle("EJ ActionBar");
+			    }
+			 
+			    public void onDrawerOpened(View arg0) {
+			    	ActionBar actionBar = getSupportActionBar();
+			        actionBar.setTitle("Menú");
+			        drawer.bringToFront();
+//			        drawer.requestLayout();
+			    }
+		};
+		
+		
+		
 		options = getResources().getStringArray(R.array.drawable);
 		drawerMenu = (ListView) findViewById(R.id.left_drawer);
 		drawerMenu.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
@@ -88,8 +104,6 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		drawer.setDrawerListener(toggle);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
-		// just styling option add shadow the right edge of the drawer
-		drawer.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		drawerMenu.setOnItemClickListener(this);
 	}
 
@@ -127,7 +141,10 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		// TODO Auto-generated method stub
+//		if(position == 0)
+//			return;
 		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction trans = manager.beginTransaction();
 		Bundle b=new Bundle();
 		switch (position){
 		case 0:
@@ -136,17 +153,23 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			Toast.makeText(getApplicationContext(),"Home", Toast.LENGTH_SHORT).show();
 			break;
 		case 1:
+			if(manager.getBackStackEntryCount()>0)
+				manager.popBackStack();
 			Listas fragmentPop = new Listas();
 			b.putInt("tipo", 0);
 			fragmentPop.setArguments(b);
-			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentPop).commit();
+			trans.replace(R.id.content_frame, fragmentPop);
+			trans.addToBackStack(null);
+			trans.commit();
 			Toast.makeText(getApplicationContext(),"Populares", Toast.LENGTH_SHORT).show();
 			break;
 		case 2:
+			if(manager.getBackStackEntryCount()>0)
+				manager.popBackStack();
 			Listas fragmentCat = new Listas();
 			b.putInt("tipo", 1);
 			fragmentCat.setArguments(b);
-			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentCat).commit();
+			trans.replace(R.id.content_frame, fragmentCat).addToBackStack(null).commit();
 			Toast.makeText(getApplicationContext(),"Categorías", Toast.LENGTH_SHORT).show();
 			break;
 		case 3:
@@ -163,29 +186,5 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		drawer.closeDrawer(drawerMenu);
 	}
 	
-	  public void onDrawerClosed(View arg0) {
-		  ActionBar actionBar = getSupportActionBar();
-	        actionBar.setTitle("EJ ActionBar");
-	    }
-	 
-	    public void onDrawerOpened(View arg0) {
-	    	ActionBar actionBar = getSupportActionBar();
-	        actionBar.setTitle("Menu Principal");
-	        drawer.bringToFront();
-	        drawer.requestLayout();
-	    }
-//https://github.com/elitzel1/iGay.git
-	    public void onDrawerSlide(View drawerView, float slideOffset) {
-	    	
-	    	//super.onDrawerSlide(drawerView, slideOffset);
-	        drawer.bringChildToFront(drawerView);
-	        drawer.requestLayout();
-	    }
-
-	    public void onDrawerStateChanged(int arg0) {
-	    	
-	    	drawer.bringToFront();
-	        drawer.requestLayout();
-	    }
 
 }
