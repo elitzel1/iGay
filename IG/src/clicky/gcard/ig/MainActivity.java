@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			return;
 		}
 		
-		MapFragmetn mapFragment = new MapFragmetn();
+		MapFragment mapFragment = new MapFragment();
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction()
 				.add(R.id.content_frame, mapFragment);
 		//trans.addToBackStack(null);

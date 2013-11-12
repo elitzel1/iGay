@@ -4,6 +4,7 @@
     <string name="app_name">J</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="facebookId">544096209003819</string>
     <string-array name = "drawable">
         <item>Home</item>
         <item>Populares</item>
