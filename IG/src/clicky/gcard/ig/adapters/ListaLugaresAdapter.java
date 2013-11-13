@@ -2,19 +2,12 @@ package clicky.gcard.ig.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import clicky.gcard.ig.DetailFragment;
 import clicky.gcard.ig.R;
 import clicky.gcard.ig.datos.Lugares;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
@@ -73,24 +66,24 @@ public class ListaLugaresAdapter extends BaseAdapter {
         holder.name.setText(lugaresList.get(position).getName());
         holder.category.setText(lugaresList.get(position).getCategory());
         // Listen for ListView Item Click
-        view.setOnClickListener(new OnClickListener() {
+       // view.setOnClickListener(new OnClickListener() {
  
-            @Override
-            public void onClick(View arg0) {
-                Bundle extras = new Bundle();
-                // Pass all data number
-                extras.putString("lugarId", (lugaresList.get(position).getLugarId()));
-                // Start SingleItemView Class
-                ActionBarActivity activity = (ActionBarActivity)mContext;
-                FragmentManager manager = activity.getSupportFragmentManager();
-                DetailFragment fragmentPop = new DetailFragment();
-        		FragmentTransaction trans = manager.beginTransaction();
-        		fragmentPop.setArguments(extras);
-        		trans.replace(R.id.content_frame, fragmentPop);
-    			trans.addToBackStack(null);
-    			trans.commit();
-            }
-        });
+//            @Override
+//            public void onClick(View arg0) {
+//                Bundle extras = new Bundle();
+//                // Pass all data number
+//                extras.putString("lugarId", (lugaresList.get(position).getLugarId()));
+//                // Start SingleItemView Class
+//                ActionBarActivity activity = (ActionBarActivity)mContext;
+//                FragmentManager manager = activity.getSupportFragmentManager();
+//                DetailFragment fragmentPop = new DetailFragment();
+//        		FragmentTransaction trans = manager.beginTransaction();
+//        		fragmentPop.setArguments(extras);
+//        		trans.replace(R.id.content_frame, fragmentPop);
+//    			trans.addToBackStack(null);
+//    			trans.commit();
+//            }
+//        });
  
         return view;
     }

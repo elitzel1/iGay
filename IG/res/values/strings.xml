@@ -14,12 +14,13 @@
     </string-array>
     
     <string-array name = "categorias">
-        <item>Antro</item>
-        <item>Bar</item>
-        <item>Cultural</item>
-        <item>Restauran</item>
+        <item>Antros y Bares</item>
+        <item>Comida</item>
+        <item>Cafeteria</item>
         <item>Hotel</item>
-        <item>Playa</item>
+        <item>Cultural</item>
+        <item>Tienda</item>
+        <item>Cuidado Personal</item>
     </string-array>
     
 	<string name="drawer_open">Open navigation drawer</string>

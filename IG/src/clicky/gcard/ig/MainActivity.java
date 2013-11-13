@@ -10,11 +10,9 @@ import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,10 +23,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity implements OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener {
 	//private GoogleMap map;
 	LocationManager locationManager;
-
 	private String[] options;
 	private ListView drawerMenu;
 	private ActionBarDrawerToggle toggle;
@@ -47,25 +44,21 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		GPSTrakcer gps = new GPSTrakcer(this);
 		if(!gps.canGetLocation())
 			gps.showAlert();
-		
-		
 
-		if (savedInstanceState != null) {
+		if (savedInstanceState != null) 
 			return;
-		}
 		
 		MapFragment mapFragment = new MapFragment();
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction()
 				.add(R.id.content_frame, mapFragment);
-		//trans.addToBackStack(null);
 		trans.commit();
 		
 		
 
 	}
 
-	private void setUpActionBar() {
-		
+	/**Action Bar**/
+	private void setUpActionBar(){
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle("J");
 		actionBar.show();
@@ -74,27 +67,21 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		
 	}
 
+	/**Navigation Drawer**/
 	@SuppressLint("NewApi")
 	private void setUpDrawer() {
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		toggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer,
 				R.string.drawer_open, R.string.drawer_close){
-			
 			  public void onDrawerClosed(View arg0) {
-//				  ActionBar actionBar = getSupportActionBar();
-//			        actionBar.setTitle("EJ ActionBar");
+				  
 			    }
-			 
 			    public void onDrawerOpened(View arg0) {
-			    	ActionBar actionBar = getSupportActionBar();
-			        actionBar.setTitle("Menú");
+//			    	ActionBar actionBar = getSupportActionBar();
+//			        actionBar.setTitle("Menú");
 			        drawer.bringToFront();
-//			        drawer.requestLayout();
 			    }
 		};
-		
-		
-		
 		options = getResources().getStringArray(R.array.drawable);
 		drawerMenu = (ListView) findViewById(R.id.left_drawer);
 		drawerMenu.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
@@ -186,5 +173,32 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		drawer.closeDrawer(drawerMenu);
 	}
 	
+	/**Interfaz para Lista y Más Info**/
+	public void onArticleSelected(int position, String idl,String name){
+		
+		DetailFragment detail =  (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
+		
+		//Pantalla horizontal o tablet
+		if(detail!=null){}
+		else{
+			DetailFragment fragment = new DetailFragment();
+			Bundle args = new Bundle();
+			args.putInt("position", position);
+			args.putString("lugarId", idl);
+			args.putString("name", name);
+			fragment.setArguments(args);
+			toggle.setDrawerIndicatorEnabled(false);
+			
+			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+			
+		}
+		
+	}
+	
+	@Override
+	public void onBackPressed(){
+		super.onBackPressed();
+		toggle.setDrawerIndicatorEnabled(true);
+	}
 
 }

@@ -22,8 +22,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -46,12 +49,16 @@ private List<Comentario> lugaresList = null;
 private View footer;
 
 private Activity activity;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    
+	   
 	    lugarId = getArguments() != null ? getArguments().getString("lugarId") : null;
 	    user = ParseUser.getCurrentUser();
+	    
+	    setHasOptionsMenu(true);
+	    setUpBar();
 	}
 	
 	@Override
@@ -64,6 +71,7 @@ private Activity activity;
 		
 		footer = ((LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.loading_item, null, false);
+		
 		
 		lugaresList = new ArrayList<Comentario>();
 		updatePostList();
@@ -79,6 +87,13 @@ private Activity activity;
 		});
 		
 		return view;
+	}
+	
+	public void setUpBar(){
+		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
+		bar.setTitle(getArguments().getString("name"));
+		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
+		bar.setDisplayHomeAsUpEnabled(true);
 	}
 	
 	@Override
@@ -179,6 +194,19 @@ private Activity activity;
 			    }
 			  }
 			});
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Get item selected and deal with it
+		switch (item.getItemId()) {
+		case android.R.id.home:
+		//called when the up affordance/carat in actionbar is pressed
+		getActivity().onBackPressed();
+		return true;
+		}
+		return true;
+	
 	}
 
 }
