@@ -3,6 +3,7 @@ package clicky.gcard.ig;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -32,7 +33,7 @@ private List<Lugares> lugaresList = null;
 OnListListener callback;
 
 	public interface OnListListener{
-	public void onArticleSelected(int position, String idl,String name);
+	public void onArticleSelected(Lugares lugar);
 	}
 
 
@@ -121,8 +122,7 @@ OnListListener callback;
 	
 	public void onListItemClick(ListView l, View v, int position,long id){
 		
-			String idl =lugaresList.get(position).getLugarId();
-		callback.onArticleSelected(position,idl,lugaresList.get(position).getName());
+		callback.onArticleSelected(lugaresList.get(position));
 		
 		getListView().setItemChecked(position, true);
 	}
@@ -146,6 +146,11 @@ OnListListener callback;
 					item.setLugarId((String) lugar.getObjectId());
 					item.setName((String) lugar.get("nombre"));
 					item.setCategory((String) lugar.get("categoria"));
+					item.setCalif((float)lugar.getDouble("calificacion"));
+					item.setDesc((String) lugar.get("descripcion"));
+					item.setDir((String) lugar.get("direccion"));
+					item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
+							lugar.getParseGeoPoint("localizacion").getLongitude()));
 					lugaresList.add(item);
 				}
 				adapter = new ListaLugaresAdapter(activity, lugaresList);

@@ -1,5 +1,7 @@
 package clicky.gcard.ig.datos;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Lugares {
 	
 	private String lugarId;
@@ -7,7 +9,21 @@ public class Lugares {
 	private String category;
 	private String desc;
 	private String dir;
+	private float calif;
+	private LatLng geo;
 	
+	public float getCalif() {
+		return calif;
+	}
+	public void setCalif(float calif) {
+		this.calif = calif;
+	}
+	public LatLng getGeo() {
+		return geo;
+	}
+	public void setGeo(LatLng geo) {
+		this.geo = geo;
+	}
 	public String getLugarId() {
 		return lugarId;
 	}

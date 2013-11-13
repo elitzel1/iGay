@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class ListaLugaresAdapter extends BaseAdapter {
@@ -31,7 +32,7 @@ public class ListaLugaresAdapter extends BaseAdapter {
  
     public class ViewHolder {
         TextView name;
-        TextView category;
+        RatingBar calificacion;
     }
  
     @Override
@@ -56,7 +57,7 @@ public class ListaLugaresAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.lugar_list_item, null);
             // Locate the TextView in listview_item.xml
             holder.name = (TextView) view.findViewById(R.id.txtNombre);
-            holder.category = (TextView) view.findViewById(R.id.txtCategoria);
+            holder.calificacion = (RatingBar) view.findViewById(R.id.rateLugar);
  
             view.setTag(holder);
         } else {
@@ -64,26 +65,7 @@ public class ListaLugaresAdapter extends BaseAdapter {
         }
         // Set the results into TextView
         holder.name.setText(lugaresList.get(position).getName());
-        holder.category.setText(lugaresList.get(position).getCategory());
-        // Listen for ListView Item Click
-       // view.setOnClickListener(new OnClickListener() {
- 
-//            @Override
-//            public void onClick(View arg0) {
-//                Bundle extras = new Bundle();
-//                // Pass all data number
-//                extras.putString("lugarId", (lugaresList.get(position).getLugarId()));
-//                // Start SingleItemView Class
-//                ActionBarActivity activity = (ActionBarActivity)mContext;
-//                FragmentManager manager = activity.getSupportFragmentManager();
-//                DetailFragment fragmentPop = new DetailFragment();
-//        		FragmentTransaction trans = manager.beginTransaction();
-//        		fragmentPop.setArguments(extras);
-//        		trans.replace(R.id.content_frame, fragmentPop);
-//    			trans.addToBackStack(null);
-//    			trans.commit();
-//            }
-//        });
+        holder.calificacion.setRating(lugaresList.get(position).getCalif());
  
         return view;
     }

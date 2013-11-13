@@ -2,6 +2,7 @@ package clicky.gcard.ig;
 
 
 import clicky.gcard.ig.adapters.GPSTrakcer;
+import clicky.gcard.ig.datos.Lugares;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -174,7 +175,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	}
 	
 	/**Interfaz para Lista y Más Info**/
-	public void onArticleSelected(int position, String idl,String name){
+	public void onArticleSelected(Lugares lugar){
 		
 		DetailFragment detail =  (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
 		
@@ -183,9 +184,13 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		else{
 			DetailFragment fragment = new DetailFragment();
 			Bundle args = new Bundle();
-			args.putInt("position", position);
-			args.putString("lugarId", idl);
-			args.putString("name", name);
+			args.putString("lugarId", lugar.getLugarId());
+			args.putString("nombre", lugar.getName());
+			args.putString("descripcion", lugar.getDesc());
+			args.putString("direccion", lugar.getDir());
+			args.putFloat("calificacion", lugar.getCalif());
+			args.putDouble("latitud", lugar.getGeo().latitude);
+			args.putDouble("longitud", lugar.getGeo().longitude);
 			fragment.setArguments(args);
 			toggle.setDrawerIndicatorEnabled(false);
 			

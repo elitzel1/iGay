@@ -7,6 +7,14 @@ import java.util.List;
 import clicky.gcard.ig.adapters.ComentarioAdapter;
 import clicky.gcard.ig.datos.Comentario;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseACL;
@@ -20,6 +28,8 @@ import com.parse.SaveCallback;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -35,13 +45,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DetailFragment extends Fragment{
-	
-private String lugarId;
+
+//Datos del lugar
+private String lugarId,nombre,descripcion,direccion;
+private float calificacion;
+private double lat,longitud;
+
+private TextView txtNombre,txtDesc,txtDir;
+private RatingBar ratingLugar;
 private Button btnCom;
 private ListView listComments;
+private GoogleMap mapa;
+
 private ParseUser user;
 
 private ComentarioAdapter adapter = null;
@@ -52,9 +71,15 @@ private Activity activity;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    
 	   
 	    lugarId = getArguments() != null ? getArguments().getString("lugarId") : null;
+	    nombre = getArguments() != null ? getArguments().getString("nombre") : null;
+	    descripcion = getArguments() != null ? getArguments().getString("descripcion") : null;
+	    direccion = getArguments() != null ? getArguments().getString("direccion") : null;
+	    calificacion = getArguments() != null ? getArguments().getFloat("calificacion") : null;
+	    lat = getArguments() != null ? getArguments().getDouble("latitud") : null;
+	    longitud = getArguments() != null ? getArguments().getDouble("longitud") : null;
+	    
 	    user = ParseUser.getCurrentUser();
 	    
 	    setHasOptionsMenu(true);
@@ -66,14 +91,29 @@ private Activity activity;
 	
 		View view = inflater.inflate(R.layout.detail_layout,null,false);
 		
+		txtNombre = (TextView)view.findViewById(R.id.txtNombre);
+		txtDesc = (TextView)view.findViewById(R.id.txtDesc);
+		txtDir = (TextView)view.findViewById(R.id.txtDir);
+		
+		ratingLugar = (RatingBar)view.findViewById(R.id.rateLugar);
+		
 		btnCom = (Button)view.findViewById(R.id.btnComment);
 		listComments = (ListView)view.findViewById(R.id.listComments);
+		
+		txtNombre.setText(nombre);
+		txtDesc.setText(descripcion);
+		txtDir.setText(direccion);
+		
+		ratingLugar.setRating(calificacion);
 		
 		footer = ((LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.loading_item, null, false);
 		
 		
 		lugaresList = new ArrayList<Comentario>();
+		
+		setUpMap();
+		
 		updatePostList();
 		
 		btnCom.setOnClickListener(new OnClickListener() {
@@ -94,6 +134,35 @@ private Activity activity;
 		bar.setTitle(getArguments().getString("name"));
 		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
 		bar.setDisplayHomeAsUpEnabled(true);
+	}
+	
+	private void setUpMap(){
+
+		mapa =((SupportMapFragment)getFragmentManager().findFragmentById(R.id.mapaLugar)).getMap();
+		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,longitud),15));
+		mapa.getUiSettings().setAllGesturesEnabled(false);
+		mapa.getUiSettings().setZoomControlsEnabled(false);
+
+		mapa.addMarker(new MarkerOptions().position(new LatLng(lat,longitud)));
+		
+		mapa.setOnMapClickListener(new OnMapClickListener(){
+            @Override
+            public void onMapClick(LatLng point){
+            	String uri = "geo:"+lat+","+longitud+"?q="+lat+","+longitud+"&z=15";
+            	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            	activity.startActivity(intent);
+            }
+        });
+		mapa.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				String uri = "geo:"+lat+","+longitud+"?q="+lat+","+longitud+"&z=15";
+            	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            	activity.startActivity(intent);
+				return false;
+			}
+		});
+		
 	}
 	
 	@Override
@@ -166,6 +235,7 @@ private Activity activity;
 		        	Comentario coment = new Comentario();
 		        	coment.setComment(post.getString("comentario"));
 		        	coment.setUser(post.getString("userName"));
+		        	coment.setCalif((float)post.getDouble("calificacion"));
 		          lugaresList.add(coment);
 		        }
 		        listComments.removeFooterView(footer);
@@ -189,6 +259,7 @@ private Activity activity;
 			public void done(Object result, ParseException e) {
 			    if (e == null) {
 			      dialog.dismiss();
+			      updatePostList();
 			    }else{
 			    	Log.i("Error", e.toString());
 			    }
@@ -200,10 +271,10 @@ private Activity activity;
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Get item selected and deal with it
 		switch (item.getItemId()) {
-		case android.R.id.home:
-		//called when the up affordance/carat in actionbar is pressed
-		getActivity().onBackPressed();
-		return true;
+			case android.R.id.home:
+				//called when the up affordance/carat in actionbar is pressed
+				getActivity().onBackPressed();
+				return true;
 		}
 		return true;
 	
