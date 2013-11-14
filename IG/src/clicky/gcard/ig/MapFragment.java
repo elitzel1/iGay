@@ -28,9 +28,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -41,14 +43,19 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	private GoogleMap mapa;
 	View view;
 	LatLng coordenadas;
-	OnMarkerListener mCallback;
+	OnButtonListener mCallback;
 	private List<Lugares> lugaresList = null;
 	private HashMap<String, Lugares> markersList = new HashMap<String, Lugares>();
-	
+	private Lugares lugar;
 	private LinearLayout detalles;
 	private TextView txtNombre;
 	private RatingBar calif;
 	private Animation showDetalle;
+	
+	
+	public interface OnButtonListener{
+		public void onArticleSelected(Lugares lugar);
+	}
 	
 	private void setUpGPS(){
 		GPSTrakcer gps = new GPSTrakcer(getActivity().getBaseContext());
@@ -87,6 +94,14 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 				detalles = (LinearLayout)view.findViewById(R.id.detalle);
 				txtNombre = (TextView)view.findViewById(R.id.txtNombre);
 				calif = (RatingBar)view.findViewById(R.id.rateLugar);
+				Button btnInfo = (Button)view.findViewById(R.id.btnInfo);
+				btnInfo.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						mCallback.onArticleSelected(lugar);
+					}
+				});
 		} 
 				setUpMap();
 				
@@ -97,7 +112,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	public void onAttach(Activity activity){
 		super.onAttach(activity);
 		try{
-			mCallback = (OnMarkerListener)activity;
+			mCallback = (OnButtonListener)activity;
 		}catch(ClassCastException c){}
 		
 	}
@@ -141,22 +156,16 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 					.title(lugaresList.get(i).getName()));
 			markersList.put(mark.getId(), lugaresList.get(i));
 		}
-		/*
-		mapa.addMarker(new MarkerOptions().position(new LatLng(19.33283,-99.18557)).title("Las islas"));
-		mapa.addMarker(new MarkerOptions().position(new LatLng(19.331473,-99.331473)).title("Algo aqui"));
-		mapa.addMarker(new MarkerOptions().position(new LatLng(19.331924,-99.189216)).title("Aqui hay otra cosa"));
-		*/
+
+
 		mapa.setOnMarkerClickListener(this);
 	}
 	
-	public interface OnMarkerListener{
-		public void onPlaceSelected(String name);
-	}
+	
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		mCallback.onPlaceSelected(marker.getTitle());
-		Log.i("MAP", "Clic en: "+marker.getId());
+		lugar = markersList.get(marker.getId());
 		showDetail(markersList.get(marker.getId()));
 		return false;
 	}
@@ -164,7 +173,6 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	private void showDetail(Lugares lugar){
 		txtNombre.setText(lugar.getName());
 		calif.setRating(lugar.getCalif());
-		
 		detalles.setVisibility(View.VISIBLE);
 		detalles.startAnimation(showDetalle);
 	}

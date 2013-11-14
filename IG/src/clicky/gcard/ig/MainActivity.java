@@ -1,13 +1,16 @@
 package clicky.gcard.ig;
 
 
-import clicky.gcard.ig.MapFragment.OnMarkerListener;
+import clicky.gcard.ig.MapFragment.OnButtonListener;
 import clicky.gcard.ig.adapters.GPSTrakcer;
 import clicky.gcard.ig.datos.Lugares;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -16,6 +19,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +30,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener,OnMarkerListener {
+public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener,OnButtonListener {
 	//private GoogleMap map;
 	LocationManager locationManager;
 	private String[] options;
@@ -77,14 +81,19 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		toggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer,
 				R.string.drawer_open, R.string.drawer_close){
 			  public void onDrawerClosed(View arg0) {
-				  
+				  ActionBar actionBar = getSupportActionBar();
+				  if(drawerMenu.getCheckedItemPosition()>=0)
+			        actionBar.setTitle(options[drawerMenu.getCheckedItemPosition()]);
 			    }
 			    public void onDrawerOpened(View arg0) {
-//			    	ActionBar actionBar = getSupportActionBar();
-//			        actionBar.setTitle("Menú");
+		    	ActionBar actionBar = getSupportActionBar();
+			        actionBar.setTitle("Menú");
 			        drawer.bringToFront();
+			        drawer.requestFocus();
 			    }
+		
 		};
+		
 		options = getResources().getStringArray(R.array.drawable);
 		drawerMenu = (ListView) findViewById(R.id.left_drawer);
 		drawerMenu.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
@@ -119,15 +128,36 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		if (toggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+        case R.id.action_search:
+            onSearchRequested(); // Para versiones menores a 3.0
+            return true;
+        default:
+            return false;
+    }
+		//return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
+		//Verificar que sea version 3.0 o mayor
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+	     
+		SearchManager searchManager =
+		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		    SearchView searchView =
+		            (SearchView) menu.findItem(R.id.action_search).getActionView();
+		    
+		    searchView.setSearchableInfo(
+		            searchManager.getSearchableInfo(getComponentName()));
+		}
 		return true;
 	}
+	
+
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -163,7 +193,6 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		if(position!=0){
 			if(manager.getBackStackEntryCount()>0)
 				manager.popBackStack();
-		
 			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 			getSupportActionBar().setTitle(options[position]);
 		}
@@ -201,12 +230,11 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	public void onBackPressed(){
 		super.onBackPressed();
 		toggle.setDrawerIndicatorEnabled(true);
+		if(drawerMenu.getCheckedItemPosition()>=0)
+		getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
 	}
 
-	@Override
-	public void onPlaceSelected(String name) {
-		Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
-		
-	}
+
+
 
 }

@@ -38,6 +38,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -333,7 +334,13 @@ private Activity activity;
 		super.onStop();
 		Log.i("CV", "onstop");
 	}
-	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+	    MenuItem item= menu.findItem(R.id.action_search);
+	    item.setEnabled(false);
+	    item.setVisible(false);
+	    super.onPrepareOptionsMenu(menu);
+	}
 	public void onDestroy(){
 		super.onDestroy();
 		 Fragment f = (SupportMapFragment) getFragmentManager()
