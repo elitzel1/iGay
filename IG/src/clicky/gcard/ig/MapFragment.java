@@ -4,22 +4,26 @@ import clicky.gcard.ig.adapters.GPSTrakcer;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMarkerClickListener {
 	public String TAG = "MAPA";
 	private GoogleMap mapa;
 	View view;
 	LatLng coordenadas;
+	OnMarkerListener mCallback;
 	
 	private void setUpGPS(){
 		GPSTrakcer gps = new GPSTrakcer(getActivity().getBaseContext());
@@ -59,6 +63,13 @@ public class MapFragment extends Fragment {
 		
 	}
 	
+	public void onAttach(Activity activity){
+		super.onAttach(activity);
+		try{
+			mCallback = (OnMarkerListener)activity;
+		}catch(ClassCastException c){}
+		
+	}
 	public void onResume(){
 		super.onResume();
 		
@@ -87,10 +98,21 @@ public class MapFragment extends Fragment {
 	
 
 	public void setUpMarker(){
-		
 		mapa.addMarker(new MarkerOptions().position(new LatLng(19.33283,-99.18557)).title("Las islas"));
 		mapa.addMarker(new MarkerOptions().position(new LatLng(19.331473,-99.331473)).title("Algo aqui"));
 		mapa.addMarker(new MarkerOptions().position(new LatLng(19.331924,-99.189216)).title("Aqui hay otra cosa"));
 
+		mapa.setOnMarkerClickListener(this);
+	}
+	
+	public interface OnMarkerListener{
+		public void onPlaceSelected(String name);
+	}
+
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		mCallback.onPlaceSelected(marker.getTitle());
+		Log.i("MAP", "Clic en: "+marker.getId());
+		return false;
 	}
 }

@@ -1,6 +1,7 @@
 package clicky.gcard.ig;
 
 
+import clicky.gcard.ig.MapFragment.OnMarkerListener;
 import clicky.gcard.ig.adapters.GPSTrakcer;
 import clicky.gcard.ig.datos.Lugares;
 import android.graphics.drawable.ColorDrawable;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -24,7 +26,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener {
+public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener,OnMarkerListener {
 	//private GoogleMap map;
 	LocationManager locationManager;
 	private String[] options;
@@ -88,6 +90,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		drawerMenu.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
 				.getThemedContext(), R.layout.item_drawable, options));
 		drawerMenu.setBackgroundColor(getResources().getColor(R.color.gris));
+	
 		// Set actionBarDrawerToggle as the DrawerListener
 		drawer.setDrawerListener(toggle);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -128,49 +131,43 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-		// TODO Auto-generated method stub
-//		if(position == 0)
+
+//		if(position == drawerMenu.getCheckedItemPosition())
 //			return;
+		
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction trans = manager.beginTransaction();
-		Bundle b=new Bundle();
+		Fragment fragment = null;
 		switch (position){
 		case 0:
 			manager.popBackStack();
 			setUpActionBar();
-			Toast.makeText(getApplicationContext(),"Home", Toast.LENGTH_SHORT).show();
 			break;
 		case 1:
-			if(manager.getBackStackEntryCount()>0)
-				manager.popBackStack();
-			Listas fragmentPop = new Listas();
-			b.putInt("tipo", 0);
-			fragmentPop.setArguments(b);
-			trans.replace(R.id.content_frame, fragmentPop);
-			trans.addToBackStack(null);
-			trans.commit();
-			Toast.makeText(getApplicationContext(),"Populares", Toast.LENGTH_SHORT).show();
+			fragment = new Listas();
 			break;
 		case 2:
-			if(manager.getBackStackEntryCount()>0)
-				manager.popBackStack();
-			Listas fragmentCat = new Listas();
-			b.putInt("tipo", 1);
-			fragmentCat.setArguments(b);
-			trans.replace(R.id.content_frame, fragmentCat).addToBackStack(null).commit();
-			Toast.makeText(getApplicationContext(),"Categorías", Toast.LENGTH_SHORT).show();
+			fragment = new Listas();
 			break;
 		case 3:
-			Toast.makeText(getApplicationContext(),"Ajustes", Toast.LENGTH_SHORT).show();
+			fragment = new AjustesFragment();
 			break;
 		case 4:
-			Toast.makeText(getApplicationContext(),"Notificaciones", Toast.LENGTH_SHORT).show();
+			fragment = new NotificacionesFragment();
 			break;
 		default:
 		Toast.makeText(getApplicationContext(),"default", Toast.LENGTH_SHORT).show();
 		break;
 		}
 		
+		if(position!=0){
+			if(manager.getBackStackEntryCount()>0)
+				manager.popBackStack();
+		
+			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+			getSupportActionBar().setTitle(options[position]);
+		}
+		drawerMenu.setItemChecked(position, true);
 		drawer.closeDrawer(drawerMenu);
 	}
 	
@@ -204,6 +201,12 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	public void onBackPressed(){
 		super.onBackPressed();
 		toggle.setDrawerIndicatorEnabled(true);
+	}
+
+	@Override
+	public void onPlaceSelected(String name) {
+		Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
+		
 	}
 
 }

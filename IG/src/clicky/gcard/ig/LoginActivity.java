@@ -21,7 +21,7 @@ import com.parse.SignUpCallback;
 
 public class LoginActivity extends ActionBarActivity {
 	
-	private Button btnReg,btnLog,btnContinue;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +31,6 @@ public class LoginActivity extends ActionBarActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.hide();
 		
-		btnReg = (Button)findViewById(R.id.btnRegister);
-		btnLog = (Button)findViewById(R.id.btnLogin);
-		btnContinue = (Button)findViewById(R.id.btnContinue);
-		
 		ParseUser user = ParseUser.getCurrentUser();
 		
 		if(user != null){
@@ -42,28 +38,22 @@ public class LoginActivity extends ActionBarActivity {
 			startActivity(i);
 			finish();
 		}
-		
-		btnReg.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showRegDialog();
-			}
-		});
-		btnLog.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showLoginDialog();
-			}
-		});
-		btnContinue.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(LoginActivity.this,MainActivity.class);
-				startActivity(i);
-				finish();
-			}
-		});
-		
+	}
+	
+	public void btnAction(View v){
+		switch(v.getId()){
+		case R.id.btnRegister:
+			showRegDialog();
+			break;
+		case R.id.btnLogin:
+			showLoginDialog();
+			break;
+		case R.id.btnContinue:
+			Intent i = new Intent(LoginActivity.this,MainActivity.class);
+			startActivity(i);
+			finish();
+			break;
+		}
 	}
 	
 	private void showLoginDialog(){

@@ -360,7 +360,7 @@ int drawable ic_plusone_medium_off_client 0x7f020093
 int drawable ic_plusone_small_off_client 0x7f020094
 int drawable ic_plusone_standard_off_client 0x7f020095
 int drawable ic_plusone_tall_off_client 0x7f020096
-int id LinearLayout1 0x7f05006c
+int id LinearLayout1 0x7f050068
 int id action_bar 0x7f050021
 int id action_bar_activity_content 0x7f050017
 int id action_bar_container 0x7f050020
@@ -378,11 +378,11 @@ int id always 0x7f05000d
 int id beginning 0x7f050013
 int id btnAceptar 0x7f050058
 int id btnComment 0x7f050063
-int id btnContinue 0x7f05006a
+int id btnContinue 0x7f05006b
 int id btnFacebook 0x7f050073
-int id btnLogin 0x7f050069
+int id btnLogin 0x7f05006a
 int id btnReg 0x7f050077
-int id btnRegister 0x7f050068
+int id btnRegister 0x7f050069
 int id checkbox 0x7f050032
 int id collapseActionView 0x7f05000f
 int id com_facebook_login_activity_progress_bar 0x7f050043
@@ -434,7 +434,7 @@ int id listComments 0x7f050064
 int id listMode 0x7f050003
 int id list_item 0x7f05002e
 int id mapaLugar 0x7f050060
-int id mapp 0x7f05006b
+int id mapp 0x7f05006c
 int id middle 0x7f050014
 int id never 0x7f05000b
 int id none 0x7f050012

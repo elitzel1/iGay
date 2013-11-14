@@ -68,12 +68,8 @@ OnListListener callback;
 	     setUpBar(s_adapter);
 	 }
 	private void setUpBar(SpinnerAdapterSpecial adapter){
-		int tipo=getArguments().getInt("tipo");
+		
 		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
-		if(tipo==0){
-			bar.setTitle("Populares");
-		}else
-			bar.setTitle("Categorías");
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		bar.setListNavigationCallbacks(adapter, this);
 	}
@@ -159,5 +155,10 @@ OnListListener callback;
 				
 			}
 		});
+	}
+	
+	public void onDestroy(){
+		super.onDestroy();
+		callback = null;
 	}
 }
