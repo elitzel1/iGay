@@ -2,12 +2,22 @@ package clicky.gcard.ig.datos;
 
 public class Comentario {
 	
+	private String commentId;
 	private String comment;
 	private String user;
 	private float calif;
 	public String getComment() {
 		return comment;
 	}
+	
+	public String getCommentId() {
+		return commentId;
+	}
+
+	public void setCommentId(String commentId) {
+		this.commentId = commentId;
+	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}

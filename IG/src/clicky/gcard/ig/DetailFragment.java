@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
+import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -35,6 +36,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,11 +64,12 @@ private ListView listComments;
 private GoogleMap mapa;
 
 private ParseUser user;
-
+private Comentario userComment = null;
+private boolean isactive=false;
 private ComentarioAdapter adapter = null;
 private List<Comentario> lugaresList = null;
 private View footer;
-
+private View view;
 private Activity activity;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,8 @@ private Activity activity;
 	    longitud = getArguments() != null ? getArguments().getDouble("longitud") : null;
 	    
 	    user = ParseUser.getCurrentUser();
+	    if(user!=null)
+	    	isactive=true;
 	    
 	    setHasOptionsMenu(true);
 	    setUpBar();
@@ -89,7 +94,16 @@ private Activity activity;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
 	
-		View view = inflater.inflate(R.layout.detail_layout,null,false);
+		if(view==null){
+			try{
+		view = inflater.inflate(R.layout.detail_layout,null,false);
+			}catch(InflateException e){}
+		}
+		else{
+			ViewGroup group = (ViewGroup)view.getParent();
+			if(group!=null)
+				group.removeView(view);
+		}
 		
 		txtNombre = (TextView)view.findViewById(R.id.txtNombre);
 		txtDesc = (TextView)view.findViewById(R.id.txtDesc);
@@ -180,10 +194,19 @@ private Activity activity;
 		final RatingBar calificacion = (RatingBar)dialog.findViewById(R.id.ratingBar1);
 		Button btnAceptar = (Button) dialog.findViewById(R.id.btnAceptar);
 		
+		if(userComment != null){
+			editComent.setText(userComment.getComment());
+			calificacion.setRating(userComment.getCalif());
+		}
+		
 		btnAceptar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				setComment(dialog,editComent.getText().toString(), calificacion.getRating());
+				if(userComment != null){
+					updateComment(dialog,editComent.getText().toString(), calificacion.getRating());
+				}else{
+					setComment(dialog,editComent.getText().toString(), calificacion.getRating());
+				}
 			}
 		});
 		
@@ -198,6 +221,7 @@ private Activity activity;
 		
 		ParseACL defaultACL = new ParseACL();
 		defaultACL.setPublicReadAccess(true);
+		defaultACL.setWriteAccess(user, true);
 		
 		comment.put("comentario", text);
 		comment.put("calificacion", calif);
@@ -210,6 +234,25 @@ private Activity activity;
 				updateCalif(dialog);
 			}
 		});
+	}
+	
+	private void updateComment(final Dialog dialog,final String text,final float calif){
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Comentarios");
+        query.getInBackground(userComment.getCommentId(), new GetCallback<ParseObject>() {
+        	public void done(final ParseObject object, ParseException e) {
+        		if (e == null) {
+	                object.put("comentario", text);
+	                object.put("calificacion", calif);
+	                object.saveInBackground(new SaveCallback() {
+	                	public void done(ParseException e) {
+	                		updateCalif(dialog);
+	                	}
+	                });
+        		}else { 
+        			e.printStackTrace();
+        		}
+        	}
+        });
 	}
 	
 	private void updatePostList() {
@@ -233,10 +276,16 @@ private Activity activity;
 		        lugaresList.clear();
 		        for (ParseObject post : postList) {
 		        	Comentario coment = new Comentario();
+		        	coment.setCommentId(post.getObjectId());
 		        	coment.setComment(post.getString("comentario"));
 		        	coment.setUser(post.getString("userName"));
 		        	coment.setCalif((float)post.getDouble("calificacion"));
-		          lugaresList.add(coment);
+		        	if(isactive){
+			        	if(post.getString("userName").equals(user.getUsername())){
+			        		userComment = coment;
+			        	}
+		        	}
+		        	lugaresList.add(coment);
 		        }
 		        listComments.removeFooterView(footer);
 	            // Pass the results into ListViewAdapter.java
@@ -278,6 +327,21 @@ private Activity activity;
 		}
 		return true;
 	
+	}
+	
+	public void onStop(){
+		super.onStop();
+		Log.i("CV", "onstop");
+	}
+	
+	public void onDestroy(){
+		super.onDestroy();
+		 Fragment f = (SupportMapFragment) getFragmentManager()
+                 .findFragmentById(R.id.mapaLugar);
+		if(f!=null){
+			getFragmentManager().beginTransaction().remove(f).commit();
+		}
+	Log.i("CV", "onDestroy");
 	}
 
 }

@@ -33,7 +33,7 @@ public class MapFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
-		/**Ubicación del usuario***/
+		/**Ubicaci��n del usuario***/
 		//LatLng coordenadas;
 		setUpGPS();
 		/*************************/
@@ -76,8 +76,7 @@ public class MapFragment extends Fragment {
 	
 	if(coordenadas!=null)
 	mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),15));
-
-	//mapa.setMyLocationEnabled(true);
+	mapa.setMyLocationEnabled(true);
 			Log.i("", "");
 			if(mapa!=null)
 				
