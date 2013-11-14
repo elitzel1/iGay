@@ -145,7 +145,7 @@ private Activity activity;
 	
 	public void setUpBar(){
 		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
-		bar.setTitle(getArguments().getString("name"));
+		bar.setTitle(nombre);
 		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
