@@ -6,6 +6,7 @@ import clicky.gcard.ig.R;
 import clicky.gcard.ig.datos.Lugares;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class ListaLugaresAdapter extends BaseAdapter {
             // Locate the TextView in listview_item.xml
             holder.name = (TextView) view.findViewById(R.id.txtNombre);
             holder.calificacion = (RatingBar) view.findViewById(R.id.rateLugar);
- 
+            holder.name.setTextColor(Color.BLACK);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
