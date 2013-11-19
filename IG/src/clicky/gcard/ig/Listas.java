@@ -1,10 +1,13 @@
 package clicky.gcard.ig;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -19,6 +22,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
@@ -89,6 +93,7 @@ OnListListener callback;
 		  switch (itemPosition) {
           case 0:
                updateCategorias("Bares y Antros");
+               //updateTop("Bares y Antros");
               break;
           case 1: //"Comida"
                updateCategorias("Comida");
@@ -155,6 +160,21 @@ OnListListener callback;
 				
 			}
 		});
+	}
+	
+	private void updateTop(String categoria){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("categoria", categoria);
+		ParseCloud.callFunctionInBackground("top", params , new FunctionCallback<Object>() {
+			@Override  
+			public void done(Object result, ParseException e) {
+			    if (e == null) {
+			    	result.toString();
+			    }else{
+			    	Log.i("Error", e.toString());
+			    }
+			  }
+			});
 	}
 	
 	public void onDestroy(){

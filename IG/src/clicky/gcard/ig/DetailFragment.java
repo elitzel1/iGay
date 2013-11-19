@@ -203,6 +203,9 @@ private Activity activity;
 		btnAceptar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Button btn = (Button)v;
+				btn.setText("Guardando Comentario");
+				btn.setEnabled(false);
 				if(userComment != null){
 					updateComment(dialog,editComent.getText().toString(), calificacion.getRating());
 				}else{
@@ -303,13 +306,14 @@ private Activity activity;
 	
 	private void updateCalif(final Dialog dialog){
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("movie", lugarId);
+		params.put("lugar", lugarId);
 		ParseCloud.callFunctionInBackground("comentario", params , new FunctionCallback<Object>() {
 			@Override  
 			public void done(Object result, ParseException e) {
 			    if (e == null) {
-			      dialog.dismiss();
-			      updatePostList();
+			    	dialog.dismiss();
+			    	ratingLugar.setRating(Float.valueOf(result.toString()));
+			    	updatePostList();
 			    }else{
 			    	Log.i("Error", e.toString());
 			    }
