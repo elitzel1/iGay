@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
@@ -23,13 +25,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 public class Listas extends ListFragment implements OnNavigationListener{
 
 private View footer;
+private View view;
 private Activity activity;
 private ListaLugaresAdapter adapter = null;
 private List<Lugares> lugaresList = null;
@@ -40,6 +45,25 @@ OnListListener callback;
 	public void onArticleSelected(Lugares lugar);
 	}
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
+		if(view==null){
+			try{
+		view = inflater.inflate(R.layout.lugares_layout,null,false);
+			}catch(InflateException e){}
+		}
+		else{
+			ViewGroup group = (ViewGroup)view.getParent();
+			if(group!=null)
+				group.removeView(view);
+		}
+		
+		AdView adView = (AdView)view.findViewById(R.id.adView);
+	    AdRequest adRequest = new AdRequest.Builder().build();
+	    adView.loadAd(adRequest);
+		
+		return view;
+	}
 
 	@SuppressLint("InlinedApi")
 	@Override
