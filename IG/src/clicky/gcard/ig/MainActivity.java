@@ -164,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
 //		if(position == drawerMenu.getCheckedItemPosition())
 //			return;
-		
+		Bundle extras = null;
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction trans = manager.beginTransaction();
 		Fragment fragment = null;
@@ -174,10 +174,16 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			setUpActionBar();
 			break;
 		case 1:
+			extras = new Bundle();
 			fragment = new Listas();
+			extras.putInt("tipo", 0);
+			fragment.setArguments(extras);
 			break;
 		case 2:
+			extras = new Bundle();
 			fragment = new Listas();
+			extras.putInt("tipo", 1);
+			fragment.setArguments(extras);
 			break;
 		case 3:
 			fragment = new AjustesFragment();

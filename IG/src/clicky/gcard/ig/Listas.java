@@ -1,20 +1,18 @@
 package clicky.gcard.ig;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import clicky.gcard.ig.adapters.ListaLugaresAdapter;
 import clicky.gcard.ig.adapters.SpinnerAdapterSpecial;
+import clicky.gcard.ig.adapters.TopLugaresAdapter;
 import clicky.gcard.ig.datos.Lugares;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,7 +22,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,8 +33,10 @@ public class Listas extends ListFragment implements OnNavigationListener{
 private View footer;
 private View view;
 private Activity activity;
-private ListaLugaresAdapter adapter = null;
+private ListaLugaresAdapter adapterList = null;
+private TopLugaresAdapter adapterTop = null;
 private List<Lugares> lugaresList = null;
+private int tipo = -1;
 
 OnListListener callback;
 
@@ -74,6 +73,8 @@ OnListListener callback;
         // Create an array adapter for the list view
         footer = ((LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.loading_item, null, false);
+        
+        tipo = getArguments() != null ? getArguments().getInt("tipo") : null;
 	}
 	
 	 @Override
@@ -115,27 +116,47 @@ OnListListener callback;
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		  switch (itemPosition) {
-          case 0:
-               updateCategorias("Bares y Antros");
-               //updateTop("Bares y Antros");
+          case 0://Bares y Antros
+        	  if(tipo == 0)
+        		  updateTop("Bares y Antros");
+        	  else
+        		  updateCategorias("Bares y Antros");
               break;
           case 1: //"Comida"
-               updateCategorias("Comida");
+        	  if(tipo == 0)
+        		  updateTop("Comida");
+        	  else
+        		  updateCategorias("Comida");
         	  break;
           case 2:// "Cafeteria"
-        	  updateCategorias("Cafeteria");
+        	  if(tipo == 0)
+        		  updateTop("Cafeteria");
+        	  else
+        		  updateCategorias("Cafeteria");
         	  break;
           case 3: //"Hotel
-        	  updateCategorias("Hotel");
+        	  if(tipo == 0)
+        		  updateTop("Hotel");
+        	  else
+        		  updateCategorias("Hotel");
         	  break;
           case 4: //"Cultural"
-        	  updateCategorias("Cultural");
+        	  if(tipo == 0)
+        		  updateTop("Cultural");
+        	  else
+        		  updateCategorias("Cultural");
               break;
           case 5:// "Tienda"
-        	  updateCategorias("Tienda");
+        	  if(tipo == 0)
+        		  updateTop("Tienda");
+        	  else
+        		  updateCategorias("Tienda");
         	  break;
           case 6://"Cuidado Personal"
-        	  updateCategorias("Cuidado Personal");
+        	  if(tipo == 0)
+        		  updateTop("Cuidado Personal");
+        	  else
+        		  updateCategorias("Cuidado Personal");
         	  break;
           default:
         	  break;
@@ -178,27 +199,50 @@ OnListListener callback;
 							lugar.getParseGeoPoint("localizacion").getLongitude()));
 					lugaresList.add(item);
 				}
-				adapter = new ListaLugaresAdapter(activity, lugaresList);
+				adapterList = new ListaLugaresAdapter(activity, lugaresList);
 	            // Binds the Adapter to the ListView
-	            getListView().setAdapter(adapter);
+	            getListView().setAdapter(adapterList);
 				
 			}
 		});
 	}
 	
 	private void updateTop(String categoria){
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("categoria", categoria);
-		ParseCloud.callFunctionInBackground("top", params , new FunctionCallback<Object>() {
-			@Override  
-			public void done(Object result, ParseException e) {
-			    if (e == null) {
-			    	result.toString();
-			    }else{
-			    	Log.i("Error", e.toString());
-			    }
-			  }
-			});
+		
+		lugaresList.clear();
+		getListView().addFooterView(footer);
+		setListAdapter(null);
+		
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+                "Top5");
+        query.orderByAscending("posicion");
+        query.include("lugarId");
+        query.whereEqualTo("categoria", categoria);
+        query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> top, ParseException e) {
+				getListView().removeFooterView(footer);
+				for (ParseObject lugar : top){
+					Lugares item = new Lugares();
+					ParseObject res = lugar.getParseObject("lugarId");
+					
+					item.setLugarId((String) res.getObjectId());
+					item.setName((String) res.get("nombre"));
+					item.setCategory((String) res.get("categoria"));
+					item.setCalif((float)res.getDouble("calificacion"));
+					item.setDesc((String) res.get("descripcion"));
+					item.setDir((String) res.get("direccion"));
+					item.setGeo(new LatLng(res.getParseGeoPoint("localizacion").getLatitude(),
+							res.getParseGeoPoint("localizacion").getLongitude()));
+					lugaresList.add(item);
+				}
+				adapterTop = new TopLugaresAdapter(activity, lugaresList);
+	            // Binds the Adapter to the ListView
+	            getListView().setAdapter(adapterTop);
+			}
+				
+		});
 	}
 	
 	public void onDestroy(){
