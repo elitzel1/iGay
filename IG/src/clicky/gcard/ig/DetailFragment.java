@@ -7,6 +7,8 @@ import java.util.List;
 import clicky.gcard.ig.adapters.ComentarioAdapter;
 import clicky.gcard.ig.datos.Comentario;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -124,6 +126,9 @@ private Activity activity;
 		footer = ((LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.loading_item, null, false);
 		
+		AdView adView = (AdView)view.findViewById(R.id.adView);
+	    AdRequest adRequest = new AdRequest.Builder().build();
+	    adView.loadAd(adRequest);
 		
 		lugaresList = new ArrayList<Comentario>();
 		
@@ -205,6 +210,9 @@ private Activity activity;
 		btnAceptar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Button btn = (Button)v;
+				btn.setText("Guardando Comentario");
+				btn.setEnabled(false);
 				if(userComment != null){
 					updateComment(dialog,editComent.getText().toString(), calificacion.getRating());
 				}else{
@@ -305,13 +313,14 @@ private Activity activity;
 	
 	private void updateCalif(final Dialog dialog){
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("movie", lugarId);
+		params.put("lugar", lugarId);
 		ParseCloud.callFunctionInBackground("comentario", params , new FunctionCallback<Object>() {
 			@Override  
 			public void done(Object result, ParseException e) {
 			    if (e == null) {
-			      dialog.dismiss();
-			      updatePostList();
+			    	dialog.dismiss();
+			    	ratingLugar.setRating(Float.valueOf(result.toString()));
+			    	updatePostList();
 			    }else{
 			    	Log.i("Error", e.toString());
 			    }
