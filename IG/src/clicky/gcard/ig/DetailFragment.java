@@ -149,6 +149,7 @@ private Activity activity;
 		bar.setTitle(nombre);
 		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
 		bar.setDisplayHomeAsUpEnabled(true);
+		
 	}
 	
 	private void setUpMap(){
@@ -184,6 +185,7 @@ private Activity activity;
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity=activity;
+        Log.i("Det",activity.getComponentName().getClassName());
 	}
 	
 	private void showCommentDialog(){
@@ -323,7 +325,7 @@ private Activity activity;
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				//called when the up affordance/carat in actionbar is pressed
-				getActivity().onBackPressed();
+				activity.onBackPressed();
 				return true;
 		}
 		return true;

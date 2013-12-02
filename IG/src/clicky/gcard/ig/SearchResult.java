@@ -1,54 +1,27 @@
 package clicky.gcard.ig;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import clicky.gcard.ig.adapters.ListaLugaresAdapter;
+import clicky.gcard.ig.FragmentResult.OnSelectItem;
 import clicky.gcard.ig.datos.Lugares;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 
-public class SearchResult extends ActionBarActivity implements OnItemClickListener {
-
-	private View footer;
-	private ListView lResult;
-	private List<Lugares> lugaresList = null;
-	private ListaLugaresAdapter adapter = null;
+public class SearchResult extends ActionBarActivity implements OnSelectItem{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_result);
-	//	footer = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_item, null, false);
-		lResult = (ListView)findViewById(R.id.listSearch);
-		lResult.setCacheColorHint(0);
-		
-        lugaresList = new ArrayList<Lugares>();
-        
+	        
 		// Show the Up button in the action bar.
 		setupActionBar();
 		handleIntent(getIntent());
@@ -61,38 +34,18 @@ public class SearchResult extends ActionBarActivity implements OnItemClickListen
 	
 	private void handleIntent(Intent i){
 
-	//	lResult.addFooterView(footer);
-		lugaresList.clear();
+		
 		if(Intent.ACTION_SEARCH.equals(i.getAction())){
 			String query = i.getStringExtra(SearchManager.QUERY);
-			Log.i("SA", query);
-			ParseQuery<ParseObject> queryP = new ParseQuery<ParseObject>("Lugares");
-			queryP.whereContains("nombre", query);
 			
-			queryP.findInBackground(new FindCallback<ParseObject>() {
-				
-				@Override
-				public void done(List<ParseObject> lugares, ParseException e) {
-				//	lResult.removeFooterView(footer);
-					for (ParseObject lugar : lugares){
-						Lugares item = new Lugares();
-						item.setLugarId((String) lugar.getObjectId());
-						item.setName((String) lugar.get("nombre"));
-						item.setCategory((String) lugar.get("categoria"));
-						item.setCalif((float)lugar.getDouble("calificacion"));
-						item.setDesc((String) lugar.get("descripcion"));
-						item.setDir((String) lugar.get("direccion"));
-						item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
-								lugar.getParseGeoPoint("localizacion").getLongitude()));
-						lugaresList.add(item);
-					}
-					adapter = new ListaLugaresAdapter(getApplicationContext(), lugaresList);
-		            // Binds the Adapter to the ListView
-		            lResult.setAdapter(adapter);
-					
-				}
-			});
-		}
+			Bundle bundle = new Bundle();
+			bundle.putString("query", query);
+			
+			FragmentResult frag = new FragmentResult();
+			frag.setArguments(bundle);
+			
+			getSupportFragmentManager().beginTransaction().add(R.id.content_frame2, frag).addToBackStack(null).commit();}
+
 	}
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -124,9 +77,36 @@ public class SearchResult extends ActionBarActivity implements OnItemClickListen
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-		lugaresList.get(position);
-	
+	public void onArticleSelected(Lugares lugar) {
+		
+		Log.i("Clic","Search Result");
+		DetailFragment detail = (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
+		if(detail!=null){
+			
+		}
+		else
+		{
+			DetailFragment frag = new DetailFragment();
+			Bundle args = new Bundle();
+			args.putString("lugarId", lugar.getLugarId());
+			args.putString("nombre", lugar.getName());
+			args.putString("descripcion", lugar.getDesc());
+			args.putString("direccion", lugar.getDir());
+			args.putFloat("calificacion", lugar.getCalif());
+			args.putDouble("latitud", lugar.getGeo().latitude);
+			args.putDouble("longitud", lugar.getGeo().longitude);
+			frag.setArguments(args);
+			
+			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame2, frag).addToBackStack(null).commit();
+		}
+		
 	}
+	
+	@Override
+	public void onBackPressed(){
+		super.onBackPressed();
+		Log.i("Clic", "SearchResult");
+	}
+
 
 }

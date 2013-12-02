@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -186,6 +187,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			fragment = new NotificacionesFragment();
 			break;
 		default:
+			
 		Toast.makeText(getApplicationContext(),"default", Toast.LENGTH_SHORT).show();
 		break;
 		}
@@ -204,7 +206,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	public void onArticleSelected(Lugares lugar){
 		
 		DetailFragment detail =  (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
-		
+		Log.i("Clic","Main");
 		//Pantalla horizontal o tablet
 		if(detail!=null){}
 		else{
