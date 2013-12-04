@@ -6,6 +6,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="facebookId">544096209003819</string>
     <string name="hint">Lugar</string>
+    <string name="dfil">Selección</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
 <string name="search">Búsqueda</string>
     <string-array name="drawable">
         <item>Home</item>
@@ -24,6 +27,7 @@
         <item>Cuidado Personal</item>
     </string-array>
 
+    <string name="filtrar">Filtrar</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_search">Buscar</string>

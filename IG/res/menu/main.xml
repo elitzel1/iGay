@@ -8,4 +8,11 @@
         yourapp:showAsAction="collapseActionView|always"
         yourapp:actionViewClass="android.support.v7.widget.SearchView"
         />
+    
+    <item
+        android:id="@+id/action_filtrar"
+        android:title="@string/filtrar"
+        yourapp:showAsAction="always"/>
+
+    
 </menu>

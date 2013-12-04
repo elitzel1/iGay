@@ -90,8 +90,10 @@ private Activity activity;
 	    if(user!=null)
 	    	isactive=true;
 	    
+	    Log.i("CLASS", ""+getActivity().getClass().getName());
 	    setHasOptionsMenu(true);
 	    setUpBar();
+	    
 	}
 	
 	@Override
@@ -350,16 +352,20 @@ private Activity activity;
 	    MenuItem item= menu.findItem(R.id.action_search);
 	    item.setEnabled(false);
 	    item.setVisible(false);
+	    item=menu.findItem(R.id.action_filtrar);
+	    item.setEnabled(false);
+	    item.setVisible(false);
 	    super.onPrepareOptionsMenu(menu);
 	}
 	public void onDestroy(){
 		super.onDestroy();
-		 Fragment f = (SupportMapFragment) getFragmentManager()
+	if(getActivity().getClass().getName().equals("clicky.gcard.ig.MainActivity")){
+		Fragment f = (SupportMapFragment) getFragmentManager()
                  .findFragmentById(R.id.mapaLugar);
 		if(f!=null){
 			getFragmentManager().beginTransaction().remove(f).commit();
 		}
-	Log.i("CV", "onDestroy");
+	}
 	}
 
 }

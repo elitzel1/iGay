@@ -22,8 +22,11 @@ import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -37,6 +40,7 @@ private ListaLugaresAdapter adapterList = null;
 private TopLugaresAdapter adapterTop = null;
 private List<Lugares> lugaresList = null;
 private int tipo = -1;
+
 
 OnListListener callback;
 
@@ -89,6 +93,16 @@ OnListListener callback;
 	        this.activity=activity;
 	 }
 	 
+		@Override
+		public void onPrepareOptionsMenu(Menu menu) {
+			Log.i("onP", "Aqui");
+			MenuItem item = menu.findItem(R.id.action_filtrar);
+			item.setEnabled(false);
+			item.setVisible(false);
+			super.onPrepareOptionsMenu(menu);
+		}
+		
+		
 	 @Override
 	 public void onStart(){
 		 super.onStart();
@@ -96,6 +110,7 @@ OnListListener callback;
 		 SpinnerAdapterSpecial s_adapter = new SpinnerAdapterSpecial(getActivity().getBaseContext(),getResources().getStringArray(R.array.categorias));
 	     setUpBar(s_adapter);
 	 }
+	 
 	private void setUpBar(SpinnerAdapterSpecial adapter){
 		
 		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
@@ -245,6 +260,7 @@ OnListListener callback;
 		});
 	}
 	
+
 	public void onDestroy(){
 		super.onDestroy();
 		callback = null;

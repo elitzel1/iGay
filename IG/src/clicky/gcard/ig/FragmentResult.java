@@ -35,10 +35,14 @@ OnSelectItem callback;
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
 		lugaresList = new ArrayList<Lugares>();
 		footer = ((LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_item,
 				null,false);
-
+		
+		Log.i("ListView", "lala");
+		
+			
 		
 		
 	}

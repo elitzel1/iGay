@@ -32,7 +32,7 @@ public class LoginActivity extends ActionBarActivity {
 		actionBar.hide();
 		
 		ParseUser user = ParseUser.getCurrentUser();
-		
+		Log.i("LA", "On Created");
 		if(user != null){
 			Intent i = new Intent(LoginActivity.this,MainActivity.class);
 			startActivity(i);

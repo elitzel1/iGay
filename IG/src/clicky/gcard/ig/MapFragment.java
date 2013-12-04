@@ -136,7 +136,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	
 	if(coordenadas!=null){
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
-		getLugares(coordenadas, 5);
+		getLugares(coordenadas, 8);
 	}
 			Log.i("", "");
 			if(mapa!=null)
@@ -147,14 +147,14 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	}
 	
 
-	public void setUpMarker(){
+	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		
-		for(int i = 0; i < lugaresList.size(); i++){
+		for(int i = 0; i < listaLugares.size(); i++){
 			Marker mark = mapa.addMarker(new MarkerOptions()
-					.position(lugaresList.get(i).getGeo())
-					.title(lugaresList.get(i).getName()));
-			markersList.put(mark.getId(), lugaresList.get(i));
+					.position(listaLugares.get(i).getGeo())
+					.title(listaLugares.get(i).getName()));
+			markersList.put(mark.getId(), listaLugares.get(i));
 		}
 
 
@@ -179,6 +179,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	
 	private void getLugares(LatLng position, double kilometros){
 		lugaresList.clear();
+		
 		ParseQuery<ParseObject> query =  new ParseQuery<ParseObject>("Lugares");
 		query.whereWithinKilometers("localizacion", new ParseGeoPoint(position.latitude, position.longitude) , kilometros);
 		query.findInBackground(new FindCallback<ParseObject>() {
@@ -199,11 +200,30 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	                                    lugar.getParseGeoPoint("localizacion").getLongitude()));
 	                    lugaresList.add(item);
 					}
-					setUpMarker();
+					setUpMarker(lugaresList);
 				}
 			}
 
 		});
 		
 	}
+	
+	public void filter(ArrayList<String> num){
+		
+	
+		
+		List<Lugares> filtroLugares = new ArrayList<Lugares>();
+		
+		for(Lugares lu : lugaresList){
+			Log.i("Iterator", ""+lu.getName()+" "+lu.getCategory());
+			for(int i=0;i<num.size();i++){
+				if(lu.getCategory().equals(num.get(i)))
+					filtroLugares.add(lu);
+			}
+		}
+		setUpMarker(filtroLugares);
+	}
+	
+	
+
 }

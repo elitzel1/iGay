@@ -1,6 +1,9 @@
 package clicky.gcard.ig;
 
 
+import java.util.ArrayList;
+
+import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
 import clicky.gcard.ig.MapFragment.OnButtonListener;
 import clicky.gcard.ig.adapters.GPSTrakcer;
 import clicky.gcard.ig.datos.Lugares;
@@ -31,15 +34,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener,OnButtonListener {
+public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener,OnButtonListener,NoticeDialogInterface {
 	//private GoogleMap map;
 	LocationManager locationManager;
 	private String[] options;
 	private ListView drawerMenu;
 	private ActionBarDrawerToggle toggle;
 	private DrawerLayout drawer;
-
-	
+	private MapFragment mapFragment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		if (savedInstanceState != null) 
 			return;
 		
-		MapFragment mapFragment = new MapFragment();
+		mapFragment = new MapFragment();
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction()
 				.add(R.id.content_frame, mapFragment);
 		trans.commit();
@@ -81,10 +83,13 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		toggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer,
 				R.string.drawer_open, R.string.drawer_close){
+			
 			  public void onDrawerClosed(View arg0) {
 				  ActionBar actionBar = getSupportActionBar();
-				  if(drawerMenu.getCheckedItemPosition()>=0)
+				  if(drawerMenu.getCheckedItemPosition()>0)
 			        actionBar.setTitle(options[drawerMenu.getCheckedItemPosition()]);
+				  else
+					  actionBar.setTitle("J");
 			    }
 			    public void onDrawerOpened(View arg0) {
 		    	ActionBar actionBar = getSupportActionBar();
@@ -133,12 +138,21 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
         case R.id.action_search:
             onSearchRequested(); // Para versiones menores a 3.0
             return true;
+            
+        case R.id.action_filtrar:
+        	onFilter();
         default:
             return false;
     }
 		//return super.onOptionsItemSelected(item);
 	}
 
+	
+	public void onFilter(){
+		DialogFiltro diag = new DialogFiltro();
+		diag.show(getSupportFragmentManager(), "DFrag");
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -154,6 +168,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		    
 		    searchView.setSearchableInfo(
 		            searchManager.getSearchableInfo(getComponentName()));
+		    
 		}
 		return true;
 	}
@@ -203,6 +218,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 				manager.popBackStack();
 			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 			getSupportActionBar().setTitle(options[position]);
+			
 		}
 		drawerMenu.setItemChecked(position, true);
 		drawer.closeDrawer(drawerMenu);
@@ -240,9 +256,32 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		toggle.setDrawerIndicatorEnabled(true);
 		if(drawerMenu.getCheckedItemPosition()>=0)
 		getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
+		else
+			getSupportActionBar().setTitle("J");
 	}
 
+	/****Métodos de DialogFragment****/
+	@Override
+	public void onDialogPositiveClic(boolean[] arr) {
+		ArrayList<String> num = new ArrayList<String>();
+		String[] lugares = getResources().getStringArray(R.array.categorias);
+		
+		for(int i=0;i<arr.length;i++){
+			if(arr[i]==true){
+				num.add(lugares[i]);
+			}
+	
+		}
+		mapFragment.filter(num);
+	}
 
+	@Override
+	public void onDialogNegativeClic() {
+		// TODO Auto-generated method stub
+		
+	}
 
+	/************/
+	
 
 }
