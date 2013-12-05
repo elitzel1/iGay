@@ -16,10 +16,15 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.PushService;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 public class LoginActivity extends ActionBarActivity {
+	
+	private LoginActivity activity = this;
 	
 
 	
@@ -136,9 +141,22 @@ public class LoginActivity extends ActionBarActivity {
 			public void done(ParseUser user, ParseException e) {
 				if (user != null) {
 					dialog.dismiss();
-					Intent i = new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(i);
-                    finish();
+					
+					ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+					PushService.subscribe(activity, "lesbiana", MainActivity.class);
+					PushService.subscribe(activity, "gay", MainActivity.class);
+					PushService.subscribe(activity, "bisexual", MainActivity.class);
+					PushService.subscribe(activity, "transexual", MainActivity.class);
+					installation.saveInBackground(new SaveCallback() {
+						
+						@Override
+						public void done(ParseException arg0) {
+							dialog.dismiss();
+							Intent i = new Intent(LoginActivity.this,MainActivity.class);
+		        			startActivity(i);
+		        			finish();
+						}
+					});
                 } else {
                     Toast.makeText(getApplicationContext(),"User and/or password incorrect",
                         Toast.LENGTH_LONG).show();
@@ -178,10 +196,23 @@ public class LoginActivity extends ActionBarActivity {
         user.signUpInBackground(new SignUpCallback() {
         	public void done(ParseException e) {
         		if (e == null) {
-        			dialog.dismiss();
-        			Intent i = new Intent(LoginActivity.this,MainActivity.class);
-        			startActivity(i);
-        			finish();
+        			
+					ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+					PushService.subscribe(activity, "lesbiana", MainActivity.class);
+					PushService.subscribe(activity, "gay", MainActivity.class);
+					PushService.subscribe(activity, "bisexual", MainActivity.class);
+					PushService.subscribe(activity, "transexual", MainActivity.class);
+					installation.saveInBackground(new SaveCallback() {
+						
+						@Override
+						public void done(ParseException arg0) {
+							dialog.dismiss();
+							Intent i = new Intent(LoginActivity.this,MainActivity.class);
+		        			startActivity(i);
+		        			finish();
+						}
+					});
+					
                 } else {
                 	if(e.getCode() == 202)
                     Toast.makeText(getApplicationContext(),"User already exists", Toast.LENGTH_LONG).show();
