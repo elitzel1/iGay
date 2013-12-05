@@ -1,5 +1,6 @@
 package clicky.gcard.ig;
 
+import java.nio.channels.GatheringByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 import clicky.gcard.ig.adapters.GPSTrakcer;
 import clicky.gcard.ig.datos.Lugares;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -24,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,9 +76,24 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		lugaresList = new ArrayList<Lugares>();
 		showDetalle = AnimationUtils.loadAnimation(getActivity(), R.anim.show_detalle);
 		
+		
+		
 		/**Ubicaci��n del usuario***/
 		//LatLng coordenadas;
-		setUpGPS();
+		// Getting Google Play availability status
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity().getBaseContext());
+ 
+        // Showing status
+        if(status!=ConnectionResult.SUCCESS){ // Google Play Services are not available
+ 
+            int requestCode = 10;
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, getActivity(), requestCode);
+            dialog.show();
+ 
+        }
+        else{
+        	Log.i("Servicios", "Activados");
+        }
 		/*************************/
 		
 		
@@ -134,8 +153,10 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	
 	mapa.setMyLocationEnabled(true);
 	
+	setUpGPS();
 	if(coordenadas!=null){
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
+		
 		getLugares(coordenadas, 8);
 	}
 			Log.i("", "");
@@ -215,7 +236,6 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		List<Lugares> filtroLugares = new ArrayList<Lugares>();
 		
 		for(Lugares lu : lugaresList){
-			Log.i("Iterator", ""+lu.getName()+" "+lu.getCategory());
 			for(int i=0;i<num.size();i++){
 				if(lu.getCategory().equals(num.get(i)))
 					filtroLugares.add(lu);

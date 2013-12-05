@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		setUpDrawer();
 		
 		GPSTrakcer gps = new GPSTrakcer(this);
-		if(!gps.canGetLocation())
+		if(!gps.isGPSEnable())
 			gps.showAlert();
 
 		if (savedInstanceState != null) 

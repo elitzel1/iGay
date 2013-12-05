@@ -5,18 +5,20 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.util.Log;
 
 public class GPSTrakcer extends Service implements LocationListener {
 
 	private final Context context;
 	
-	boolean isEnableGPS=false;
+	boolean isGPSEnable=false;
 	boolean isEnableWifi=false;
 	boolean canGetLocation = false;
 	
@@ -36,47 +38,24 @@ public class GPSTrakcer extends Service implements LocationListener {
 	
 	public Location getLocation(){
 		
-		try{
-			
-			locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
-			isEnableGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			isEnableWifi = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-			
-			if(!isEnableGPS&&!isEnableWifi){
-				return null;
-				}
-			else{
-				canGetLocation= true;
-				
-				if(isEnableGPS){
-					if(location==null){
-						locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-					
-						if(locationManager!=null){ location=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-							if(location!=null){
-								lat=location.getLatitude();
-								log=location.getLongitude();
-							}
-						}
-					}
-				}
-				
-				if(isEnableWifi){
-					locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-					if(locationManager!=null){
-						location=locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-						if(location!=null){
-							lat=location.getLatitude();
-							log=location.getLongitude();
-						}
-					}
-				}
-			}
-			
-		}catch(Exception e){}
 		
-		return location;
+		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
 		
+		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+			isGPSEnable=true;
+		
+		Criteria criteria = new Criteria();
+		String provider = locationManager.getBestProvider(criteria, true);
+		location = locationManager.getLastKnownLocation(provider);
+		
+		if(location!=null){
+			Log.i("Location", provider);
+			canGetLocation=true;
+			lat=location.getLatitude();
+			log=location.getLongitude();
+			return location;
+		}
+		else return null;
 		
 	}
 	
@@ -97,7 +76,11 @@ public class GPSTrakcer extends Service implements LocationListener {
 	}
 	
 	public boolean canGetLocation(){
-		return isEnableGPS;
+		return canGetLocation;
+	}
+	
+	public boolean isGPSEnable(){
+		return isGPSEnable;
 	}
 	
 	public void showAlert(){
