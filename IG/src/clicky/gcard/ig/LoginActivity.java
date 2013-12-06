@@ -53,6 +53,8 @@ public class LoginActivity extends ActionBarActivity {
 		case R.id.btnLogin:
 			showLoginDialog();
 			break;
+		case R.id.btnFacebook:
+			connectFacebook();
 		case R.id.btnContinue:
 			Intent i = new Intent(LoginActivity.this,MainActivity.class);
 			startActivity(i);
@@ -70,7 +72,6 @@ public class LoginActivity extends ActionBarActivity {
 		final EditText editPass = (EditText) dialog.findViewById(R.id.editPass);
 		
 		Button btnLogin = (Button) dialog.findViewById(R.id.btnLogin);
-		Button btnFacebook = (Button) dialog.findViewById(R.id.btnFacebook);
 		
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
@@ -81,13 +82,6 @@ public class LoginActivity extends ActionBarActivity {
 			}
 		});
 		
-		btnFacebook.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				connectFacebook(dialog);
-			}
-		});
-
 		dialog.show();
 	}
 	
@@ -102,7 +96,6 @@ public class LoginActivity extends ActionBarActivity {
 		final EditText editMail = (EditText) dialog.findViewById(R.id.editMail);
 		
 		Button dialogButton = (Button) dialog.findViewById(R.id.btnReg);
-		Button btnFacebook = (Button) dialog.findViewById(R.id.btnFacebook);
 		
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -111,12 +104,6 @@ public class LoginActivity extends ActionBarActivity {
 					register(dialog,editUser.getText().toString(), editPass.getText().toString(), 
 							editMail.getText().toString());
 				}
-			}
-		});
-		btnFacebook.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				connectFacebook(dialog);
 			}
 		});
 
@@ -220,19 +207,17 @@ public class LoginActivity extends ActionBarActivity {
         	}
         });
 	}
-	private void connectFacebook(final Dialog dialog){
+	private void connectFacebook(){
 		ParseFacebookUtils.logIn(this, new LogInCallback() {
 			 @Override
 			 public void done(ParseUser user, ParseException err) {
 				 if (user == null) {
 					 Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
 				 } else if (user.isNew()) {
-					 dialog.dismiss();
 					 Intent i = new Intent(LoginActivity.this,MainActivity.class);
 					 startActivity(i);
 					 finish();
 				 } else {
-					 dialog.dismiss();
 					 Intent i = new Intent(LoginActivity.this,MainActivity.class);
 					 startActivity(i);
 					 finish();

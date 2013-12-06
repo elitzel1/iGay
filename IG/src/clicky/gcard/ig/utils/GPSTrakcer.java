@@ -1,4 +1,4 @@
-package clicky.gcard.ig.adapters;
+package clicky.gcard.ig.utils;
 
 import android.app.AlertDialog;
 import android.app.Service;

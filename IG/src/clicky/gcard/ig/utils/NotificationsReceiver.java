@@ -1,5 +1,8 @@
-package clicky.gcard.ig.adapters;
+package clicky.gcard.ig.utils;
 
+import java.util.Calendar;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +21,19 @@ public class NotificationsReceiver extends BroadcastReceiver {
       String action = intent.getAction();
       String channel = intent.getExtras().getString("com.parse.Channel");
       JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+      JSONArray array = NotificationsFile.getNotifications(context, "notificaciones");
+      JSONObject notification = new JSONObject();
+
+      Calendar calendar = Calendar.getInstance();
+      String fecha = calendar.get(Calendar.DAY_OF_MONTH)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+      
+      notification.put("titulo", json.getString("alert"));
+      notification.put("descripcion", json.getString("desc"));
+      notification.put("link", json.getString("link"));
+      notification.put("fecha", fecha);
+
+      array.put(notification);
+      NotificationsFile.saveNotification(context, "notificaciones", array.toString());
  
       Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
 

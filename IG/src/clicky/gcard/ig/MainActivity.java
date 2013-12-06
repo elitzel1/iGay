@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
 import clicky.gcard.ig.MapFragment.OnButtonListener;
-import clicky.gcard.ig.adapters.GPSTrakcer;
 import clicky.gcard.ig.datos.Lugares;
+import clicky.gcard.ig.utils.GPSTrakcer;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Build;
