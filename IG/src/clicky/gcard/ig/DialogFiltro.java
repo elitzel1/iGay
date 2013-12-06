@@ -11,7 +11,7 @@ import android.support.v4.app.DialogFragment;
 public class DialogFiltro extends DialogFragment implements OnMultiChoiceClickListener {
 
 
-	public boolean[] arr = new boolean[7];
+	public static boolean[] arr = new boolean[7];
 	NoticeDialogInterface mCallback;
 	
 	public interface NoticeDialogInterface{
@@ -35,7 +35,7 @@ public class DialogFiltro extends DialogFragment implements OnMultiChoiceClickLi
 	
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		
-		builder.setTitle(R.string.dfil).setMultiChoiceItems(getResources().getStringArray(R.array.categorias), null, this).
+		builder.setTitle(R.string.dfil).setMultiChoiceItems(getResources().getStringArray(R.array.categorias), arr, this).
 		setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
 			
 			@Override

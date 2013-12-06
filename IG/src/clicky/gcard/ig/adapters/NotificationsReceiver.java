@@ -19,7 +19,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
       String channel = intent.getExtras().getString("com.parse.Channel");
       JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
  
-      Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
+      Log.d(TAG, "got action " + json + " on channel " + channel + " with:");
 
     } catch (JSONException e) {
       Log.d(TAG, "JSONException: " + e.getMessage());

@@ -1,6 +1,5 @@
 package clicky.gcard.ig;
 
-import java.nio.channels.GatheringByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
