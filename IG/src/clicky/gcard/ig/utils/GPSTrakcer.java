@@ -1,4 +1,4 @@
-package clicky.gcard.ig.adapters;
+package clicky.gcard.ig.utils;
 
 import android.app.AlertDialog;
 import android.app.Service;
@@ -17,7 +17,6 @@ import android.util.Log;
 public class GPSTrakcer extends Service implements LocationListener {
 
 	private final Context context;
-	
 	boolean isGPSEnable=false;
 	boolean isEnableWifi=false;
 	boolean canGetLocation = false;
@@ -26,8 +25,8 @@ public class GPSTrakcer extends Service implements LocationListener {
 	double lat;
 	double log;
 	
-	private static final long MIN_DISTANCE =10; //10 metros
-	private static final long MIN_TIME = 1000*60*1; //UN MINUTO
+//	private static final long MIN_DISTANCE =10; //10 metros
+//	private static final long MIN_TIME = 1000*60*1; //UN MINUTO
 	
 	protected LocationManager locationManager;
 	
@@ -139,5 +138,6 @@ public class GPSTrakcer extends Service implements LocationListener {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

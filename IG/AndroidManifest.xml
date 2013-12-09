@@ -88,7 +88,7 @@
 		    <action android:name="android.intent.action.USER_PRESENT" />
 		  </intent-filter>
 		</receiver>
-		<receiver android:name="clicky.gcard.ig.adapters.NotificationsReceiver">
+		<receiver android:name="clicky.gcard.ig.utils.NotificationsReceiver">
 			<intent-filter>
 			  <action android:name="notification" />
 			</intent-filter>

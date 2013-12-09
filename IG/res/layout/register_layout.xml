@@ -58,16 +58,6 @@
         android:layout_below="@+id/editConfirmPass"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal" >
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hombre" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mujer" />
     </RadioGroup>
 
     <Button
@@ -77,13 +67,5 @@
         android:layout_below="@+id/radioGroup1"
         android:layout_centerHorizontal="true"
         android:text="Registrar" />
-
-    <Button
-        android:id="@+id/btnFacebook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnReg"
-        android:layout_centerHorizontal="true"
-        android:text="Registrar con Facebook" />
 
 </RelativeLayout>

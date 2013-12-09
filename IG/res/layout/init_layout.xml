@@ -21,6 +21,14 @@
         android:layout_gravity="center"
         android:onClick="btnAction"
         android:text="Log In" />
+    
+    <Button
+        android:id="@+id/btnFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="btnAction"
+        android:text="Entrar con Facebook" />
 
     <Button
         android:id="@+id/btnContinue"

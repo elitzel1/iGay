@@ -3,10 +3,12 @@ package clicky.gcard.ig;
 
 import java.util.ArrayList;
 
+import clicky.gcard.ig.AjustesFragment.onListItemClicConf;
+import clicky.gcard.ig.DialogAjustesNot.AjustesNotListener;
 import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
 import clicky.gcard.ig.MapFragment.OnButtonListener;
-import clicky.gcard.ig.adapters.GPSTrakcer;
 import clicky.gcard.ig.datos.Lugares;
+import clicky.gcard.ig.utils.GPSTrakcer;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Build;
@@ -34,7 +36,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener,OnButtonListener,NoticeDialogInterface {
+public class MainActivity extends ActionBarActivity implements OnItemClickListener,Listas.OnListListener,OnButtonListener,NoticeDialogInterface,
+onListItemClicConf,AjustesNotListener{
 	//private GoogleMap map;
 	LocationManager locationManager;
 	private String[] options;
@@ -278,6 +281,20 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 	@Override
 	public void onDialogNegativeClic() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPositiveClic(boolean[] tipos) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDialogNot() {
+		// TODO Auto-generated method stub
+		DialogAjustesNot diag = new DialogAjustesNot();
+		diag.show(getSupportFragmentManager(), "diagNoti");
 		
 	}
 

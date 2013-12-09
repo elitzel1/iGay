@@ -1,6 +1,5 @@
 package clicky.gcard.ig.adapters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import clicky.gcard.ig.R;
@@ -20,15 +19,12 @@ public class ComentarioAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
     private List<Comentario> lugaresList = null;
-    private ArrayList<Comentario> arraylist;
     protected int count;
  
     public ComentarioAdapter(Context context, List<Comentario> lugaresList) {
         mContext = context;
         this.lugaresList = lugaresList;
         inflater = LayoutInflater.from(mContext);
-        this.arraylist = new ArrayList<Comentario>();
-        this.arraylist.addAll(lugaresList);
     }
  
     public class ViewHolder {

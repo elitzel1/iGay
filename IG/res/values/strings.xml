@@ -27,6 +27,12 @@
         <item>Cuidado Personal</item>
     </string-array>
 
+    <string-array name="tipos">
+       <item>Bisexual</item>
+       <item>Gay</item>
+       <item>Lésbico</item>
+       <item>Transexual</item>
+    </string-array>
     <string name="filtrar">Filtrar</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
