@@ -1,6 +1,7 @@
 package clicky.gcard.ig;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.parse.PushService;
@@ -17,7 +18,7 @@ public class DialogAjustesNot extends DialogFragment implements OnMultiChoiceCli
 
 	public boolean[] tipos = new boolean[4];
 	AjustesNotListener mCallback;
-	Object[] suscriptions;
+	Set<String> suscriptions;
 	
 	
 	public interface AjustesNotListener{
@@ -36,14 +37,12 @@ public class DialogAjustesNot extends DialogFragment implements OnMultiChoiceCli
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState){
-		suscriptions =  PushService.getSubscriptions(getActivity()).toArray();
+		suscriptions =  PushService.getSubscriptions(getActivity());
 		String[] array = getResources().getStringArray(R.array.tipos);
 		for(int i = 0; i< array.length;i++){
-			for(int j = 0 ; j<suscriptions.length;j++){
-				if(array[i].equals(suscriptions[j])){
+			if(suscriptions.contains(array[i])){
 					tipos[i] = true;
 				}
-			}
 		}
 		AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.dfil).setMultiChoiceItems(getResources().getStringArray(R.array.tipos), tipos, this).
@@ -85,23 +84,18 @@ public class DialogAjustesNot extends DialogFragment implements OnMultiChoiceCli
 	public void changeChannels(ArrayList<String> num){
 		
 		for(int i=0;i<num.size();i++){
-			out:
-			for(int j = 0; j < suscriptions.length; j++){
-				if(num.get(i).equals(suscriptions[j])){
-					break out;
-				}
+			if(!suscriptions.contains(num.get(i))){
 				PushService.subscribe(getActivity(), num.get(i), MainActivity.class);
 			}
 		}
-		for(int i=0;i<suscriptions.length;i++){
-			out:
-			for(int j = 0; j < num.size(); j++){
-				if(suscriptions[i].equals(num.get(j))){
-					break out;
-				}
-				PushService.unsubscribe(getActivity(), suscriptions[i].toString());
+		Iterator<String> iterator = suscriptions.iterator();
+		while(iterator.hasNext()){
+			String tipo = iterator.next();
+			if(!num.contains(tipo)){
+				PushService.unsubscribe(getActivity(), tipo);
 			}
 		}
+		
 	}
 	
 	public boolean[] getOptions(){
