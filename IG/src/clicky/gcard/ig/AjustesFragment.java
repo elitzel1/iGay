@@ -1,7 +1,10 @@
 package clicky.gcard.ig;
 
+import com.parse.ParseUser;
+
 import clicky.gcard.ig.adapters.AdapterListaNotificaciones;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -65,6 +68,13 @@ public class AjustesFragment extends ListFragment {
 		case 4:
 			break;
 		case 5:
+			ParseUser user = ParseUser.getCurrentUser();
+			if(user != null){
+				ParseUser.logOut();
+				Intent i = new Intent(activity,LoginActivity.class);
+				startActivity(i);
+				activity.finish();
+			}
 			break;
 		default:
 			break;

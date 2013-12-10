@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:ems="5"
-        android:onClick="btnAction"
-        android:text="Registrar" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="btnAction"
-        android:text="Log In" />
     
-    <Button
-        android:id="@+id/btnFacebook"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imgLogin"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="btnAction"
-        android:text="Entrar con Facebook" />
+        android:layout_above="@+id/botones"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_launcher"
+        android:contentDescription="@string/img_log" />
+    
+    <LinearLayout 
+        android:id="@+id/botones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnContinue"
+        android:orientation="horizontal">
 
+	    <Button
+	        android:id="@+id/btnRegister"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:onClick="btnAction"
+	        android:text="@string/btn_reg" />
+	
+	    <Button
+	        android:id="@+id/btnLogin"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:onClick="btnAction"
+	        android:text="@string/btn_log" />
+    
+    </LinearLayout>
+    
     <Button
         android:id="@+id/btnContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:onClick="btnAction"
-        android:text="Continue to app" />
+        android:text="@string/btn_continue" />
 
-</LinearLayout>
+</RelativeLayout>

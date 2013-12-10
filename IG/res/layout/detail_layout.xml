@@ -13,6 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:contentDescription="@string/img_detalle"
         android:background="@color/negro" />
     
     <TextView
@@ -65,25 +66,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mapaLugar"
         android:layout_centerHorizontal="true"
-        android:text="Add comment" />
+        android:text="@string/btn_comment" />
 
     <ListView
         android:id="@+id/listComments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/btnComment"
-        android:layout_above="@+id/adView" >
-    </ListView>
+        android:layout_below="@+id/btnComment" />
     
-    <com.google.android.gms.ads.AdView
-       android:id="@+id/adView"
-       ads:adSize="SMART_BANNER"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-       android:layout_alignParentBottom="true"
-       ads:adUnitId="ca-app-pub-7375913785110561/8214137935" />
-
-    
-
 </RelativeLayout>
