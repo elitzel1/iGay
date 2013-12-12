@@ -93,6 +93,9 @@
 			  <action android:name="notification" />
 			</intent-filter>
 		</receiver>
+		<activity android:name="clicky.gcard.ig.CuentaActivity"></activity>
+		<activity android:name="clicky.gcard.ig.RedesSocialesActivity"></activity>
+		<activity android:name="clicky.gcard.ig.PrivacidadActivity"></activity>
     </application>
 
 </manifest>

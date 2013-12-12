@@ -54,24 +54,30 @@ public class AjustesFragment extends ListFragment {
 	
 	public void onListItemClick(ListView list,View view, int position, long id){
 		super.onListItemClick(list, view, position, id);
-		
+		Intent i;
 		switch(position){
 		case 0:
+			i = new Intent(activity,CuentaActivity.class);
+			startActivity(i);
 			break;
 		case 1:
 			mCallback.onDialogNot();
 			break;
 		case 2:
+			i = new Intent(activity,RedesSocialesActivity.class);
+			startActivity(i);
 			break;
 		case 3:
 			break;
 		case 4:
+			i = new Intent(activity,PrivacidadActivity.class);
+			startActivity(i);
 			break;
 		case 5:
 			ParseUser user = ParseUser.getCurrentUser();
 			if(user != null){
 				ParseUser.logOut();
-				Intent i = new Intent(activity,LoginActivity.class);
+				i = new Intent(activity,LoginActivity.class);
 				startActivity(i);
 				activity.finish();
 			}
