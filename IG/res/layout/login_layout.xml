@@ -10,14 +10,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#FFF">
+    
+    <Button
+        android:id="@+id/btnFacebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/btn_face" />
 
     <EditText
         android:id="@+id/editUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:hint="Usuario"
+        android:layout_below="@+id/btnFacebook"
+        android:hint="@string/hint_user"
         android:inputType="text"
         android:ems="10" />
 
@@ -27,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editUser"
         android:layout_below="@+id/editUser"
-        android:hint="Contraseña"
+        android:hint="@string/hint_pass"
         android:inputType="textPassword"
         android:ems="10" />
 
@@ -37,6 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editPass"
         android:layout_centerHorizontal="true"
-        android:text="Log In" />
+        android:text="@string/btn_log" />
 
 </RelativeLayout>

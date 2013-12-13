@@ -1,6 +1,7 @@
 package clicky.gcard.ig;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -25,7 +26,7 @@ import com.parse.SignUpCallback;
 public class LoginActivity extends ActionBarActivity {
 	
 	private LoginActivity activity = this;
-	
+	private ProgressDialog loading;
 
 	
 	@Override
@@ -53,8 +54,6 @@ public class LoginActivity extends ActionBarActivity {
 		case R.id.btnLogin:
 			showLoginDialog();
 			break;
-		case R.id.btnFacebook:
-			connectFacebook();
 		case R.id.btnContinue:
 			Intent i = new Intent(LoginActivity.this,MainActivity.class);
 			startActivity(i);
@@ -72,6 +71,7 @@ public class LoginActivity extends ActionBarActivity {
 		final EditText editPass = (EditText) dialog.findViewById(R.id.editPass);
 		
 		Button btnLogin = (Button) dialog.findViewById(R.id.btnLogin);
+		Button btnFace = (Button) dialog.findViewById(R.id.btnFacebook);
 		
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
@@ -79,6 +79,13 @@ public class LoginActivity extends ActionBarActivity {
 				if(verifyLogin(editUser,editPass)){
 					logIn(dialog,editUser.getText().toString(), editPass.getText().toString());
 				}
+			}
+		});
+		
+		btnFace.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				connectFacebook(dialog);
 			}
 		});
 		
@@ -96,6 +103,7 @@ public class LoginActivity extends ActionBarActivity {
 		final EditText editMail = (EditText) dialog.findViewById(R.id.editMail);
 		
 		Button dialogButton = (Button) dialog.findViewById(R.id.btnReg);
+		Button btnFace = (Button) dialog.findViewById(R.id.btnFacebook);
 		
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -104,6 +112,13 @@ public class LoginActivity extends ActionBarActivity {
 					register(dialog,editUser.getText().toString(), editPass.getText().toString(), 
 							editMail.getText().toString());
 				}
+			}
+		});
+		
+		btnFace.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				connectFacebook(dialog);
 			}
 		});
 
@@ -124,27 +139,20 @@ public class LoginActivity extends ActionBarActivity {
 	}
 	
 	private void logIn(final Dialog dialog,String userName,String password){
+		dialog.dismiss();
+		loading = new ProgressDialog(activity);
+		loading.setMessage("Wait a moment...");
+		loading.setCancelable(false);
+		loading.show();
 		ParseUser.logInInBackground(userName, password, new LogInCallback() {
 			public void done(ParseUser user, ParseException e) {
 				if (user != null) {
-					dialog.dismiss();
-					
-					ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-					PushService.subscribe(activity, "lesbiana", MainActivity.class);
-					PushService.subscribe(activity, "gay", MainActivity.class);
-					PushService.subscribe(activity, "bisexual", MainActivity.class);
-					PushService.subscribe(activity, "transexual", MainActivity.class);
-					installation.saveInBackground(new SaveCallback() {
-						
-						@Override
-						public void done(ParseException arg0) {
-							dialog.dismiss();
-							Intent i = new Intent(LoginActivity.this,MainActivity.class);
-		        			startActivity(i);
-		        			finish();
-						}
-					});
+					loading.dismiss();
+					Intent i = new Intent(LoginActivity.this,MainActivity.class);
+	       			startActivity(i);
+        			finish();
                 } else {
+                	loading.dismiss();
                     Toast.makeText(getApplicationContext(),"User and/or password incorrect",
                         Toast.LENGTH_LONG).show();
                 }
@@ -176,6 +184,11 @@ public class LoginActivity extends ActionBarActivity {
 		return true;
 	}
 	private void register(final Dialog dialog,String userName,String password,String mail){
+		dialog.dismiss();
+		loading = new ProgressDialog(activity);
+		loading.setMessage("Wait a moment...");
+		loading.setCancelable(false);
+		loading.show();
 		ParseUser user = new ParseUser();
         user.setUsername(userName);
         user.setEmail(mail);
@@ -185,15 +198,15 @@ public class LoginActivity extends ActionBarActivity {
         		if (e == null) {
         			
 					ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-					PushService.subscribe(activity, "lesbiana", MainActivity.class);
-					PushService.subscribe(activity, "gay", MainActivity.class);
-					PushService.subscribe(activity, "bisexual", MainActivity.class);
-					PushService.subscribe(activity, "transexual", MainActivity.class);
+					PushService.subscribe(activity, "Lesbico", MainActivity.class);
+					PushService.subscribe(activity, "Gay", MainActivity.class);
+					PushService.subscribe(activity, "Bisexual", MainActivity.class);
+					PushService.subscribe(activity, "Transexual", MainActivity.class);
 					installation.saveInBackground(new SaveCallback() {
 						
 						@Override
 						public void done(ParseException arg0) {
-							dialog.dismiss();
+							loading.dismiss();
 							Intent i = new Intent(LoginActivity.this,MainActivity.class);
 		        			startActivity(i);
 		        			finish();
@@ -201,23 +214,49 @@ public class LoginActivity extends ActionBarActivity {
 					});
 					
                 } else {
+                	loading.dismiss();
                 	if(e.getCode() == 202)
-                    Toast.makeText(getApplicationContext(),"User already exists", Toast.LENGTH_LONG).show();
+                		Toast.makeText(getApplicationContext(),"User already exists", Toast.LENGTH_LONG).show();
                 }
         	}
         });
 	}
-	private void connectFacebook(){
+	private void connectFacebook(final Dialog dialog){
+		/*
+		dialog.dismiss();
+		
+		loading = new ProgressDialog(activity);
+		loading.setMessage("Wait a moment...");
+		loading.setCancelable(false);
+		loading.show();
+		*/
 		ParseFacebookUtils.logIn(this, new LogInCallback() {
 			 @Override
 			 public void done(ParseUser user, ParseException err) {
+				 dialog.dismiss();
 				 if (user == null) {
-					 Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+					 //loading.dismiss();
+					 Log.i("MyApp", "Error");
 				 } else if (user.isNew()) {
-					 Intent i = new Intent(LoginActivity.this,MainActivity.class);
-					 startActivity(i);
-					 finish();
+					 Log.i("MyApp", "New user");
+					 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+					 PushService.subscribe(activity, "Lesbico", MainActivity.class);
+					 PushService.subscribe(activity, "Gay", MainActivity.class);
+					 PushService.subscribe(activity, "Bisexual", MainActivity.class);
+					 PushService.subscribe(activity, "Transexual", MainActivity.class);
+					 installation.saveInBackground(new SaveCallback() {
+						
+						 @Override
+						 public void done(ParseException arg0) {
+							 //loading.dismiss();
+							 Intent i = new Intent(LoginActivity.this,MainActivity.class);
+							 startActivity(i);
+							 finish();
+						}
+					});
 				 } else {
+					 //loading.dismiss();
+					 Log.i("MyApp", "Log In");
 					 Intent i = new Intent(LoginActivity.this,MainActivity.class);
 					 startActivity(i);
 					 finish();

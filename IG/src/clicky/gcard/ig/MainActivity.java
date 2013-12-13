@@ -283,6 +283,7 @@ onListItemClicConf,AjustesNotListener{
 	
 		}
 		mapFragment.filter(num);
+		mapFragment.hideDetail();
 	}
 
 	@Override
@@ -292,17 +293,22 @@ onListItemClicConf,AjustesNotListener{
 	}
 
 	@Override
-	public void onPositiveClic(boolean[] tipos) {
-		// TODO Auto-generated method stub
+	public void onPositiveClic(boolean[] tipos,DialogAjustesNot fragment) {
+		ArrayList<String> num = new ArrayList<String>();
+		String[] lugares = getResources().getStringArray(R.array.tipos);
 		
+		for(int i=0;i<tipos.length;i++){
+			if(tipos[i]==true){
+				num.add(lugares[i]);
+			}
+		}
+		fragment.changeChannels(num);
 	}
 
 	@Override
 	public void onDialogNot() {
-		// TODO Auto-generated method stub
 		DialogAjustesNot diag = new DialogAjustesNot();
 		diag.show(getSupportFragmentManager(), "diagNoti");
-		
 	}
 
 	/************/

@@ -10,15 +10,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#fff"
     android:orientation="vertical" >
+    
+    <Button
+        android:id="@+id/btnFacebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/btn_face" />
 
     <EditText
         android:id="@+id/editUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/btnFacebook"
         android:ems="10"
-        android:hint="Usuario"
+        android:hint="@string/hint_user"
         android:inputType="text" />
     
     <EditText
@@ -28,7 +35,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/editUser"
         android:ems="10"
-        android:hint="Correo"
+        android:hint="@string/hint_mail"
         android:inputType="textEmailAddress" />
 
     <EditText
@@ -38,7 +45,7 @@
         android:layout_alignLeft="@+id/editUser"
         android:layout_below="@+id/editMail"
         android:ems="10"
-        android:hint="Contraseña"
+        android:hint="@string/hint_pass"
         android:inputType="textPassword" />
 
     <EditText
@@ -48,7 +55,7 @@
         android:layout_alignLeft="@+id/editUser"
         android:layout_below="@+id/editPass"
         android:ems="10"
-        android:hint="Confirmar Contraseña"
+        android:hint="@string/hint_confirm"
         android:inputType="textPassword" />
 
     <RadioGroup
@@ -66,6 +73,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/radioGroup1"
         android:layout_centerHorizontal="true"
-        android:text="Registrar" />
+        android:text="@string/btn_reg" />
 
 </RelativeLayout>

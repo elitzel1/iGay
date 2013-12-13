@@ -11,6 +11,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -50,10 +52,11 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	private List<Lugares> lugaresList = null;
 	private HashMap<String, Lugares> markersList = new HashMap<String, Lugares>();
 	private Lugares lugar;
+	private boolean visible = false;
 	private LinearLayout detalles;
 	private TextView txtNombre;
 	private RatingBar calif;
-	private Animation showDetalle;
+	private Animation showDetalle,hideDetalle;
 	
 	
 	public interface OnButtonListener{
@@ -74,6 +77,21 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		
 		lugaresList = new ArrayList<Lugares>();
 		showDetalle = AnimationUtils.loadAnimation(getActivity(), R.anim.show_detalle);
+		hideDetalle = AnimationUtils.loadAnimation(getActivity(), R.anim.hide_detalle);
+		hideDetalle.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				detalles.setVisibility(View.INVISIBLE);
+			}
+		});
 		
 		
 		
@@ -151,6 +169,12 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	mapa =((SupportMapFragment)getFragmentManager().findFragmentById(R.id.mapp)).getMap();
 	
 	mapa.setMyLocationEnabled(true);
+	mapa.setOnMapClickListener(new OnMapClickListener() {
+		@Override
+		public void onMapClick(LatLng point) {
+			hideDetail();
+		}
+	});
 	
 	setUpGPS();
 	if(coordenadas!=null){
@@ -172,8 +196,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		
 		for(int i = 0; i < listaLugares.size(); i++){
 			Marker mark = mapa.addMarker(new MarkerOptions()
-					.position(listaLugares.get(i).getGeo())
-					.title(listaLugares.get(i).getName()));
+					.position(listaLugares.get(i).getGeo()));
 			markersList.put(mark.getId(), listaLugares.get(i));
 		}
 
@@ -194,7 +217,15 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		txtNombre.setText(lugar.getName());
 		calif.setRating(lugar.getCalif());
 		detalles.setVisibility(View.VISIBLE);
+		visible = true;
 		detalles.startAnimation(showDetalle);
+	}
+	
+	public void hideDetail(){
+		if(visible){
+			detalles.startAnimation(hideDetalle);
+			visible = false;
+		}
 	}
 	
 	private void getLugares(LatLng position, double kilometros){
@@ -229,8 +260,6 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	}
 	
 	public void filter(ArrayList<String> num){
-		
-	
 		
 		List<Lugares> filtroLugares = new ArrayList<Lugares>();
 		
