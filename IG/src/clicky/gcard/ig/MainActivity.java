@@ -2,11 +2,11 @@ package clicky.gcard.ig;
 
 
 import java.util.ArrayList;
-
 import clicky.gcard.ig.AjustesFragment.onListItemClicConf;
 import clicky.gcard.ig.DialogAjustesNot.AjustesNotListener;
 import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
 import clicky.gcard.ig.MapFragment.OnButtonListener;
+import clicky.gcard.ig.adapters.AdapterDrawer;
 import clicky.gcard.ig.datos.Lugares;
 import clicky.gcard.ig.utils.GPSTrakcer;
 import android.graphics.drawable.ColorDrawable;
@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,6 +44,10 @@ onListItemClicConf,AjustesNotListener{
 	private ActionBarDrawerToggle toggle;
 	private DrawerLayout drawer;
 	private MapFragment mapFragment;
+	
+	Integer[] imageId ={R.drawable.ic_action_picture,R.drawable.ic_action_cc_bcc,R.drawable.ic_action_flash_on,
+			R.drawable.ic_action_make_available_offline,R.drawable.ic_action_split};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +78,7 @@ onListItemClicConf,AjustesNotListener{
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle("J");
 		actionBar.show();
-		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.morado)));
+		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.moradof)));
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		
 	}
@@ -105,10 +108,14 @@ onListItemClicConf,AjustesNotListener{
 		
 		options = getResources().getStringArray(R.array.drawable);
 		drawerMenu = (ListView) findViewById(R.id.left_drawer);
-		drawerMenu.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
-				.getThemedContext(), R.layout.item_drawable, options));
+		drawerMenu.setAdapter(new AdapterDrawer(getSupportActionBar()
+				.getThemedContext(), R.layout.item_drawable, options,imageId));
 		drawerMenu.setBackgroundColor(getResources().getColor(R.color.gris));
 	
+		//getSupportActionBar().getThemedContext()
+		//http://www.androidbegin.com/tutorial/implementing-actionbarsherlock-side-menu-navigation-drawer-in-android/
+		
+		
 		// Set actionBarDrawerToggle as the DrawerListener
 		drawer.setDrawerListener(toggle);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
