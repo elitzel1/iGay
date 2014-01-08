@@ -214,11 +214,15 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	}
 	
 	private void showDetail(Lugares lugar){
+		try{
 		txtNombre.setText(lugar.getName());
 		calif.setRating(lugar.getCalif());
 		detalles.setVisibility(View.VISIBLE);
 		visible = true;
 		detalles.startAnimation(showDetalle);
+		}catch(NullPointerException e){
+			Toast.makeText(getActivity(), "Espere un momento", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	public void hideDetail(){

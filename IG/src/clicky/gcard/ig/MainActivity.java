@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -25,7 +26,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -237,37 +237,60 @@ onListItemClicConf,AjustesNotListener{
 	/**Interfaz para Lista y Más Info**/
 	public void onArticleSelected(Lugares lugar){
 		
-		DetailFragment detail =  (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
-		Log.i("Clic","Main");
+		Intent i = new Intent(MainActivity.this,DetallesActivity.class);
+		Bundle args = new Bundle();
+		args.putString("lugarId", lugar.getLugarId());
+		args.putString("nombre", lugar.getName());
+		args.putString("descripcion", lugar.getDesc());
+		args.putString("direccion", lugar.getDir());
+		args.putFloat("calificacion", lugar.getCalif());
+		args.putDouble("latitud", lugar.getGeo().latitude);
+		args.putDouble("longitud", lugar.getGeo().longitude);
+		i.putExtra("datos", args);
+		
+		startActivity(i);
+		
+		//DetailFragment detail =  (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
+		//Log.i("Clic","Main");
 		//Pantalla horizontal o tablet
-		if(detail!=null){}
-		else{
-			DetailFragment fragment = new DetailFragment();
-			Bundle args = new Bundle();
-			args.putString("lugarId", lugar.getLugarId());
-			args.putString("nombre", lugar.getName());
-			args.putString("descripcion", lugar.getDesc());
-			args.putString("direccion", lugar.getDir());
-			args.putFloat("calificacion", lugar.getCalif());
-			args.putDouble("latitud", lugar.getGeo().latitude);
-			args.putDouble("longitud", lugar.getGeo().longitude);
-			fragment.setArguments(args);
+		//if(detail!=null){}
+		//else{
+			//DetailFragment fragment = new DetailFragment();
+//			Bundle args = new Bundle();
+//			args.putString("lugarId", lugar.getLugarId());
+//			args.putString("nombre", lugar.getName());
+//			args.putString("descripcion", lugar.getDesc());
+//			args.putString("direccion", lugar.getDir());
+//			args.putFloat("calificacion", lugar.getCalif());
+//			args.putDouble("latitud", lugar.getGeo().latitude);
+//			args.putDouble("longitud", lugar.getGeo().longitude);
+			//fragment.setArguments(args);
 			toggle.setDrawerIndicatorEnabled(false);
 			
-			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+			//getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 			
-		}
+	//	}
 		
 	}
 	
-	@Override
-	public void onBackPressed(){
-		super.onBackPressed();
+	public void isEnableToggle(){
+		if(!toggle.isDrawerIndicatorEnabled())
+			enableToggle();
+	}
+	
+	
+	public void enableToggle(){
 		toggle.setDrawerIndicatorEnabled(true);
 		if(drawerMenu.getCheckedItemPosition()>=0)
 		getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
 		else
 			getSupportActionBar().setTitle("J");
+	}
+	@Override
+	public void onBackPressed(){
+		super.onBackPressed();
+		
+		enableToggle();
 	}
 
 	/****Métodos de DialogFragment****/

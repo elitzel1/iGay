@@ -9,9 +9,9 @@ import clicky.gcard.ig.datos.Comentario;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -27,14 +27,13 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import android.app.Activity;
+import android.net.Uri;
+import android.os.Bundle;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -42,7 +41,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -52,74 +50,51 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DetailFragment extends Fragment{
-
-	private FadingActionBarHelper mFadingHelper;
+public class DetallesActivity extends ActionBarActivity {
 	
+	//Datos del lugar
+	private String lugarId,nombre,descripcion,direccion;
+	private float calificacion;
+	private double lat,longitud;
+
+	private TextView txtNombre,txtDesc,txtDir;
+	private RatingBar ratingLugar;
+	private Button btnCom;
+	private ListView listComments;
+	private GoogleMap mapa;
+
+	private ParseUser user;
+	private Comentario userComment = null;
+	private boolean isactive=false;
+	private ComentarioAdapter adapter = null;
+	private List<Comentario> lugaresList = null;
+	private View footer;
+//	private View view;
+//	private Activity activity;
 	
-//Datos del lugar
-private String lugarId,nombre,descripcion,direccion;
-private float calificacion;
-private double lat,longitud;
-
-private TextView txtNombre,txtDesc,txtDir;
-private RatingBar ratingLugar;
-private Button btnCom;
-private ListView listComments;
-private GoogleMap mapa;
-
-private ParseUser user;
-private Comentario userComment = null;
-private boolean isactive=false;
-private ComentarioAdapter adapter = null;
-private List<Comentario> lugaresList = null;
-private View footer;
-private View view;
-private Activity activity;
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	   
-	    lugarId = getArguments() != null ? getArguments().getString("lugarId") : null;
-	    nombre = getArguments() != null ? getArguments().getString("nombre") : null;
-	    descripcion = getArguments() != null ? getArguments().getString("descripcion") : null;
-	    direccion = getArguments() != null ? getArguments().getString("direccion") : null;
-	    calificacion = getArguments() != null ? getArguments().getFloat("calificacion") : null;
-	    lat = getArguments() != null ? getArguments().getDouble("latitud") : null;
-	    longitud = getArguments() != null ? getArguments().getDouble("longitud") : null;
-	    
-	    user = ParseUser.getCurrentUser();
-	    if(user!=null)
-	    	isactive=true;
-	    
-	    Log.i("CLASS", ""+getActivity().getClass().getName());
-	    setHasOptionsMenu(true);
-	    setUpBar();
-	    
-	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
-		view = mFadingHelper.createView(inflater);
-//		if(view==null){
-//			try{
-//				view = mFadingHelper.createView(inflater);
-//			}catch(InflateException e){}
-//		}
-//		else{
-//			ViewGroup group = (ViewGroup)view.getParent();
-//			if(group!=null)
-//				group.removeView(view);
-//		}
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		
-		txtNombre = (TextView)view.findViewById(R.id.txtNombre);
-		txtDesc = (TextView)view.findViewById(R.id.txtDesc);
-		txtDir = (TextView)view.findViewById(R.id.txtDir);
+		FadingActionBarHelper mFadingHelper = new FadingActionBarHelper()
+		.actionBarBackground(new ColorDrawable(getResources().getColor(R.color.moradof)))
+	    .headerLayout(R.layout.header)
+	    .contentLayout(R.layout.detail_layout);
 		
-		ratingLugar = (RatingBar)view.findViewById(R.id.rateLugar);
+		setContentView(mFadingHelper.createView(this));
+		mFadingHelper.initActionBar(this);
+
+		setUpSomething();
 		
-		btnCom = (Button)view.findViewById(R.id.btnComment);
-		listComments = (ListView)view.findViewById(R.id.listComments);
+		txtNombre = (TextView)findViewById(R.id.txtNombre);
+		txtDesc = (TextView)findViewById(R.id.txtDesc);
+		txtDir = (TextView)findViewById(R.id.txtDir);
+		
+		ratingLugar = (RatingBar)findViewById(R.id.rateLugar);
+		
+		btnCom = (Button)findViewById(R.id.btnComment);
+		listComments = (ListView)findViewById(R.id.listComments);
 		
 		txtNombre.setText(nombre);
 		txtDesc.setText(descripcion);
@@ -127,8 +102,8 @@ private Activity activity;
 		
 		ratingLugar.setRating(calificacion);
 		
-		footer = ((LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.loading_item, null, false);
+	footer = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+               .inflate(R.layout.loading_item, null, false);
 		
 		lugaresList = new ArrayList<Comentario>();
 		
@@ -142,24 +117,45 @@ private Activity activity;
 				if(user != null)
 					showCommentDialog();
 				else
-					Toast.makeText(activity, "You must sign in to comment", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), "You must sign in to comment", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
-		return view;
+		setUpBar();
+	}
+
+	public void setUpSomething(){
+		Intent i = getIntent();
+		Bundle b = i.getBundleExtra("datos");
+		if(b!=null){
+			lugarId = b.getString("lugarId");
+			nombre = b.getString("nombre");
+			descripcion = b.getString("descripcion");
+			direccion = b.getString("direccion");
+			calificacion = b.getFloat("calificacion");
+			lat = b.getDouble("latitud");
+			longitud = b.getDouble("longitud");
+		}
+	
+		user = ParseUser.getCurrentUser();
+		if(user!=null)
+			isactive=true;
 	}
 	
 	public void setUpBar(){
-		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
+		ActionBar bar = getSupportActionBar();
 		bar.setTitle(nombre);
-		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
+	//	bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
 		bar.setDisplayHomeAsUpEnabled(true);
 		
 	}
 	
+	
+	
 	private void setUpMap(){
 
-		mapa =((SupportMapFragment)getFragmentManager().findFragmentById(R.id.mapaLugar)).getMap();
+		
+		mapa =((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.mapaLugar)).getMap();
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,longitud),15));
 		mapa.getUiSettings().setAllGesturesEnabled(false);
 		mapa.getUiSettings().setZoomControlsEnabled(false);
@@ -171,7 +167,7 @@ private Activity activity;
             public void onMapClick(LatLng point){
             	String uri = "geo:"+lat+","+longitud+"?q="+lat+","+longitud+"&z=15";
             	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            	activity.startActivity(intent);
+            	startActivity(intent);
             }
         });
 		mapa.setOnMarkerClickListener(new OnMarkerClickListener() {
@@ -179,28 +175,16 @@ private Activity activity;
 			public boolean onMarkerClick(Marker marker) {
 				String uri = "geo:"+lat+","+longitud+"?q="+lat+","+longitud+"&z=15";
             	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            	activity.startActivity(intent);
+            	startActivity(intent);
 				return false;
 			}
 		});
 		
 	}
 	
-	@Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity=activity;
-        
-        mFadingHelper = new FadingActionBarHelper()
-        .actionBarBackground(new ColorDrawable(getResources().getColor(R.color.moradof)))
-        .headerLayout(R.layout.header)
-        .contentLayout(R.layout.detail_layout);
-        mFadingHelper.initActionBar(this.activity);
-        
-	}
 	
 	private void showCommentDialog(){
-		final Dialog dialog = new Dialog(activity,R.style.ThemeDialogCustom);
+		final Dialog dialog = new Dialog(this,R.style.ThemeDialogCustom);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.coment_layout);
 		
@@ -306,7 +290,7 @@ private Activity activity;
 		        }
 		        listComments.removeFooterView(footer);
 	            // Pass the results into ListViewAdapter.java
-	            adapter = new ComentarioAdapter(activity, lugaresList);
+	            adapter = new ComentarioAdapter(getApplicationContext(), lugaresList);
 	            // Binds the Adapter to the ListView
 	            listComments.setAdapter(adapter);
 		      } else {
@@ -335,43 +319,21 @@ private Activity activity;
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Get item selected and deal with it
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				//called when the up affordance/carat in actionbar is pressed
-				activity.onBackPressed();
-				return true;
-		}
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.detalles, menu);
 		return true;
-	
-	}
-	
-	public void onStop(){
-		super.onStop();
-		Log.i("CV", "onstop");
-	}
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-	    MenuItem item= menu.findItem(R.id.action_search);
-	    item.setEnabled(false);
-	    item.setVisible(false);
-	    if(getActivity().getClass().getName().equals("clicky.gcard.ig.MainActivity")){
-	    	item=menu.findItem(R.id.action_filtrar);
-	    	item.setEnabled(false);
-	    	item.setVisible(false);
-	    }
-	    super.onPrepareOptionsMenu(menu);
-	}
-	public void onDestroy(){
-		super.onDestroy();
-	if(getActivity().getClass().getName().equals("clicky.gcard.ig.MainActivity")){
-		Fragment f = (SupportMapFragment) getFragmentManager()
-                 .findFragmentById(R.id.mapaLugar);
-		if(f!=null){
-			getFragmentManager().beginTransaction().remove(f).commit();
-		}
-	}
 	}
 
+	public boolean onOptionItemSelected (MenuItem item){
+		switch(item.getItemId()){
+		case android.R.id.home:
+		//	NavUtils.navigateUpFromSameTask(this);
+			//super.onBackPressed();
+			Intent up = NavUtils.getParentActivityIntent(this);
+			
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

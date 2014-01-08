@@ -46,6 +46,7 @@ OnListListener callback;
 
 	public interface OnListListener{
 	public void onArticleSelected(Lugares lugar);
+	public void isEnableToggle();
 	}
 
 	@Override
@@ -116,6 +117,7 @@ OnListListener callback;
 		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		bar.setListNavigationCallbacks(adapter, this);
+		callback.isEnableToggle();
 	}
 	
 	

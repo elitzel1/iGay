@@ -6,15 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <ImageView
-        android:id="@+id/imgLugar"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/img_detalle"
-        android:background="@color/negro" />
+  
     
     <TextView
         android:id="@+id/txtNombre"
