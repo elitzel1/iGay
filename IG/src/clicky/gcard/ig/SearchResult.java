@@ -97,25 +97,18 @@ public class SearchResult extends ActionBarActivity implements OnSelectItem, Sea
 	public void onArticleSelected(Lugares lugar) {
 		
 		Log.i("Clic","Search Result");
-		DetailFragment detail = (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
-		if(detail!=null){
-			
-		}
-		else
-		{
-			DetailFragment frag = new DetailFragment();
-			Bundle args = new Bundle();
-			args.putString("lugarId", lugar.getLugarId());
-			args.putString("nombre", lugar.getName());
-			args.putString("descripcion", lugar.getDesc());
-			args.putString("direccion", lugar.getDir());
-			args.putFloat("calificacion", lugar.getCalif());
-			args.putDouble("latitud", lugar.getGeo().latitude);
-			args.putDouble("longitud", lugar.getGeo().longitude);
-			frag.setArguments(args);
-			
-			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame2, frag).addToBackStack(null).commit();
-		}
+		Intent i = new Intent(SearchResult.this,DetallesActivity.class);
+		Bundle args = new Bundle();
+		args.putString("lugarId", lugar.getLugarId());
+		args.putString("nombre", lugar.getName());
+		args.putString("descripcion", lugar.getDesc());
+		args.putString("direccion", lugar.getDir());
+		args.putFloat("calificacion", lugar.getCalif());
+		args.putDouble("latitud", lugar.getGeo().latitude);
+		args.putDouble("longitud", lugar.getGeo().longitude);
+		i.putExtra("datos", args);
+		
+		startActivity(i);
 		
 	}
 	

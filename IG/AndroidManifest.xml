@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name="clicky.gcard.ig.ParseApplication"
@@ -35,10 +35,10 @@
         <activity
             android:name="clicky.gcard.ig.MainActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/app_name" >
-            <meta-data android:name="android.app.default_searchable"
-                android:value="clicky.gcard.ig.SearchResult">
-                
+            android:label="@string/app_name">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="clicky.gcard.ig.SearchResult" >
             </meta-data>
         </activity>
 
@@ -66,36 +66,54 @@
         <activity
             android:name="clicky.gcard.ig.SearchResult"
             android:label="@string/title_activity_search_result"
-            android:parentActivityName="com.example.firstapp.MainActivity" 
-            android:launchMode="singleTop">
-             <intent-filter>
-        		<action android:name="android.intent.action.SEARCH" />
-   			 </intent-filter>
+            android:launchMode="singleTop"
+            android:parentActivityName="com.example.firstapp.MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="clicky.gcard.ig.MainActivity" />
-            <meta-data 
+            <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+                android:resource="@xml/searchable" />
         </activity>
         <activity
-    		android:name="com.google.android.gms.ads.AdActivity"
-    		android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+
         <service android:name="com.parse.PushService" />
-		<receiver android:name="com.parse.ParseBroadcastReceiver">
-		  <intent-filter>
-		    <action android:name="android.intent.action.BOOT_COMPLETED" />
-		    <action android:name="android.intent.action.USER_PRESENT" />
-		  </intent-filter>
-		</receiver>
-		<receiver android:name="clicky.gcard.ig.utils.NotificationsReceiver">
-			<intent-filter>
-			  <action android:name="notification" />
-			</intent-filter>
-		</receiver>
-		<activity android:name="clicky.gcard.ig.CuentaActivity"></activity>
-		<activity android:name="clicky.gcard.ig.RedesSocialesActivity"></activity>
-		<activity android:name="clicky.gcard.ig.PrivacidadActivity"></activity>
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="clicky.gcard.ig.utils.NotificationsReceiver" >
+            <intent-filter>
+                <action android:name="notification" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name="clicky.gcard.ig.CuentaActivity" >
+        </activity>
+        <activity android:name="clicky.gcard.ig.RedesSocialesActivity" >
+        </activity>
+        <activity android:name="clicky.gcard.ig.PrivacidadActivity" >
+        </activity>
+        <activity
+            android:name="clicky.gcard.ig.DetallesActivity"
+            android:label="@string/title_activity_detalles"
+            android:theme="@style/AppTheme.TranslucentActionBar"  >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="clicky.gcard.ig.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="clicky.gcard.ig.SearchResult" />
+        </activity>
     </application>
 
 </manifest>

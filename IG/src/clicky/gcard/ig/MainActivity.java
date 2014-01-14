@@ -157,6 +157,10 @@ onListItemClicConf,AjustesNotListener{
 		//return super.onOptionsItemSelected(item);
 	}
 
+	public void onStart(){
+		super.onStart();
+		isEnableToggle();
+	}
 	
 	public void onFilter(){
 		DialogFiltro diag = new DialogFiltro();
@@ -250,26 +254,8 @@ onListItemClicConf,AjustesNotListener{
 		
 		startActivity(i);
 		
-		//DetailFragment detail =  (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.info_det);
-		//Log.i("Clic","Main");
-		//Pantalla horizontal o tablet
-		//if(detail!=null){}
-		//else{
-			//DetailFragment fragment = new DetailFragment();
-//			Bundle args = new Bundle();
-//			args.putString("lugarId", lugar.getLugarId());
-//			args.putString("nombre", lugar.getName());
-//			args.putString("descripcion", lugar.getDesc());
-//			args.putString("direccion", lugar.getDir());
-//			args.putFloat("calificacion", lugar.getCalif());
-//			args.putDouble("latitud", lugar.getGeo().latitude);
-//			args.putDouble("longitud", lugar.getGeo().longitude);
-			//fragment.setArguments(args);
 			toggle.setDrawerIndicatorEnabled(false);
 			
-			//getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-			
-	//	}
 		
 	}
 	
@@ -280,6 +266,7 @@ onListItemClicConf,AjustesNotListener{
 	
 	
 	public void enableToggle(){
+		
 		toggle.setDrawerIndicatorEnabled(true);
 		if(drawerMenu.getCheckedItemPosition()>=0)
 		getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
@@ -289,7 +276,6 @@ onListItemClicConf,AjustesNotListener{
 	@Override
 	public void onBackPressed(){
 		super.onBackPressed();
-		
 		enableToggle();
 	}
 

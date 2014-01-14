@@ -14,7 +14,7 @@
     <string name="search">Búsqueda</string>
 
     <string-array name="drawable">
-        <item>Home</item>
+        <item>Mapa</item>
         <item>Populares</item>
         <item>Categorías</item>
         <item>Ajustes</item>
