@@ -1,7 +1,8 @@
 package clicky.gcard.ig.utils;
 
-import android.support.v7.app.ActionBar;
-import android.util.TypedValue;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
@@ -27,20 +28,27 @@ public class Utiliy {
 	        view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
 	        totalHeight += view.getMeasuredHeight();
 	    }
-	    
-	    /*
-	    TypedValue tv = new TypedValue();
-	    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB){
-	       if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-	         actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-	    }else if(getTheme().resolveAttribute(com.actionbarsherlock.R.attr.actionBarSize, tv, true){
-	         actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-	    }
-	    */
-	    
+	     
 	    ViewGroup.LayoutParams params = listView.getLayoutParams();
 	    params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
 	    listView.setLayoutParams(params);
 	    listView.requestLayout();
 	}
+	
+	/******CONEXIÓN**************/
+	 public static boolean verificaConexion(Context ctx) {
+	        boolean bConectado = false;
+	        ConnectivityManager connec = (ConnectivityManager) ctx
+	                .getSystemService(Context.CONNECTIVITY_SERVICE);
+	        // No sólo wifi, también GPRS
+	        NetworkInfo[] redes = connec.getAllNetworkInfo();
+	        for (int i = 0; i < 2; i++) {
+	            // ¿Tenemos conexión? ponemos a true
+	            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+	                bConectado = true;
+	            }
+	        }
+	        return bConectado;
+	    }
+	 /****************************/
 }

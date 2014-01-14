@@ -317,8 +317,7 @@ public class DetallesActivity extends ActionBarActivity {
         public boolean onOptionItemSelected (MenuItem item){
                 switch(item.getItemId()){
                 case android.R.id.home:
-                //        NavUtils.navigateUpFromSameTask(this);
-                        //super.onBackPressed();
+                
                        NavUtils.getParentActivityIntent(this);
                         
                         return true;

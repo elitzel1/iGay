@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SpinnerAdapterSpecial extends BaseAdapter {
@@ -54,10 +55,8 @@ public class SpinnerAdapterSpecial extends BaseAdapter {
 		} else {
 		    holder = (ViewHolder) convertView.getTag();
 		}
-			convertView.setBackgroundColor(context.getResources().getColor(R.color.morado));
-
+			convertView.setBackgroundColor(context.getResources().getColor(R.color.moradof));
 		    holder.text.setTextColor(context.getResources().getColor(R.color.blanco));
-		    // Bind the data efficiently with the holder.
 		    holder.text.setText(items[position]);
 		    //Set the background color depending of  odd/even colorPos result
 		   return convertView;
@@ -65,21 +64,23 @@ public class SpinnerAdapterSpecial extends BaseAdapter {
 	
 	 @Override
 	    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		 TextView text;
 		 
+		 ViewHolderDrop mholder;
 		 if (convertView == null) {
 	        	LayoutInflater inflater = (LayoutInflater) context
 	    		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	            convertView = inflater.inflate(clicky.gcard.ig.R.layout.list_item_navigation, parent, false);
-	            text=(TextView)convertView.findViewById(clicky.gcard.ig.R.id.txtTitle);
-			    //convertView.setTag(holder);
+	            convertView = inflater.inflate(clicky.gcard.ig.R.layout.list_item_navigation_drop, parent, false);
+	            
+	            mholder = new ViewHolderDrop();
+	            mholder.text1=(TextView)convertView.findViewById(clicky.gcard.ig.R.id.txtdropcat);
+			    convertView.setTag(mholder);
 	        }
 		 else
-			 text=(TextView)convertView.findViewById(clicky.gcard.ig.R.id.txtTitle);
+			 mholder = (ViewHolderDrop)convertView.getTag();
 		 	
 		 	convertView.setBackgroundColor(context.getResources().getColor(R.color.blanco));
-		 // Bind the data efficiently with the holder.
-		    text.setText(items[position]);
+		
+		 	mholder.text1.setText(items[position]);
 		    //Set the background color depending of  odd/even colorPos result
 		   return convertView;
 	    }
@@ -87,6 +88,11 @@ public class SpinnerAdapterSpecial extends BaseAdapter {
 	 
 	static class ViewHolder {
 		TextView text;
+	}
+	
+	static class ViewHolderDrop{
+		TextView text1;
+		ImageView img;
 	}
 
 }

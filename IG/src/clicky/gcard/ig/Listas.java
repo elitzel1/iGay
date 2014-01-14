@@ -22,11 +22,8 @@ import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -49,6 +46,7 @@ OnListListener callback;
 	public void isEnableToggle();
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
 		if(view==null){
@@ -65,7 +63,6 @@ OnListListener callback;
 		AdView adView = (AdView)view.findViewById(R.id.adView);
 	    AdRequest adRequest = new AdRequest.Builder().build();
 	    adView.loadAd(adRequest);
-		
 		return view;
 	}
 
@@ -80,6 +77,7 @@ OnListListener callback;
                 .inflate(R.layout.loading_item, null, false);
         
         tipo = getArguments() != null ? getArguments().getInt("tipo") : null;
+       
 	}
 	
 	 @Override
@@ -93,15 +91,7 @@ OnListListener callback;
 	        }
 	        this.activity=activity;
 	 }
-	 
-		@Override
-		public void onPrepareOptionsMenu(Menu menu) {
-			Log.i("onP", "Aqui");
-			MenuItem item = menu.findItem(R.id.action_filtrar);
-			item.setEnabled(false);
-			item.setVisible(false);
-			super.onPrepareOptionsMenu(menu);
-		}
+
 		
 		
 	 @Override
@@ -110,6 +100,7 @@ OnListListener callback;
 		 
 		 SpinnerAdapterSpecial s_adapter = new SpinnerAdapterSpecial(getActivity().getBaseContext(),getResources().getStringArray(R.array.categorias));
 	     setUpBar(s_adapter);
+	     
 	 }
 	 
 	private void setUpBar(SpinnerAdapterSpecial adapter){
@@ -186,7 +177,6 @@ OnListListener callback;
 	public void onListItemClick(ListView l, View v, int position,long id){
 		
 		callback.onArticleSelected(lugaresList.get(position));
-		
 		getListView().setItemChecked(position, true);
 	}
 	

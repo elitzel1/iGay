@@ -9,6 +9,7 @@ import clicky.gcard.ig.MapFragment.OnButtonListener;
 import clicky.gcard.ig.adapters.AdapterDrawer;
 import clicky.gcard.ig.datos.Lugares;
 import clicky.gcard.ig.utils.GPSTrakcer;
+import clicky.gcard.ig.utils.Utiliy;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Build;
@@ -44,7 +45,7 @@ onListItemClicConf,AjustesNotListener{
 	private ActionBarDrawerToggle toggle;
 	private DrawerLayout drawer;
 	private MapFragment mapFragment;
-	
+	private int FRAGMENT_ID=0;
 	Integer[] imageId ={R.drawable.ic_action_picture,R.drawable.ic_action_cc_bcc,R.drawable.ic_action_flash_on,
 			R.drawable.ic_action_make_available_offline,R.drawable.ic_action_split};
 	
@@ -57,6 +58,9 @@ onListItemClicConf,AjustesNotListener{
 		/*** Drawer **/
 		setUpDrawer();
 		
+		if(!Utiliy.verificaConexion(this))
+			Toast.makeText(this, "No hay conexión de internet", Toast.LENGTH_LONG).show();
+		
 		GPSTrakcer gps = new GPSTrakcer(this);
 		if(!gps.isGPSEnable())
 			gps.showAlert();
@@ -68,9 +72,6 @@ onListItemClicConf,AjustesNotListener{
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction()
 				.add(R.id.content_frame, mapFragment);
 		trans.commit();
-		
-		
-
 	}
 
 	/**Action Bar**/
@@ -112,8 +113,7 @@ onListItemClicConf,AjustesNotListener{
 				.getThemedContext(), R.layout.item_drawable, options,imageId));
 		drawerMenu.setBackgroundColor(getResources().getColor(R.color.gris));
 	
-		//getSupportActionBar().getThemedContext()
-		//http://www.androidbegin.com/tutorial/implementing-actionbarsherlock-side-menu-navigation-drawer-in-android/
+				//http://www.androidbegin.com/tutorial/implementing-actionbarsherlock-side-menu-navigation-drawer-in-android/
 		
 		
 		// Set actionBarDrawerToggle as the DrawerListener
@@ -136,6 +136,7 @@ onListItemClicConf,AjustesNotListener{
 		toggle.onConfigurationChanged(newConfig);
 	}
 
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// call ActionBarDrawerToggle.onOptionsItemSelected(), if it returns
@@ -154,7 +155,7 @@ onListItemClicConf,AjustesNotListener{
         default:
             return false;
     }
-		//return super.onOptionsItemSelected(item);
+		
 	}
 
 	public void onStart(){
@@ -175,7 +176,7 @@ onListItemClicConf,AjustesNotListener{
 		//Verificar que sea version 3.0 o mayor
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 	     
-		SearchManager searchManager =
+			SearchManager searchManager =
 		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		    SearchView searchView =
 		            (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -183,6 +184,12 @@ onListItemClicConf,AjustesNotListener{
 		    searchView.setSearchableInfo(
 		            searchManager.getSearchableInfo(getComponentName()));
 		    
+		}
+		
+		if(FRAGMENT_ID==1){
+			MenuItem item = menu.findItem(R.id.action_filtrar);
+			item.setEnabled(false);
+			item.setVisible(false);
 		}
 		return true;
 	}
@@ -200,6 +207,7 @@ onListItemClicConf,AjustesNotListener{
 		Fragment fragment = null;
 		switch (position){
 		case 0:
+			FRAGMENT_ID=0;
 			manager.popBackStack();
 			setUpActionBar();
 			break;
@@ -232,8 +240,10 @@ onListItemClicConf,AjustesNotListener{
 				manager.popBackStack();
 			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 			getSupportActionBar().setTitle(options[position]);
+			FRAGMENT_ID=1; //ID para modificar el menú
 			
 		}
+		invalidateOptionsMenu(); //Obliga a reconstruir el menú dependiendo del fragment.
 		drawerMenu.setItemChecked(position, true);
 		drawer.closeDrawer(drawerMenu);
 	}
