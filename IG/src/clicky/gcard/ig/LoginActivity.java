@@ -46,6 +46,12 @@ public class LoginActivity extends ActionBarActivity {
 		}
 	}
 	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+	}
+	
 	public void btnAction(View v){
 		switch(v.getId()){
 		case R.id.btnRegister:
@@ -222,14 +228,14 @@ public class LoginActivity extends ActionBarActivity {
         });
 	}
 	private void connectFacebook(final Dialog dialog){
-		/*
+		
 		dialog.dismiss();
 		
 		loading = new ProgressDialog(activity);
 		loading.setMessage("Wait a moment...");
 		loading.setCancelable(false);
 		loading.show();
-		*/
+		
 		ParseFacebookUtils.logIn(this, new LogInCallback() {
 			 @Override
 			 public void done(ParseUser user, ParseException err) {
@@ -239,6 +245,11 @@ public class LoginActivity extends ActionBarActivity {
 					 Log.i("MyApp", "Error");
 				 } else if (user.isNew()) {
 					 Log.i("MyApp", "New user");
+					 loading = new ProgressDialog(activity);
+					 loading.setMessage("Wait a moment...");
+					 loading.setCancelable(false);
+					 loading.show();
+						
 					 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 					 PushService.subscribe(activity, "Lesbico", MainActivity.class);
 					 PushService.subscribe(activity, "Gay", MainActivity.class);
@@ -248,18 +259,34 @@ public class LoginActivity extends ActionBarActivity {
 						
 						 @Override
 						 public void done(ParseException arg0) {
-							 //loading.dismiss();
+							 loading.dismiss();
 							 Intent i = new Intent(LoginActivity.this,MainActivity.class);
 							 startActivity(i);
 							 finish();
 						}
 					});
 				 } else {
-					 //loading.dismiss();
 					 Log.i("MyApp", "Log In");
-					 Intent i = new Intent(LoginActivity.this,MainActivity.class);
-					 startActivity(i);
-					 finish();
+					 
+					 loading = new ProgressDialog(activity);
+					 loading.setMessage("Wait a moment...");
+					 loading.setCancelable(false);
+					 loading.show();
+					 
+					 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+					 PushService.subscribe(activity, "Lesbico", MainActivity.class);
+					 PushService.subscribe(activity, "Gay", MainActivity.class);
+					 PushService.subscribe(activity, "Bisexual", MainActivity.class);
+					 PushService.subscribe(activity, "Transexual", MainActivity.class);
+					 installation.saveInBackground(new SaveCallback() {
+						 @Override
+						 public void done(ParseException arg0) {
+							 loading.dismiss();
+							 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+							 startActivity(intent);
+							 finish();
+						 }
+					 });
 			 	}
 			 }
 		});

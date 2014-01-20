@@ -12,10 +12,11 @@ public class ParseApplication extends Application {
     public void onCreate() {
             super.onCreate();
 
-            Parse.initialize(this, "e54qWo0yYhMhpGpmMFUcVrUtArRjBunDebYM6tgf","r2H8dYGS6bIgZErZgkyN8mL2WbP1Ul9vxfXEqdJy");
-
+            Parse.initialize(this, "e54qWo0yYhMhpGpmMFUcVrUtArRjBunDebYM6tgf",
+    				"r2H8dYGS6bIgZErZgkyN8mL2WbP1Ul9vxfXEqdJy");
+            
             // Set your Facebook App Id in strings.xml
-            ParseFacebookUtils.initialize(getResources().getString(R.string.facebookId));
+            ParseFacebookUtils.initialize(getString(R.string.facebookId));
             
             PushService.setDefaultPushCallback(this, MainActivity.class);
 
