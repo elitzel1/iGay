@@ -16,8 +16,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 public class FragmentResult extends ListFragment{
@@ -26,11 +28,27 @@ public class FragmentResult extends ListFragment{
 	private Activity activity;
 	private ListaLugaresAdapter adapter=null;
 	private List<Lugares> lugaresList = null;
-
+	private View view;
 OnSelectItem callback;
 
 	public interface OnSelectItem{
 		public void onArticleSelected(Lugares lugar);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
+		if(view==null){
+			try{
+		view = inflater.inflate(R.layout.lugares_layout,null,false);
+			}catch(InflateException e){}
+		}
+		else{
+			ViewGroup group = (ViewGroup)view.getParent();
+			if(group!=null)
+				group.removeView(view);
+		}
+		
+		return view;
 	}
 	
 	public void onCreate(Bundle savedInstanceState){

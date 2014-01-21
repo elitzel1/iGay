@@ -1081,7 +1081,7 @@ containing a value of this type.
         public static final int abc_split_action_bar_is_narrow=0x7f070002;
     }
     public static final class color {
-        public static final int abc_search_url_text_holo=0x7f080019;
+        public static final int abc_search_url_text_holo=0x7f08001a;
         public static final int abc_search_url_text_normal=0x7f080000;
         public static final int abc_search_url_text_pressed=0x7f080002;
         public static final int abc_search_url_text_selected=0x7f080001;
@@ -1103,14 +1103,15 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f080009;
         public static final int common_signin_btn_light_text_focused=0x7f08000a;
         public static final int common_signin_btn_light_text_pressed=0x7f080008;
-        public static final int common_signin_btn_text_dark=0x7f08001a;
-        public static final int common_signin_btn_text_light=0x7f08001b;
+        public static final int common_signin_btn_text_dark=0x7f08001b;
+        public static final int common_signin_btn_text_light=0x7f08001c;
         public static final int gris=0x7f080015;
-        public static final int gris_fuerte=0x7f080016;
+        public static final int gris_fuerte=0x7f080017;
+        public static final int gris_lista=0x7f080016;
         public static final int morado=0x7f080012;
         public static final int moradof=0x7f080013;
-        public static final int negro=0x7f080017;
-        public static final int transparent_color=0x7f080018;
+        public static final int negro=0x7f080018;
+        public static final int transparent_color=0x7f080019;
     }
     public static final class dimen {
         /**  Default height of an action bar. 

@@ -179,7 +179,6 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	setUpGPS();
 	if(coordenadas!=null){
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
-		
 		getLugares(coordenadas, 8);
 	}
 			Log.i("", "");
