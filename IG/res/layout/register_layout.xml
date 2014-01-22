@@ -17,6 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:background="@drawable/com_facebook_button_blue"
+        android:textColor="@color/blanco"
         android:text="@string/btn_face" />
 
     <EditText

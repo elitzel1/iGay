@@ -1,7 +1,9 @@
 package clicky.gcard.ig;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -20,6 +22,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.PushService;
+import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
@@ -78,6 +81,7 @@ public class LoginActivity extends ActionBarActivity {
 		
 		Button btnLogin = (Button) dialog.findViewById(R.id.btnLogin);
 		Button btnFace = (Button) dialog.findViewById(R.id.btnFacebook);
+		Button btnForget = (Button) dialog.findViewById(R.id.btnForget);
 		
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
@@ -92,6 +96,13 @@ public class LoginActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				connectFacebook(dialog);
+			}
+		});
+		
+		btnForget.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showMailDialog(dialog);
 			}
 		});
 		
@@ -132,6 +143,40 @@ public class LoginActivity extends ActionBarActivity {
 
 	}
 	
+	private void showMailDialog(Dialog dialogo){
+		dialogo.dismiss();
+		
+		final Dialog dialog = new Dialog(this,R.style.ThemeDialogCustom);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.forget_password_layout);
+		
+		final EditText editMail = (EditText) dialog.findViewById(R.id.editMail);
+		
+		Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+		
+		btnSubmit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(verifyMail(editMail))
+					resetPassword(dialog,editMail.getText().toString());
+			}
+		});
+		dialog.show();
+	}
+	
+	private void showAlert(int message){
+		AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+		alert.setMessage(message);
+		alert.setNeutralButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		alert.create().show();
+	}
 	private boolean verifyLogin(EditText user,EditText pass){
 		if(user.getText().toString().equals("")){
 			user.setError("Fill this");
@@ -142,6 +187,26 @@ public class LoginActivity extends ActionBarActivity {
 			return false;
 		}
 		return true;
+	}
+	
+	private void resetPassword(final Dialog dialog,String mail){
+		dialog.dismiss();
+		loading = new ProgressDialog(activity);
+		loading.setMessage("Wait a moment...");
+		loading.setCancelable(false);
+		loading.show();
+		
+		ParseUser.requestPasswordResetInBackground(mail, new RequestPasswordResetCallback() {
+			public void done(ParseException e) {
+				if (e == null) {
+					loading.dismiss();
+					showAlert(R.string.alert_email);
+				} else {
+					loading.dismiss();
+					showAlert(R.string.alert_no_email);
+				}
+			}
+		});
 	}
 	
 	private void logIn(final Dialog dialog,String userName,String password){
@@ -166,28 +231,37 @@ public class LoginActivity extends ActionBarActivity {
         });
 	 
 	}
-	private boolean verifyRegister(EditText user, EditText pass,EditText confPass,EditText mail){
-		if(user.getText().toString().equals("")){
-			user.setError("Fill this");
-			return false;
-		}
-		if(pass.getText().toString().equals("")){
-			pass.setError("Fill this");
-			return false;
-		}
-		if(confPass.getText().toString().equals("")){
-			confPass.setError("Fill this");
-			return false;
-		}
+	
+	private boolean verifyMail(EditText mail){
 		if(mail.getText().toString().equals("")){
 			mail.setError("Fill this");
 			return false;
 		}
+		return true;
+	}
+	private boolean verifyRegister(EditText user, EditText pass,EditText confPass,EditText mail){
+		boolean acepta = true;
+		if(user.getText().toString().equals("")){
+			user.setError("Fill this");
+			acepta = false;
+		}
+		if(pass.getText().toString().equals("")){
+			pass.setError("Fill this");
+			acepta = false;
+		}
+		if(confPass.getText().toString().equals("")){
+			confPass.setError("Fill this");
+			acepta = false;
+		}
+		if(mail.getText().toString().equals("")){
+			mail.setError("Fill this");
+			acepta = false;
+		}
 		if(!pass.getText().toString().equals(confPass.getText().toString())){
 			confPass.setError("Mismatch");
-			return false;
+			acepta = false;
 		}
-		return true;
+		return acepta;
 	}
 	private void register(final Dialog dialog,String userName,String password,String mail){
 		dialog.dismiss();

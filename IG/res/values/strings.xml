@@ -41,15 +41,30 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_search">Buscar</string>
     <string name="title_activity_search_result">SearchResult</string>
+    
     <string name="btn_log">Log In</string>
     <string name="btn_reg">Sign Up</string>
-    <string name="btn_continue">Sign Up Later</string>
+    <string name="btn_continue">Continue to App</string>
     <string name="btn_face">Login with Facebook</string>
+    <string name="btn_forget">Forgot password?</string>
     <string name="btn_comment">Add Comment</string>
+    <string name="btn_submit">Submit</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
+    
     <string name="hint_user">User</string>
     <string name="hint_pass">Password</string>
     <string name="hint_mail">Email</string>
     <string name="hint_confirm">Confirm Password</string>
+    
+    <string name="alert_no_login">You need to sign in or register</string>
+    <string name="alert_email">An email has been sent to your address</string>
+    <string name="alert_no_email">We don\'t have that email</string>
+
+    <string name="txt_linked">Linked with Facebook</string>
+    <string name="txt_share_facebook">Share comments on Facebook</string>
+    <string name="txt_forgot_pass">Please enter your email address to recover your account</string>
+    
     <string name="title_activity_detalles">DetallesActivity</string>
 
 </resources>
