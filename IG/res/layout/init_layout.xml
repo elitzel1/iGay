@@ -3,16 +3,8 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondosplash"
     android:orientation="vertical" >
-    
-    <ImageView
-        android:id="@+id/imgLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/botones"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_launcher"
-        android:contentDescription="@string/img_log" />
     
     <LinearLayout 
         android:id="@+id/botones"
