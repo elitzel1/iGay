@@ -6,8 +6,10 @@
 
     <ImageView
         android:id="@+id/imgicon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:src="@drawable/ic_action_flash_on" />
 
     <TextView

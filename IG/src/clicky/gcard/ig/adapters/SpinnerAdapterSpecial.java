@@ -15,6 +15,8 @@ public class SpinnerAdapterSpecial extends BaseAdapter {
 	
 	private String[] items;
 	private Context context;
+	private Integer[] images = {R.drawable.nsantro,R.drawable.nsrestaurante,R.drawable.nscafe,
+			R.drawable.nshotel,R.drawable.nscultural,R.drawable.nstienda,R.drawable.nscpersonal};
 	
 	public SpinnerAdapterSpecial (Context context,String[] items){
 		this.items=items;
@@ -39,6 +41,7 @@ public class SpinnerAdapterSpecial extends BaseAdapter {
 		return position;
 	}
 
+	/*Elemento seleccionado*/
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
@@ -73,13 +76,15 @@ public class SpinnerAdapterSpecial extends BaseAdapter {
 	            
 	            mholder = new ViewHolderDrop();
 	            mholder.text1=(TextView)convertView.findViewById(clicky.gcard.ig.R.id.txtdropcat);
+	            mholder.img = (ImageView)convertView.findViewById(R.id.imgicon);
 			    convertView.setTag(mholder);
 	        }
 		 else
 			 mholder = (ViewHolderDrop)convertView.getTag();
 		 	
 		 	convertView.setBackgroundColor(context.getResources().getColor(R.color.blanco));
-		
+		 	
+		 	mholder.img.setImageResource(images[position]);
 		 	mholder.text1.setText(items[position]);
 		    //Set the background color depending of  odd/even colorPos result
 		   return convertView;

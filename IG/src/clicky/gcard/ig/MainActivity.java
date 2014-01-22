@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,8 +47,8 @@ onListItemClicConf,AjustesNotListener{
 	private DrawerLayout drawer;
 	private MapFragment mapFragment;
 	private int FRAGMENT_ID=0;
-	Integer[] imageId ={R.drawable.ic_action_picture,R.drawable.ic_action_cc_bcc,R.drawable.ic_action_flash_on,
-			R.drawable.ic_action_make_available_offline,R.drawable.ic_action_split};
+	Integer[] imageId ={R.drawable.ihome,R.drawable.ipopulares,R.drawable.icategoria,
+			R.drawable.iajustes,R.drawable.inotificacion};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ onListItemClicConf,AjustesNotListener{
 				  if(drawerMenu.getCheckedItemPosition()>0)
 			        actionBar.setTitle(options[drawerMenu.getCheckedItemPosition()]);
 				  else
-					  actionBar.setTitle("J");
+					  actionBar.setTitle("ota");
 			    }
 			    public void onDrawerOpened(View arg0) {
 		    	ActionBar actionBar = getSupportActionBar();
@@ -109,9 +110,10 @@ onListItemClicConf,AjustesNotListener{
 		
 		options = getResources().getStringArray(R.array.drawable);
 		drawerMenu = (ListView) findViewById(R.id.left_drawer);
+	
 		drawerMenu.setAdapter(new AdapterDrawer(getSupportActionBar()
 				.getThemedContext(), R.layout.item_drawable, options,imageId));
-		drawerMenu.setBackgroundColor(getResources().getColor(R.color.gris));
+		drawerMenu.setBackgroundResource(R.drawable.fondomenu);
 	
 				//http://www.androidbegin.com/tutorial/implementing-actionbarsherlock-side-menu-navigation-drawer-in-android/
 		

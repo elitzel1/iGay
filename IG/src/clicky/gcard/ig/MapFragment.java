@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -189,18 +190,60 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		
 	}
 	
-
+	/**
+	 * Antros y Bares 0
+	 * Comida 1
+	 * Cafeteria 2
+	 * Hotel 3
+	 * Cultural 4
+	 * Tienda 5
+	 * Cuidado personal 6
+	 */
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		
 		for(int i = 0; i < listaLugares.size(); i++){
 			Marker mark = mapa.addMarker(new MarkerOptions()
 					.position(listaLugares.get(i).getGeo()));
+			
+			//icon(BitmapDescriptorFactory.fromResource(R.drawable.pinantro))
+			
 			markersList.put(mark.getId(), listaLugares.get(i));
 		}
-
-
 		mapa.setOnMarkerClickListener(this);
+	}
+	
+	private int getCategoryId(String cat){
+		int id=0;
+		if(cat.equals("Antros y Bares")){
+			id = R.drawable.pinantro;
+			return id;
+		}
+		if(cat.equals("Comida")){
+			id=R.drawable.pinrestaurante;
+			return id;
+		}
+		if(cat.equals("Cafeteria")){
+			id=R.drawable.pincafe;
+			return id;
+		}
+		if(cat.equals("Hotel")){
+			id=R.drawable.pinhotel;
+			return id;
+		}
+		if(cat.equals("Cultural")){
+			id=R.drawable.pincultural;
+			return id;
+		}
+		if(cat.equals("Tienda")){
+			id=R.drawable.pintienda;
+			return id;
+		}
+		if(cat.equals("Cuidado personal")){
+			id=R.drawable.pincpersonal;
+			return id;
+		}
+		return id;
 	}
 	
 	

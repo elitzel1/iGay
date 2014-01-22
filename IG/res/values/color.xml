@@ -2,7 +2,7 @@
 <resources>
     <color name="morado">#AA66CC</color>
     <color name="moradof">#9933CC</color>
-    <color name="blanco">#FFFFFF</color>
+    <color name="blanco">#FFFFFFFF</color>
     <color name="gris">#ECECEC</color>
     <color name="gris_lista">#DDDDDD</color>
     <color name="gris_fuerte">#404040</color>
