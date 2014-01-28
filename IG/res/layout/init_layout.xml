@@ -17,17 +17,24 @@
 	        android:id="@+id/btnRegister"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="0.5dp"
 	        android:layout_weight="1"
+	        android:background="@color/morado_inicio"
 	        android:onClick="btnAction"
-	        android:text="@string/btn_reg" />
+	        android:text="@string/btn_reg"
+	        android:textColor="@color/blanco" />
 	
 	    <Button
 	        android:id="@+id/btnLogin"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="0.2dp"
+	        android:layout_marginRight="0.5dp"
 	        android:layout_weight="1"
+	        android:background="@color/morado_inicio"
 	        android:onClick="btnAction"
-	        android:text="@string/btn_log" />
+	        android:text="@string/btn_log"
+	        android:textColor="@color/blanco" />
     
     </LinearLayout>
     
@@ -38,6 +45,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="btnAction"
+        android:background="@color/transparent_color"
+        android:textColor="@color/morado_inicio"
         android:text="@string/btn_continue" />
 
 </RelativeLayout>

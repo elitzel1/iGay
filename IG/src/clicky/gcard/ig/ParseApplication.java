@@ -7,7 +7,7 @@ import com.parse.PushService;
 import android.app.Application;
 
 public class ParseApplication extends Application {
-	 
+
 	@Override
     public void onCreate() {
             super.onCreate();
@@ -16,7 +16,6 @@ public class ParseApplication extends Application {
 
             // Set your Facebook App Id in strings.xml
             ParseFacebookUtils.initialize(getResources().getString(R.string.facebookId));
-            
             PushService.setDefaultPushCallback(this, MainActivity.class);
 
     }

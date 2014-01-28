@@ -41,15 +41,16 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_search">Buscar</string>
     <string name="title_activity_search_result">SearchResult</string>
-    <string name="btn_log">Log In</string>
-    <string name="btn_reg">Sign Up</string>
-    <string name="btn_continue">Sign Up Later</string>
+    <string name="btn_log">Iniciar sesión</string>
+    <string name="btn_reg">Crear cuenta</string>
+    <string name="btn_continue">Omitir este paso</string>
     <string name="btn_face">Login with Facebook</string>
-    <string name="btn_comment">Add Comment</string>
+    <string name="btn_comment">Comentar</string>
     <string name="hint_user">User</string>
     <string name="hint_pass">Password</string>
     <string name="hint_mail">Email</string>
     <string name="hint_confirm">Confirm Password</string>
     <string name="title_activity_detalles">DetallesActivity</string>
+    <string name="masinfo">Más Información</string>
 
 </resources>

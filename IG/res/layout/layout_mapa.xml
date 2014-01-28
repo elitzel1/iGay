@@ -21,7 +21,7 @@
      android:layout_alignParentLeft="true"
      android:gravity="center"
      android:orientation="vertical"
-     android:background="@color/blanco" >
+     android:background="@drawable/fondocomponente" >
 
      <TextView
          android:id="@+id/txtNombre"
@@ -35,14 +35,16 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:isIndicator="true" />
-     <Button 
+     
+     <Button
          android:id="@+id/btnInfo"
-         android:layout_width="wrap_content"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:text="+Info"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
          android:background="@color/morado"
-         android:textColor="@color/blanco"
-         />
+         android:text="@string/masinfo"
+         android:textColor="@color/blanco" />
 
  </LinearLayout>
 

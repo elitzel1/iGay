@@ -8,6 +8,7 @@ import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
 import clicky.gcard.ig.MapFragment.OnButtonListener;
 import clicky.gcard.ig.adapters.AdapterDrawer;
 import clicky.gcard.ig.datos.Lugares;
+import clicky.gcard.ig.utils.Constants;
 import clicky.gcard.ig.utils.GPSTrakcer;
 import clicky.gcard.ig.utils.Utiliy;
 import android.graphics.drawable.ColorDrawable;
@@ -56,6 +57,12 @@ onListItemClicConf,AjustesNotListener{
 		setContentView(R.layout.inicio);
 
 		setUpActionBar();
+		
+//		Constants cons = new Constants();
+//		cons.setFontLt(getAssets());
+//		cons.setFontRoman(getAssets());
+//		cons.setFontUl(getAssets());
+		
 		/*** Drawer **/
 		setUpDrawer();
 		

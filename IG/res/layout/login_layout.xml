@@ -2,14 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginRight="5dp"
     android:layout_marginLeft="5dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#FFF">
+    android:paddingTop="@dimen/activity_vertical_margin">
     
     <Button
         android:id="@+id/btnFacebook"
@@ -44,6 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editPass"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/moradof"
+        android:background="@color/blanco"
         android:text="@string/btn_log" />
 
 </RelativeLayout>

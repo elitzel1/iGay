@@ -8,7 +8,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#fff"
     android:orientation="vertical" >
     
     <Button
@@ -73,6 +72,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/radioGroup1"
         android:layout_centerHorizontal="true"
+        android:background="@color/blanco"
+        android:textColor="@color/moradof"
         android:text="@string/btn_reg" />
 
 </RelativeLayout>

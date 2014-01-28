@@ -2,6 +2,7 @@ package clicky.gcard.ig.adapters;
 
 
 import clicky.gcard.ig.R;
+import clicky.gcard.ig.utils.Constants;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class AdapterListaNotificaciones extends ArrayAdapter<String>{
 			rowView=inflater.inflate(R.layout.item_configuracion, null);
 			ViewHolder viewHolder = new ViewHolder();
 			viewHolder.text = (TextView)rowView.findViewById(R.id.textitem);
+		//	viewHolder.text.setTypeface(Constants.font_roman);
 			rowView.setTag(viewHolder);
 		}
 		

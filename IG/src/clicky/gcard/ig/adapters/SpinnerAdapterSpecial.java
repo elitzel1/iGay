@@ -23,6 +23,7 @@ public class SpinnerAdapterSpecial extends BaseAdapter {
 		this.context=context;
 		
 	}
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub

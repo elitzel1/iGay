@@ -24,21 +24,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_weight="0.3" >
 
         <TextView
             android:id="@+id/txtNombre"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <RatingBar
             android:id="@+id/rateLugar"
             style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
-
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.5" />
     </LinearLayout>
 
     <TextView
@@ -47,6 +50,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_weight="0.3"
+        android:textColor="@color/gris_fuerte"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
@@ -71,21 +75,34 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
+                android:textColor="@color/gris_fuerte"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Button
                 android:id="@+id/btnComment"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="15dp"
-                android:text="@string/btn_comment" />
+                android:background="@color/morado_inicio"
+                android:text="@string/btn_comment"
+                android:textColor="@color/blanco" />
+
         </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/plecacomentarios" />
 
     <ListView
         android:id="@+id/listComments"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:divider="@color/morado"
+        android:dividerHeight="0.5dp"
         android:layout_weight="1" />
 
 </LinearLayout>
