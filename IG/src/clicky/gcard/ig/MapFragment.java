@@ -216,64 +216,55 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	
 	private void getCategoryId(List<Lugares> listaLugares, int i){
 		String cat = listaLugares.get(i).getCategory();
-	
-		if(cat.equals("Antros y Bares")){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinantro)));
-			markersList.put(mark.getId(), listaLugares.get(i));
-			Log.i("Markers", "Antros: "+i);
-			//id = R.drawable.pinantro;
-
-		}
-		if(cat.equals("Comida")){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinrestaurante)));
-			markersList.put(mark.getId(), listaLugares.get(i));
-			Log.i("Markers", "Comida: "+i);
-			//id=R.drawable.pinrestaurante;
-			
-		}
-		if(cat.equals("Cafeteria")){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pincafe)));
-			markersList.put(mark.getId(), listaLugares.get(i));
-			Log.i("Markers", "Cafeteria: "+i);
-		//	id=R.drawable.pincafe;
-			
-		}
-		if(cat.equals("Hotel")){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinhotel)));
-			markersList.put(mark.getId(), listaLugares.get(i));
-			Log.i("Markers", "Hotel: "+i);
-		//	id=R.drawable.pinhotel;
-	
-		}
-		if(cat.equals("Cultural")){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pincultural)));
-			markersList.put(mark.getId(), listaLugares.get(i));
-			Log.i("Markers", "Cultural: "+i);
-		//	id=R.drawable.pincultural;
-			
-		}
-		if(cat.equals("Tienda")){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pintienda)));
-			markersList.put(mark.getId(), listaLugares.get(i));
-			Log.i("Markers", "Tienda: "+i);
-			//id=R.drawable.pintienda;
-			
-		}
-		if(cat.equals("Cuidado personal")){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pincpersonal)));
-			markersList.put(mark.getId(), listaLugares.get(i));
-			Log.i("Markers", "CP: "+i);
-		//	id=R.drawable.pincpersonal;
+		int id=0;
 		
+		if(cat.equals("Bares y Antros")){
+			Log.i("Markers", "Antros: "+i);
+			id = R.drawable.pinantro;
+
+		}else{
+			if(cat.equals("Comida")){
+				Log.i("Markers", "Comida: "+i);
+				id=R.drawable.pinrestaurante;
+			
+			}else{
+				if(cat.equals("Cafeteria")){
+					Log.i("Markers", "Cafeteria: "+i);
+					id=R.drawable.pincafe;
+			
+				}else{
+					if(cat.equals("Hotel")){
+						Log.i("Markers", "Hotel: "+i);
+						id=R.drawable.pinhotel;
+	
+					}else{
+						if(cat.equals("Cultural")){
+							Log.i("Markers", "Cultural: "+i);
+							id=R.drawable.pincultural;
+			
+						}else{
+							if(cat.equals("Tienda")){
+								Log.i("Markers", "Tienda: "+i);
+								id=R.drawable.pintienda;
+			
+							}else{
+								if(cat.equals("Cuidado personal")){
+									Log.i("Markers", "CP: "+i);
+									id=R.drawable.pincpersonal;
+		
+								}
+							}
+						}
+					}
+				}
+			}
 		}
-		//return id;
+		
+		if(id!=0){
+		Marker mark = mapa.addMarker(new MarkerOptions()
+		.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(id)));
+		markersList.put(mark.getId(), listaLugares.get(i));
+		}
 	}
 	
 	
