@@ -74,7 +74,7 @@ public class SearchResult extends ActionBarActivity implements OnSelectItem, Sea
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.morado)));
+		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.moradof)));
 		getSupportActionBar().setTitle(getResources().getString(R.string.search));
 	}
 

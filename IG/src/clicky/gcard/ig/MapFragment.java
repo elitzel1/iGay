@@ -29,6 +29,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,7 +97,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		
 		
 		
-		/**Ubicaci��n del usuario***/
+		/**Ubicación del usuario***/
 		//LatLng coordenadas;
 		// Getting Google Play availability status
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity().getBaseContext());
@@ -202,48 +203,77 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		
+		Log.i("Markers", ""+listaLugares.size());
+		
 		for(int i = 0; i < listaLugares.size(); i++){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-					.position(listaLugares.get(i).getGeo()));
+
+			getCategoryId(listaLugares, i);
 			
-			//icon(BitmapDescriptorFactory.fromResource(R.drawable.pinantro))
-			
-			markersList.put(mark.getId(), listaLugares.get(i));
 		}
 		mapa.setOnMarkerClickListener(this);
+		Log.i("Markers", "Marcadores: "+markersList.size());
 	}
 	
-	private int getCategoryId(String cat){
-		int id=0;
+	private void getCategoryId(List<Lugares> listaLugares, int i){
+		String cat = listaLugares.get(i).getCategory();
+	
 		if(cat.equals("Antros y Bares")){
-			id = R.drawable.pinantro;
-			return id;
+			Marker mark = mapa.addMarker(new MarkerOptions()
+			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinantro)));
+			markersList.put(mark.getId(), listaLugares.get(i));
+			Log.i("Markers", "Antros: "+i);
+			//id = R.drawable.pinantro;
+
 		}
 		if(cat.equals("Comida")){
-			id=R.drawable.pinrestaurante;
-			return id;
+			Marker mark = mapa.addMarker(new MarkerOptions()
+			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinrestaurante)));
+			markersList.put(mark.getId(), listaLugares.get(i));
+			Log.i("Markers", "Comida: "+i);
+			//id=R.drawable.pinrestaurante;
+			
 		}
 		if(cat.equals("Cafeteria")){
-			id=R.drawable.pincafe;
-			return id;
+			Marker mark = mapa.addMarker(new MarkerOptions()
+			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pincafe)));
+			markersList.put(mark.getId(), listaLugares.get(i));
+			Log.i("Markers", "Cafeteria: "+i);
+		//	id=R.drawable.pincafe;
+			
 		}
 		if(cat.equals("Hotel")){
-			id=R.drawable.pinhotel;
-			return id;
+			Marker mark = mapa.addMarker(new MarkerOptions()
+			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinhotel)));
+			markersList.put(mark.getId(), listaLugares.get(i));
+			Log.i("Markers", "Hotel: "+i);
+		//	id=R.drawable.pinhotel;
+	
 		}
 		if(cat.equals("Cultural")){
-			id=R.drawable.pincultural;
-			return id;
+			Marker mark = mapa.addMarker(new MarkerOptions()
+			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pincultural)));
+			markersList.put(mark.getId(), listaLugares.get(i));
+			Log.i("Markers", "Cultural: "+i);
+		//	id=R.drawable.pincultural;
+			
 		}
 		if(cat.equals("Tienda")){
-			id=R.drawable.pintienda;
-			return id;
+			Marker mark = mapa.addMarker(new MarkerOptions()
+			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pintienda)));
+			markersList.put(mark.getId(), listaLugares.get(i));
+			Log.i("Markers", "Tienda: "+i);
+			//id=R.drawable.pintienda;
+			
 		}
 		if(cat.equals("Cuidado personal")){
-			id=R.drawable.pincpersonal;
-			return id;
+			Marker mark = mapa.addMarker(new MarkerOptions()
+			.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pincpersonal)));
+			markersList.put(mark.getId(), listaLugares.get(i));
+			Log.i("Markers", "CP: "+i);
+		//	id=R.drawable.pincpersonal;
+		
 		}
-		return id;
+		//return id;
 	}
 	
 	
@@ -318,6 +348,45 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		setUpMarker(filtroLugares);
 	}
 	
+	public class MarkerAnsyc extends AsyncTask<Lugares,String,String>{
+
+	
+		@Override
+	    protected void onPreExecute() {
+			mapa.clear();
+			    }
+		
+
+
+		@Override
+		protected String doInBackground(Lugares... arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+			
+		
+		
+		
+		
+		
+		
+		@Override
+		  protected void onProgressUpdate(String...id) {
+		//	setupMarker(id[0],lat,lng);
+			 
+		  }
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			//setupMarker(result, coor_est);
+			
+		}
+		
+		
+		
+	}
 	
 
 }
