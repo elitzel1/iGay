@@ -9,6 +9,7 @@ public class Lugares {
 	private String category;
 	private String desc;
 	private String dir;
+	private String edo;
 	private float calif;
 	private LatLng geo;
 	
@@ -53,6 +54,12 @@ public class Lugares {
 	}
 	public void setDir(String dir) {
 		this.dir = dir;
+	}
+	public String getEdo() {
+		return edo;
+	}
+	public void setEdo(String edo) {
+		this.edo = edo;
 	}
 
 }

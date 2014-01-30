@@ -22,7 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NotificacionesFragment extends ListFragment{
+public class NotificacionesActivity extends ListFragment{
 	
 	private View view;
 	private NotificacionesAdapter adapter;

@@ -13,16 +13,18 @@ public class ListaLugares {
 	String nombre;
 	String direccion;
 	String desc;
+	String edo;
 	String ima;
 	LatLng geo;
 	long calificacion;
 	int id;
 	
-		public item(String nombre, String direccion, String desc, String ima, LatLng geo, long calificacion, int id){
+		public item(String nombre, String direccion, String desc,String edo, String ima, LatLng geo, long calificacion, int id){
 			this.nombre=nombre;
 			this.direccion = direccion;
 			this.ima=ima;
 			this.desc=desc;
+			this.edo = edo;
 			this.geo=geo;
 			this.calificacion=calificacion;
 			this.id=id;

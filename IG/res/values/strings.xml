@@ -57,6 +57,7 @@
     <string name="hint_mail">Email</string>
     <string name="hint_confirm">Confirm Password</string>
     
+    <string name="alert_wait">Wait a moment&#8230;</string>
     <string name="alert_no_login">You need to sign in or register</string>
     <string name="alert_email">An email has been sent to your address</string>
     <string name="alert_no_email">We don\'t have that email</string>

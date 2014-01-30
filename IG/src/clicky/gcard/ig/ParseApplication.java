@@ -1,7 +1,10 @@
 package clicky.gcard.ig;
 
+import clicky.gcard.ig.datos.Comentario;
+
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.PushService;
 
 import android.app.Application;
@@ -12,6 +15,7 @@ public class ParseApplication extends Application {
     public void onCreate() {
             super.onCreate();
 
+            ParseObject.registerSubclass(Comentario.class);
             Parse.initialize(this, "e54qWo0yYhMhpGpmMFUcVrUtArRjBunDebYM6tgf",
     				"r2H8dYGS6bIgZErZgkyN8mL2WbP1Ul9vxfXEqdJy");
             

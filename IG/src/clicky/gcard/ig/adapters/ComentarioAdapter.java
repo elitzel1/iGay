@@ -2,6 +2,8 @@ package clicky.gcard.ig.adapters;
 
 import java.util.List;
 
+import com.facebook.widget.ProfilePictureView;
+
 import clicky.gcard.ig.R;
 import clicky.gcard.ig.datos.Comentario;
 
@@ -28,6 +30,7 @@ public class ComentarioAdapter extends BaseAdapter {
     }
  
     public class ViewHolder {
+    	ProfilePictureView userProfilePicture;
         TextView comment;
         TextView user;
         RatingBar calificacion;
@@ -54,6 +57,7 @@ public class ComentarioAdapter extends BaseAdapter {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.comentario_item, null);
             // Locate the TextView in listview_item.xml
+            holder.userProfilePicture = (ProfilePictureView) view.findViewById(R.id.userProfilePicture);
             holder.user = (TextView) view.findViewById(R.id.txtUser);
             holder.comment = (TextView) view.findViewById(R.id.txtComment);
             holder.calificacion = (RatingBar) view.findViewById(R.id.rateComentario);
@@ -63,6 +67,7 @@ public class ComentarioAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         // Set the results into TextView
+        holder.userProfilePicture.setProfileId(lugaresList.get(position).getFbId());
         holder.user.setText(lugaresList.get(position).getUser());
         holder.comment.setText(lugaresList.get(position).getComment());
         holder.calificacion.setRating(lugaresList.get(position).getCalif());

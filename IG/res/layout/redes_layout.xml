@@ -8,14 +8,12 @@
         android:id="@+id/checkLinked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:button="@drawable/com_facebook_button_check"
         android:text="@string/txt_linked" />
 
     <CheckBox
         android:id="@+id/checkComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:button="@drawable/com_facebook_button_check"
         android:text="@string/txt_share_facebook" />
 
 </LinearLayout>

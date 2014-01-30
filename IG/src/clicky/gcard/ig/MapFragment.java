@@ -246,11 +246,12 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 					for (ParseObject lugar : lugares){
 	                    Lugares item = new Lugares();
 	                    item.setLugarId((String) lugar.getObjectId());
-	                    item.setName((String) lugar.get("nombre"));
+	                    item.setName( lugar.getString("nombre"));
 	                    item.setCategory((String) lugar.get("categoria"));
 	                    item.setCalif((float)lugar.getDouble("calificacion"));
-	                    item.setDesc((String) lugar.get("descripcion"));
-	                    item.setDir((String) lugar.get("direccion"));
+	                    item.setDesc( lugar.getString("descripcion"));
+	                    item.setDir( lugar.getString("direccion"));
+	                    item.setEdo(lugar.getString("estado"));
 	                    item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 	                                    lugar.getParseGeoPoint("localizacion").getLongitude()));
 	                    lugaresList.add(item);

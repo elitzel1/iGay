@@ -40,9 +40,12 @@ public class AjustesFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setListAdapter(new AdapterListaNotificaciones(getActivity(),values));
-		
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
 		user = ParseUser.getCurrentUser();
-		
 	}
 	
 	@Override
@@ -66,8 +69,8 @@ public class AjustesFragment extends ListFragment {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 				Intent i = new Intent(activity,LoginActivity.class);
+				i.putExtra("inside", true);
 				startActivity(i);
-				activity.finish();
 			}
 		});
 		alert.setNegativeButton(R.string.btn_cancel, new OnClickListener() {

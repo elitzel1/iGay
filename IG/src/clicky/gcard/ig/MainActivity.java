@@ -2,6 +2,9 @@ package clicky.gcard.ig;
 
 
 import java.util.ArrayList;
+
+import com.parse.ParseUser;
+
 import clicky.gcard.ig.AjustesFragment.onListItemClicConf;
 import clicky.gcard.ig.DialogAjustesNot.AjustesNotListener;
 import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
@@ -15,9 +18,12 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -227,7 +233,11 @@ onListItemClicConf,AjustesNotListener{
 			fragment = new AjustesFragment();
 			break;
 		case 4:
-			fragment = new NotificacionesFragment();
+			if(ParseUser.getCurrentUser() != null){
+				fragment = new NotificacionesActivity();
+			}else{
+				showAlert();
+			}
 			break;
 		default:
 			
@@ -235,7 +245,7 @@ onListItemClicConf,AjustesNotListener{
 		break;
 		}
 		
-		if(position!=0){
+		if(position!=0 && fragment != null){
 			if(manager.getBackStackEntryCount()>0)
 				manager.popBackStack();
 			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
@@ -248,6 +258,29 @@ onListItemClicConf,AjustesNotListener{
 		drawer.closeDrawer(drawerMenu);
 	}
 	
+	private void showAlert(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setMessage(R.string.alert_no_login);
+		alert.setPositiveButton(R.string.btn_ok, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				Intent i = new Intent(MainActivity.this,LoginActivity.class);
+				i.putExtra("inside", true);
+				startActivity(i);
+			}
+		});
+		alert.setNegativeButton(R.string.btn_cancel, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		alert.create().show();
+	}
+	
 	/**Interfaz para Lista y Más Info**/
 	public void onArticleSelected(Lugares lugar){
 		
@@ -256,6 +289,7 @@ onListItemClicConf,AjustesNotListener{
 		args.putString("lugarId", lugar.getLugarId());
 		args.putString("nombre", lugar.getName());
 		args.putString("descripcion", lugar.getDesc());
+		args.putString("estado", lugar.getEdo());
 		args.putString("direccion", lugar.getDir());
 		args.putFloat("calificacion", lugar.getCalif());
 		args.putDouble("latitud", lugar.getGeo().latitude);
