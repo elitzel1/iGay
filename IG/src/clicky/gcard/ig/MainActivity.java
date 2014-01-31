@@ -22,8 +22,8 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -52,8 +52,8 @@ onListItemClicConf,AjustesNotListener{
 	private DrawerLayout drawer;
 	private MapFragment mapFragment;
 	private int FRAGMENT_ID=0;
-	Integer[] imageId ={R.drawable.ic_action_picture,R.drawable.ic_action_cc_bcc,R.drawable.ic_action_flash_on,
-			R.drawable.ic_action_make_available_offline,R.drawable.ic_action_split};
+	Integer[] imageId ={R.drawable.ihome,R.drawable.ipopulares,R.drawable.icategoria,
+			R.drawable.iajustes,R.drawable.inotificacion};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,12 @@ onListItemClicConf,AjustesNotListener{
 		setContentView(R.layout.inicio);
 
 		setUpActionBar();
+		
+//		Constants cons = new Constants();
+//		cons.setFontLt(getAssets());
+//		cons.setFontRoman(getAssets());
+//		cons.setFontUl(getAssets());
+		
 		/*** Drawer **/
 		setUpDrawer();
 		
@@ -102,7 +108,7 @@ onListItemClicConf,AjustesNotListener{
 				  if(drawerMenu.getCheckedItemPosition()>0)
 			        actionBar.setTitle(options[drawerMenu.getCheckedItemPosition()]);
 				  else
-					  actionBar.setTitle("J");
+					  actionBar.setTitle("ota");
 			    }
 			    public void onDrawerOpened(View arg0) {
 		    	ActionBar actionBar = getSupportActionBar();
@@ -115,9 +121,10 @@ onListItemClicConf,AjustesNotListener{
 		
 		options = getResources().getStringArray(R.array.drawable);
 		drawerMenu = (ListView) findViewById(R.id.left_drawer);
+	
 		drawerMenu.setAdapter(new AdapterDrawer(getSupportActionBar()
 				.getThemedContext(), R.layout.item_drawable, options,imageId));
-		drawerMenu.setBackgroundColor(getResources().getColor(R.color.gris));
+		drawerMenu.setBackgroundResource(R.drawable.fondomenu);
 	
 				//http://www.androidbegin.com/tutorial/implementing-actionbarsherlock-side-menu-navigation-drawer-in-android/
 		
@@ -234,7 +241,7 @@ onListItemClicConf,AjustesNotListener{
 			break;
 		case 4:
 			if(ParseUser.getCurrentUser() != null){
-				fragment = new NotificacionesActivity();
+				fragment = new NotificacionesFragment();
 			}else{
 				showAlert();
 			}
@@ -245,7 +252,7 @@ onListItemClicConf,AjustesNotListener{
 		break;
 		}
 		
-		if(position!=0 && fragment != null){
+		if(position!=0){
 			if(manager.getBackStackEntryCount()>0)
 				manager.popBackStack();
 			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
@@ -289,8 +296,8 @@ onListItemClicConf,AjustesNotListener{
 		args.putString("lugarId", lugar.getLugarId());
 		args.putString("nombre", lugar.getName());
 		args.putString("descripcion", lugar.getDesc());
-		args.putString("estado", lugar.getEdo());
 		args.putString("direccion", lugar.getDir());
+		args.putString("estado", lugar.getEdo());
 		args.putFloat("calificacion", lugar.getCalif());
 		args.putDouble("latitud", lugar.getGeo().latitude);
 		args.putDouble("longitud", lugar.getGeo().longitude);

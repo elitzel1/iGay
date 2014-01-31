@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,6 +29,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,7 +97,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		
 		
 		
-		/**Ubicaci��n del usuario***/
+		/**Ubicación del usuario***/
 		//LatLng coordenadas;
 		// Getting Google Play availability status
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity().getBaseContext());
@@ -179,7 +181,6 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	setUpGPS();
 	if(coordenadas!=null){
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
-		
 		getLugares(coordenadas, 8);
 	}
 			Log.i("", "");
@@ -190,18 +191,80 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		
 	}
 	
-
+	/**
+	 * Antros y Bares 0
+	 * Comida 1
+	 * Cafeteria 2
+	 * Hotel 3
+	 * Cultural 4
+	 * Tienda 5
+	 * Cuidado personal 6
+	 */
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		
+		Log.i("Markers", ""+listaLugares.size());
+		
 		for(int i = 0; i < listaLugares.size(); i++){
-			Marker mark = mapa.addMarker(new MarkerOptions()
-					.position(listaLugares.get(i).getGeo()));
-			markersList.put(mark.getId(), listaLugares.get(i));
+
+			getCategoryId(listaLugares, i);
+			
 		}
-
-
 		mapa.setOnMarkerClickListener(this);
+		Log.i("Markers", "Marcadores: "+markersList.size());
+	}
+	
+	private void getCategoryId(List<Lugares> listaLugares, int i){
+		String cat = listaLugares.get(i).getCategory();
+		int id=0;
+		
+		if(cat.equals("Bares y Antros")){
+			Log.i("Markers", "Antros: "+i);
+			id = R.drawable.pinantro;
+
+		}else{
+			if(cat.equals("Comida")){
+				Log.i("Markers", "Comida: "+i);
+				id=R.drawable.pinrestaurante;
+			
+			}else{
+				if(cat.equals("Cafeteria")){
+					Log.i("Markers", "Cafeteria: "+i);
+					id=R.drawable.pincafe;
+			
+				}else{
+					if(cat.equals("Hotel")){
+						Log.i("Markers", "Hotel: "+i);
+						id=R.drawable.pinhotel;
+	
+					}else{
+						if(cat.equals("Cultural")){
+							Log.i("Markers", "Cultural: "+i);
+							id=R.drawable.pincultural;
+			
+						}else{
+							if(cat.equals("Tienda")){
+								Log.i("Markers", "Tienda: "+i);
+								id=R.drawable.pintienda;
+			
+							}else{
+								if(cat.equals("Cuidado personal")){
+									Log.i("Markers", "CP: "+i);
+									id=R.drawable.pincpersonal;
+		
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if(id!=0){
+		Marker mark = mapa.addMarker(new MarkerOptions()
+		.position(listaLugares.get(i).getGeo()).icon(BitmapDescriptorFactory.fromResource(id)));
+		markersList.put(mark.getId(), listaLugares.get(i));
+		}
 	}
 	
 	
@@ -246,12 +309,12 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 					for (ParseObject lugar : lugares){
 	                    Lugares item = new Lugares();
 	                    item.setLugarId((String) lugar.getObjectId());
-	                    item.setName( lugar.getString("nombre"));
+	                    item.setName((String) lugar.get("nombre"));
 	                    item.setCategory((String) lugar.get("categoria"));
 	                    item.setCalif((float)lugar.getDouble("calificacion"));
-	                    item.setDesc( lugar.getString("descripcion"));
-	                    item.setDir( lugar.getString("direccion"));
 	                    item.setEdo(lugar.getString("estado"));
+	                    item.setDesc((String) lugar.get("descripcion"));
+	                    item.setDir((String) lugar.get("direccion"));
 	                    item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 	                                    lugar.getParseGeoPoint("localizacion").getLongitude()));
 	                    lugaresList.add(item);
@@ -277,6 +340,45 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		setUpMarker(filtroLugares);
 	}
 	
+	public class MarkerAnsyc extends AsyncTask<Lugares,String,String>{
+
+	
+		@Override
+	    protected void onPreExecute() {
+			mapa.clear();
+			    }
+		
+
+
+		@Override
+		protected String doInBackground(Lugares... arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+			
+		
+		
+		
+		
+		
+		
+		@Override
+		  protected void onProgressUpdate(String...id) {
+		//	setupMarker(id[0],lat,lng);
+			 
+		  }
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			//setupMarker(result, coor_est);
+			
+		}
+		
+		
+		
+	}
 	
 
 }

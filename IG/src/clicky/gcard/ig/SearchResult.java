@@ -74,7 +74,7 @@ public class SearchResult extends ActionBarActivity implements OnSelectItem, Sea
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.morado)));
+		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.moradof)));
 		getSupportActionBar().setTitle(getResources().getString(R.string.search));
 	}
 
@@ -103,6 +103,7 @@ public class SearchResult extends ActionBarActivity implements OnSelectItem, Sea
 		args.putString("nombre", lugar.getName());
 		args.putString("descripcion", lugar.getDesc());
 		args.putString("direccion", lugar.getDir());
+		args.putString("estado", lugar.getEdo());
 		args.putFloat("calificacion", lugar.getCalif());
 		args.putDouble("latitud", lugar.getGeo().latitude);
 		args.putDouble("longitud", lugar.getGeo().longitude);

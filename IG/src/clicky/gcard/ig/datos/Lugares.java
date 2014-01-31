@@ -8,8 +8,8 @@ public class Lugares {
 	private String name;
 	private String category;
 	private String desc;
-	private String dir;
 	private String edo;
+	private String dir;
 	private float calif;
 	private LatLng geo;
 	

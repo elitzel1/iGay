@@ -16,11 +16,7 @@ public class AdapterDrawer extends BaseAdapter {
 	private Integer[] imageId;
 	LayoutInflater inflater;
 	
-	static class ViewHolder{
-		public TextView text;
-		public ImageView image;
-		
-	}
+	
 	
 	public AdapterDrawer(Context context, int resource,
 			String[] objects,Integer[] imageId) {
@@ -36,34 +32,55 @@ public class AdapterDrawer extends BaseAdapter {
 	@Override
 	public View getView(int position, View view, ViewGroup parent){
 		
+		View view2 = null;
+		
+		if(position==0)
+			view2 = getViewHeader(view,parent);
+		else
+			view2 = getViewItem(view, parent,position);
+			
+		return view2;
+	}
+	
+	public View getViewItem(View view, ViewGroup parent,int position){
+		ViewHolder holder;
+		if(view==null){
+		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		view = inflater.inflate(R.layout.item_drawable, parent,false);
+		
 		TextView text;
 		ImageView imag;
+	
+		text=(TextView)view.findViewById(R.id.texto1);
+		imag=(ImageView)view.findViewById(R.id.imag1);
+		holder= new ViewHolder();
+		holder.text = text;
+		holder.image = imag;
+		view.setTag(holder);
+		}
 		
-		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View itemView = inflater.inflate(R.layout.item_drawable, parent,false);
-		text=(TextView)itemView.findViewById(R.id.texto1);
-		imag=(ImageView)itemView.findViewById(R.id.imag1);
+		holder = (ViewHolder)view.getTag();
+		holder.text.setText(options[position]);
+		holder.image.setImageResource(imageId[position]);
 		
-		text.setText(options[position]);
-		imag.setImageResource(imageId[position]);
-//		View rowView = view;
-//		
-//		if(rowView== null){
-//		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		rowView = inflater.inflate(R.layout.item_drawable, null,false);
-//		ViewHolder viewHolder = (ViewHolder)rowView.getTag();
-//		
-//		viewHolder.image=(ImageView)rowView.findViewById(R.id.imag1);
-//		viewHolder.text=(TextView)rowView.findViewById(R.id.texto1);
-//		
-//		rowView.setTag(viewHolder);
-//		}
-//		
-//		ViewHolder holder = (ViewHolder)rowView.getTag();
-//		holder.text.setText(options[position]);
-//		holder.image.setImageResource(imageId[position]);
-	//	return rowView;
-		return itemView;
+		return view;
+	}
+	
+	public View getViewHeader(View view, ViewGroup parent){
+		ViewHolderHeader holder;
+		
+		if(view==null){
+			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			view = inflater.inflate(R.layout.header, parent,false);
+			holder= new ViewHolderHeader();
+			
+			ImageView imag = (ImageView)view.findViewById(R.id.image_header);
+			
+			holder.imagen = imag;
+			view.setTag(holder);
+			}
+			
+		return view;
 	}
 
 	@Override
@@ -83,5 +100,16 @@ public class AdapterDrawer extends BaseAdapter {
 		// TODO Auto-generated method stub
 		return position;
 	}
+	
+	static class ViewHolder{
+		public TextView text;
+		public ImageView image;
+		
+	}
+	
+	class ViewHolderHeader{
+		public ImageView imagen;
+	}
+	
 
 }
