@@ -51,6 +51,7 @@
     <string name="btn_submit">Submit</string>
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_more_comments">More Comments</string>
     
     <string name="hint_user">User</string>
     <string name="hint_pass">Password</string>
@@ -67,5 +68,6 @@
     <string name="txt_forgot_pass">Please enter your email address to recover your account</string>
     
     <string name="title_activity_detalles">DetallesActivity</string>
+    <string name="masinfo">Más Información</string>
 
 </resources>

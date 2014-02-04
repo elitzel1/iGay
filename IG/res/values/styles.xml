@@ -11,6 +11,18 @@
             backward-compatibility can go here.
         -->
     </style>
+    
+    <style name="purpleRatingSmall" parent="@android:style/Widget.RatingBar">
+    <item name="android:progressDrawable">@drawable/purple_rating_small</item>
+    <item name="android:minHeight">16dp</item>
+    <item name="android:maxHeight">16dp</item>
+</style>
+
+    <style name="purpleRating" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/purple_rating</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:maxHeight">48dp</item>
+    </style>
 
     <style name="ThemeDialogCustom">
     	<item name="android:windowFrame">@null</item>
