@@ -19,6 +19,7 @@
         android:layout_height="wrap_content" 
         android:layout_alignBottom="@+id/txtNombre"
         android:layout_alignParentRight="true"
-        style="?android:attr/ratingBarStyleSmall"/>
+        android:isIndicator="true"
+        style="@style/purpleRatingSmall"/>
 
 </RelativeLayout>

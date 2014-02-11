@@ -248,7 +248,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 								id=R.drawable.pintienda;
 			
 							}else{
-								if(cat.equals("Cuidado personal")){
+								if(cat.equals("Cuidado Personal")){
 									Log.i("Markers", "CP: "+i);
 									id=R.drawable.pincpersonal;
 		
@@ -312,6 +312,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	                    item.setName((String) lugar.get("nombre"));
 	                    item.setCategory((String) lugar.get("categoria"));
 	                    item.setCalif((float)lugar.getDouble("calificacion"));
+	                    item.setEdo(lugar.getString("estado"));
 	                    item.setDesc((String) lugar.get("descripcion"));
 	                    item.setDir((String) lugar.get("direccion"));
 	                    item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),

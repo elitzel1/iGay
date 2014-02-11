@@ -2,6 +2,9 @@ package clicky.gcard.ig;
 
 
 import java.util.ArrayList;
+
+import com.parse.ParseUser;
+
 import clicky.gcard.ig.AjustesFragment.onListItemClicConf;
 import clicky.gcard.ig.DialogAjustesNot.AjustesNotListener;
 import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
@@ -15,8 +18,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -47,7 +53,7 @@ onListItemClicConf,AjustesNotListener{
 	private MapFragment mapFragment;
 	private int FRAGMENT_ID=0;
 	Integer[] imageId ={R.drawable.ihome,R.drawable.ipopulares,R.drawable.icategoria,
-			R.drawable.iajustes,R.drawable.inotificacion};
+			R.drawable.inotificacion,R.drawable.iajustes};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +61,7 @@ onListItemClicConf,AjustesNotListener{
 		setContentView(R.layout.inicio);
 
 		setUpActionBar();
-		
-//		Constants cons = new Constants();
-//		cons.setFontLt(getAssets());
-//		cons.setFontRoman(getAssets());
-//		cons.setFontUl(getAssets());
-		
+
 		/*** Drawer **/
 		setUpDrawer();
 		
@@ -231,10 +232,17 @@ onListItemClicConf,AjustesNotListener{
 			fragment.setArguments(extras);
 			break;
 		case 3:
-			fragment = new AjustesFragment();
+			
+		if(ParseUser.getCurrentUser() != null){
+			fragment = new NotificacionesFragment();
+		}else{
+			showAlert();
+		}
+			
 			break;
 		case 4:
-			fragment = new NotificacionesFragment();
+			
+			fragment = new AjustesFragment();
 			break;
 		default:
 			
@@ -245,14 +253,39 @@ onListItemClicConf,AjustesNotListener{
 		if(position!=0){
 			if(manager.getBackStackEntryCount()>0)
 				manager.popBackStack();
+			try{
 			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 			getSupportActionBar().setTitle(options[position]);
 			FRAGMENT_ID=1; //ID para modificar el menú
+			}catch(NullPointerException e){}
 			
 		}
 		invalidateOptionsMenu(); //Obliga a reconstruir el menú dependiendo del fragment.
 		drawerMenu.setItemChecked(position, true);
 		drawer.closeDrawer(drawerMenu);
+	}
+	
+	private void showAlert(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setMessage(R.string.alert_no_login);
+		alert.setPositiveButton(R.string.btn_ok, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				Intent i = new Intent(MainActivity.this,LoginActivity.class);
+				i.putExtra("inside", true);
+				startActivity(i);
+			}
+		});
+		alert.setNegativeButton(R.string.btn_cancel, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		alert.create().show();
 	}
 	
 	/**Interfaz para Lista y Más Info**/
@@ -264,6 +297,7 @@ onListItemClicConf,AjustesNotListener{
 		args.putString("nombre", lugar.getName());
 		args.putString("descripcion", lugar.getDesc());
 		args.putString("direccion", lugar.getDir());
+		args.putString("estado", lugar.getEdo());
 		args.putFloat("calificacion", lugar.getCalif());
 		args.putDouble("latitud", lugar.getGeo().latitude);
 		args.putDouble("longitud", lugar.getGeo().longitude);

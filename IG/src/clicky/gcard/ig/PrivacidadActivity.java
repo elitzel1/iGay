@@ -20,7 +20,7 @@ public class PrivacidadActivity extends ActionBarActivity{
 		ActionBar bar = getSupportActionBar();
 		bar.setTitle("Privacidad");
 		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
-		bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.morado)));
+		bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.moradof)));
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 	

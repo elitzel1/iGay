@@ -201,7 +201,8 @@ OnListListener callback;
 					item.setCategory((String) lugar.get("categoria"));
 					item.setCalif((float)lugar.getDouble("calificacion"));
 					item.setDesc((String) lugar.get("descripcion"));
-					item.setDir((String) lugar.get("direccion"));
+					item.setDir( lugar.getString("direccion"));
+					item.setEdo(lugar.getString("estado"));
 					item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 							lugar.getParseGeoPoint("localizacion").getLongitude()));
 					lugaresList.add(item);
@@ -235,11 +236,12 @@ OnListListener callback;
 					ParseObject res = lugar.getParseObject("lugarId");
 					
 					item.setLugarId((String) res.getObjectId());
-					item.setName((String) res.get("nombre"));
-					item.setCategory((String) res.get("categoria"));
+					item.setName( res.getString("nombre"));
+					item.setCategory( res.getString("categoria"));
 					item.setCalif((float)res.getDouble("calificacion"));
-					item.setDesc((String) res.get("descripcion"));
-					item.setDir((String) res.get("direccion"));
+					item.setDesc( res.getString("descripcion"));
+					item.setDir( res.getString("direccion"));
+					item.setEdo(res.getString("estado"));
 					item.setGeo(new LatLng(res.getParseGeoPoint("localizacion").getLatitude(),
 							res.getParseGeoPoint("localizacion").getLongitude()));
 					lugaresList.add(item);

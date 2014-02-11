@@ -1,108 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/info_det"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/windowBackground"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/fab__header_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.2" >
+    
 
-        <ImageView
-            android:id="@+id/image_header"
+   <!--      <FrameLayout
+            android:id="@+id/fab__header_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/london" />
-    </FrameLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1.5" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_weight="0.3" >
+            <ImageView
+                android:id="@+id/image_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/img_detalle"
+                android:scaleType="centerCrop"
+                android:src="@drawable/london" />
+        </FrameLayout>
+ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3" >
 
+            <ImageView
+                android:id="@+id/txtNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/nsantro" />
+          
         <TextView
-            android:id="@+id/txtNombre"
-            android:layout_width="0dp"
+            android:id="@+id/txtDesc"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <RatingBar
-            android:id="@+id/rateLugar"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.5" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/txtDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="0.3"
-        android:textColor="@color/gris_fuerte"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8" >
-
-        <fragment
-            android:id="@+id/mapaLugar"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            class="com.google.android.gms.maps.SupportMapFragment" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1" >
 
-            <TextView
-                android:id="@+id/txtDir"
+            <RatingBar
+                android:id="@+id/rateLugar"
+                style="@style/purpleRatingSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:textColor="@color/gris_fuerte"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:isIndicator="true" />
 
             <Button
                 android:id="@+id/btnComment"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="15dp"
-                android:background="@color/morado_inicio"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_morado"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:text="@string/btn_comment"
                 android:textColor="@color/blanco" />
 
         </LinearLayout>
-    </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/plecacomentarios" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5" >
 
-    <ListView
-        android:id="@+id/listComments"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:divider="@color/morado"
-        android:dividerHeight="0.5dp"
-        android:layout_weight="1" />
+            <fragment
+                android:id="@+id/mapaLugar"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="5dp"
+                class="com.google.android.gms.maps.SupportMapFragment" />
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/txtEdo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="left"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/txtDir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/plecacomentarios" />
+        
+        <LinearLayout 
+            android:id="@+id/comentarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+        
+        <Button
+            android:id="@+id/btnComentarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/btn_morado"
+            android:textColor="@color/blanco"
+            android:text="@string/btn_more_comments" />
+         
+        
+ </LinearLayout>
+

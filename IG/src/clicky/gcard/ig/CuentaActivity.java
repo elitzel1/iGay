@@ -20,7 +20,7 @@ public class CuentaActivity extends ActionBarActivity{
 		ActionBar bar = getSupportActionBar();
 		bar.setTitle("Cuenta");
 		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
-		bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.morado)));
+		bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.moradof)));
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 	

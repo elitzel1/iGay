@@ -7,6 +7,7 @@ import java.util.List;
 import clicky.gcard.ig.adapters.ComentarioAdapter;
 import clicky.gcard.ig.datos.Comentario;
 
+import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
@@ -31,6 +33,7 @@ import android.os.Bundle;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -43,6 +46,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -51,14 +55,15 @@ import android.widget.Toast;
 public class DetallesActivity extends ActionBarActivity {
         
         //Datos del lugar
-        private String lugarId,nombre,descripcion,direccion;
+        private String lugarId,nombre,descripcion,direccion,estado;
         private float calificacion;
         private double lat,longitud;
 
-        private TextView txtNombre,txtDesc,txtDir;
+        private LinearLayout layout;
+        private TextView txtNombre,txtDesc,txtDir,txtEdo;
         private RatingBar ratingLugar;
-        private Button btnCom;
-        private ListView listComments;
+        private Button btnCom,btnMas;
+       // private ListView listComments;
         private GoogleMap mapa;
 
         private ParseUser user;
@@ -72,27 +77,39 @@ public class DetallesActivity extends ActionBarActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
-                        
-                setContentView(R.layout.detail_layout);
+                FadingActionBarHelper helper = new FadingActionBarHelper()
+                .actionBarBackground(new ColorDrawable(getResources().getColor(R.color.moradof)))
+                .headerLayout(R.layout.header_fa)
+                .contentLayout(R.layout.detail_layout);
+            setContentView(helper.createView(this));
+            helper.initActionBar(this);
                 setUpSomething();
                 
-                txtNombre = (TextView)findViewById(R.id.txtNombre);
+                layout = (LinearLayout)findViewById(R.id.comentarios);
+             //   txtNombre = (TextView)findViewById(R.id.txtNombre);
                 txtDesc = (TextView)findViewById(R.id.txtDesc);
                 txtDir = (TextView)findViewById(R.id.txtDir);
+                txtEdo = (TextView)findViewById(R.id.txtEdo);
                 
                 ratingLugar = (RatingBar)findViewById(R.id.rateLugar);
                 
                 btnCom = (Button)findViewById(R.id.btnComment);
-                listComments = (ListView)findViewById(R.id.listComments);
-                
+                btnMas = (Button)findViewById(R.id.btnComentarios);
+               // listComments = (ListView)findViewById(R.id.listComments);
+                /*
                 txtNombre.setText(nombre);
                 txtDesc.setText(descripcion);
                 txtDir.setText(direccion);
+                */
+                txtDesc.setText("Capital de Inglaterra y Reino Unido, el más grande de los estados" +
+                		" de ese país, por que YOLO");
+                txtDir.setText("Calle #69, Colonia, Delegación");
+                txtEdo.setText(estado);
                 
                 ratingLugar.setRating(calificacion);
                 
-        footer = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-               .inflate(R.layout.loading_item, null, false);
+                footer = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                		.inflate(R.layout.loading_item, null, false);
                 
                 lugaresList = new ArrayList<Comentario>();
                 
@@ -103,12 +120,23 @@ public class DetallesActivity extends ActionBarActivity {
                 btnCom.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                                if(user != null)
-                                        showCommentDialog();
-                                else
-                                        Toast.makeText(getBaseContext(), "You must sign in to comment", Toast.LENGTH_SHORT).show();
+                        	if(user != null)
+                        		showCommentDialog();
+                            else
+                            	Toast.makeText(getBaseContext(), "You must sign in to comment", Toast.LENGTH_SHORT).show();
                         }
                 });
+                
+                btnMas.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Intent i = new Intent(DetallesActivity.this,CommentsActivity.class);
+						i.putExtra("lugar", lugarId);
+						startActivity(i);
+						
+					}
+				});
                 
                 setUpBar();
         }
@@ -121,6 +149,7 @@ public class DetallesActivity extends ActionBarActivity {
                         nombre = b.getString("nombre");
                         descripcion = b.getString("descripcion");
                         direccion = b.getString("direccion");
+                        estado = b.getString("estado");
                         calificacion = b.getFloat("calificacion");
                         lat = b.getDouble("latitud");
                         longitud = b.getDouble("longitud");
@@ -171,7 +200,6 @@ public class DetallesActivity extends ActionBarActivity {
                 
         }
         
-        
         private void showCommentDialog(){
                 final Dialog dialog = new Dialog(this,R.style.ThemeDialogCustom);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -208,6 +236,8 @@ public class DetallesActivity extends ActionBarActivity {
                 
                 comment.put("usuario", ParseUser.createWithoutData(ParseUser.class, user.getObjectId()));
                 comment.put("userName", user.getUsername());
+                if(user.get("fbId") != null)
+                	comment.put("fbId", user.get("fbId"));
                 
                 ParseACL defaultACL = new ParseACL();
                 defaultACL.setPublicReadAccess(true);
@@ -246,22 +276,21 @@ public class DetallesActivity extends ActionBarActivity {
         }
         
         private void updatePostList() {
-                listComments.addFooterView(footer);
-                listComments.setAdapter(adapter);
-                  // Create query for objects of type "Post"
-                  ParseQuery<ParseObject> query = ParseQuery.getQuery("Comentarios");
-                             
-                  query.whereEqualTo("idLugar", ParseObject.createWithoutData("Lugares",lugarId));
+        	layout.addView(footer);
+        	// Create query for objects of type "Post"
+        	ParseQuery<ParseObject> query = ParseQuery.getQuery("Comentarios");
                          
-                  // Run the query  
-                  query.findInBackground(new FindCallback<ParseObject>() {
+        	query.whereEqualTo("idLugar", ParseObject.createWithoutData("Lugares",lugarId));
+            query.setLimit(4);
+        	// Run the query  
+        	query.findInBackground(new FindCallback<ParseObject>() {
                  
-                    @Override
-                    public void done(List<ParseObject> postList,
-                        ParseException e) {
-                      if (e == null) {
+        		@Override
+        		public void done(List<ParseObject> postList, ParseException e) {
+        			layout.removeView(footer);
+        			if (e == null) {
                               
-                        // If there are results, update the list of posts
+        				// If there are results, update the list of posts
                         // and notify the adapter
                         lugaresList.clear();
                         for (ParseObject post : postList) {
@@ -269,19 +298,22 @@ public class DetallesActivity extends ActionBarActivity {
                                 coment.setCommentId(post.getObjectId());
                                 coment.setComment(post.getString("comentario"));
                                 coment.setUser(post.getString("userName"));
+                                if(post.getString("fbId") != null)
+                                	coment.setFbId(post.getString("fbId"));
                                 coment.setCalif((float)post.getDouble("calificacion"));
                                 if(isactive){
                                         if(post.getString("userName").equals(user.getUsername())){
                                                 userComment = coment;
                                         }
                                 }
-                                lugaresList.add(coment);
+                                addCommentView(coment);
+                                //lugaresList.add(coment);
                         }
-                        listComments.removeFooterView(footer);
+                        //listComments.removeFooterView(footer);
                     // Pass the results into ListViewAdapter.java
-                    adapter = new ComentarioAdapter(getApplicationContext(), lugaresList);
+                    //adapter = new ComentarioAdapter(getApplicationContext(), lugaresList);
                     // Binds the Adapter to the ListView
-                    listComments.setAdapter(adapter);
+                    //listComments.setAdapter(adapter);
                       } else {
                         Log.d("Post retrieval", "Error: " + e.getMessage());
                       }
@@ -299,7 +331,7 @@ public class DetallesActivity extends ActionBarActivity {
                             if (e == null) {
                                     dialog.dismiss();
                                     ratingLugar.setRating(Float.valueOf(result.toString()));
-                                    updatePostList();
+                                    //updatePostList();
                             }else{
                                     Log.i("Error", e.toString());
                             }
@@ -307,6 +339,23 @@ public class DetallesActivity extends ActionBarActivity {
                         });
         }
         
+        private void addCommentView(Comentario comentario){
+        	LayoutInflater inflater =
+        		    (LayoutInflater)this.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        	View view = inflater.inflate( R.layout.comentario_item, null );
+        	
+        	ProfilePictureView userProfilePicture = (ProfilePictureView) view.findViewById(R.id.userProfilePicture);
+            TextView user = (TextView) view.findViewById(R.id.txtUser);
+            TextView comment = (TextView) view.findViewById(R.id.txtComment);
+            RatingBar calificacion = (RatingBar) view.findViewById(R.id.rateComentario);
+            
+            userProfilePicture.setProfileId(comentario.getFbId());
+            user.setText(comentario.getUser());
+            comment.setText(comentario.getComment());
+            calificacion.setRating(comentario.getCalif());
+            
+            layout.addView(view);
+        }
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
                 // Inflate the menu; this adds items to the action bar if it is present.

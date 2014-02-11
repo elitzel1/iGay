@@ -4,6 +4,9 @@ import com.parse.ParseUser;
 
 import clicky.gcard.ig.adapters.AdapterListaNotificaciones;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -15,11 +18,11 @@ import android.widget.ListView;
 
 public class AjustesFragment extends ListFragment {
 
-	String values[] = new String[]{"Configuración de Cuenta","Configuración de Notificaciones",
+	String values[] = new String[]{"Configuración de Notificaciones",
 			"Redes sociales","Acerca de","Privacidad","Finalizar sesión"};
 	
-	private ListView list;
 	private Activity activity;
+	private ParseUser user;
 	
 	onListItemClicConf mCallback;
 	
@@ -30,14 +33,19 @@ public class AjustesFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ){
 		
 		View rootView =  inflater.inflate(R.layout.frag_ajustes, container, false);
-		list=(ListView)rootView.findViewById(android.R.id.list);
+		
 		return rootView;
 	}
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setListAdapter(new AdapterListaNotificaciones(getActivity(),values));
-		
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		user = ParseUser.getCurrentUser();
 	}
 	
 	@Override
@@ -52,34 +60,62 @@ public class AjustesFragment extends ListFragment {
         }
 	}
 	
+	private void showAlert(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+		alert.setMessage(R.string.alert_no_login);
+		alert.setPositiveButton(R.string.btn_ok, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				Intent i = new Intent(activity,LoginActivity.class);
+				i.putExtra("inside", true);
+				startActivity(i);
+			}
+		});
+		alert.setNegativeButton(R.string.btn_cancel, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		alert.create().show();
+	}
+	
 	public void onListItemClick(ListView list,View view, int position, long id){
 		super.onListItemClick(list, view, position, id);
 		Intent i;
 		switch(position){
 		case 0:
-			i = new Intent(activity,CuentaActivity.class);
-			startActivity(i);
+			if(user != null)
+				mCallback.onDialogNot();
+			else{
+				showAlert();
+			}
 			break;
 		case 1:
-			mCallback.onDialogNot();
+			if(user != null){
+				i = new Intent(activity,RedesSocialesActivity.class);
+				startActivity(i);
+			}else{
+				showAlert();
+			}
 			break;
 		case 2:
-			i = new Intent(activity,RedesSocialesActivity.class);
-			startActivity(i);
 			break;
 		case 3:
-			break;
-		case 4:
 			i = new Intent(activity,PrivacidadActivity.class);
 			startActivity(i);
 			break;
-		case 5:
-			ParseUser user = ParseUser.getCurrentUser();
+		case 4:
 			if(user != null){
 				ParseUser.logOut();
 				i = new Intent(activity,LoginActivity.class);
 				startActivity(i);
 				activity.finish();
+			}else{
+				showAlert();
 			}
 			break;
 		default:

@@ -103,6 +103,7 @@ public class SearchResult extends ActionBarActivity implements OnSelectItem, Sea
 		args.putString("nombre", lugar.getName());
 		args.putString("descripcion", lugar.getDesc());
 		args.putString("direccion", lugar.getDir());
+		args.putString("estado", lugar.getEdo());
 		args.putFloat("calificacion", lugar.getCalif());
 		args.putDouble("latitud", lugar.getGeo().latitude);
 		args.putDouble("longitud", lugar.getGeo().longitude);

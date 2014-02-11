@@ -34,6 +34,7 @@
          android:id="@+id/rateLugar"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
+         style="@style/purpleRating"
          android:isIndicator="true" />
      
      <Button
@@ -42,7 +43,8 @@
          android:layout_height="wrap_content"
          android:layout_marginLeft="10dp"
          android:layout_marginRight="10dp"
-         android:background="@color/morado"
+         android:layout_marginTop="5dp"
+         android:background="@drawable/btn_morado"
          android:text="@string/masinfo"
          android:textColor="@color/blanco" />
 
