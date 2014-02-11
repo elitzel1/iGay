@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">J</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="facebookId">624622577604521</string>
+    <string name="img_log">Imagen de login</string>
+    <string name="img_detalle">Imagen de lugar</string>
+    <string name="hint">Lugar</string>
+    <string name="dfil">Selección</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="search">Búsqueda</string>
+
+    <string-array name="drawable">
+        <item>Mapa</item>
+        <item>Populares</item>
+        <item>Categorías</item>
+        <item>Notificaciones</item>
+        <item>Ajustes</item>
+    </string-array>
+    <string-array name="categorias">
+        <item>Antros y Bares</item>
+        <item>Comida</item>
+        <item>Cafeteria</item>
+        <item>Hotel</item>
+        <item>Cultural</item>
+        <item>Tienda</item>
+        <item>Cuidado Personal</item>
+    </string-array>
+    <string-array name="tipos">
+        <item>Bisexual</item>
+        <item>Gay</item>
+        <item>Lesbico</item>
+        <item>Transexual</item>
+    </string-array>
+
+    <string name="filtrar">Filtrar</string>
+    <string name="drawer_open">Abrir navigation drawer</string>
+    <string name="drawer_close">Cerrar navigation drawer</string>
+    <string name="action_search">Buscar</string>
+    <string name="title_activity_search_result">SearchResult</string>
+
+    <string name="btn_log">Iniciar sesión</string>
+    <string name="btn_reg">Crear cuenta</string>
+    <string name="btn_continue">Omitir este paso</string>
+
+
+    <string name="btn_face">Login con Facebook</string>
+
+    <string name="btn_comment">Comentar</string>
+
+    <string name="btn_forget">Olvido su contraseña?</string>
+    <string name="btn_submit">Envíar</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_more_comments">Más comentarios</string>
+    
+    <string name="hint_user">Usuario</string>
+    <string name="hint_pass">Contraseña</string>
+    <string name="hint_mail">Email</string>
+    <string name="hint_confirm">Confirmar Contraseña</string>
+    
+    <string name="alert_wait">Espere un momento</string>
+    <string name="alert_no_login">Necesitas registrarte o iniciar sesión</string>
+    <string name="alert_email">Se ha enviado un email a su correo</string>
+    <string name="alert_no_email">No tenemos ese correo</string>
+
+    <string name="txt_linked">Vinculado con Facebook</string>
+    <string name="txt_share_facebook">Comparte tu comentario en Facebook</string>
+    <string name="txt_forgot_pass">Ingrese su correo para restaurar su cuenta</string>
+    
+    <string name="title_activity_detalles">DetallesActivity</string>
+    <string name="masinfo">Más Información</string>
+    
+    
+
+</resources>
