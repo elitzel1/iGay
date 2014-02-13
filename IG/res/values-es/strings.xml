@@ -5,6 +5,8 @@
     <string name="action_settings">Ajustes</string>
     <string name="hello_world">Hello world!</string>
     <string name="facebookId">624622577604521</string>
+    <string name="version">Versión 1.0</string>
+    
     <string name="img_log">Imagen de login</string>
     <string name="img_detalle">Imagen de lugar</string>
     <string name="hint">Lugar</string>
@@ -52,7 +54,7 @@
     <string name="btn_comment">Comentar</string>
 
     <string name="btn_forget">Olvido su contraseña?</string>
-    <string name="btn_submit">Envíar</string>
+    <string name="btn_submit">Enviar</string>
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_more_comments">Más comentarios</string>
@@ -70,10 +72,12 @@
     <string name="txt_linked">Vinculado con Facebook</string>
     <string name="txt_share_facebook">Comparte tu comentario en Facebook</string>
     <string name="txt_forgot_pass">Ingrese su correo para restaurar su cuenta</string>
+    <string name="txt_mail">Selecciona un cliente de correo:</string>
     
     <string name="title_activity_detalles">DetallesActivity</string>
     <string name="masinfo">Más Información</string>
     
+    <string name="about">Acerca de</string>
     
 
 </resources>

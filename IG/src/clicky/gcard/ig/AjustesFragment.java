@@ -2,24 +2,31 @@ package clicky.gcard.ig;
 
 import com.parse.ParseUser;
 
+import clicky.gcard.ig.adapters.AdapterAbout;
 import clicky.gcard.ig.adapters.AdapterListaNotificaciones;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class AjustesFragment extends ListFragment {
 
 	String values[] = new String[]{"Configuración de Notificaciones",
 			"Redes sociales","Acerca de","Privacidad","Finalizar sesión"};
+	
+	String redes[] = new String[]{"AppJ","@AppJ","appj@cl1cky.com"};
+	int logos[] = new int[]{R.drawable.facebook_icon,R.drawable.twitter_icon,android.R.drawable.ic_dialog_email};
 	
 	private Activity activity;
 	private ParseUser user;
@@ -83,6 +90,52 @@ public class AjustesFragment extends ListFragment {
 		alert.create().show();
 	}
 	
+	private void showAbout(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+		alert.setTitle(R.string.about);
+		View v = activity.getLayoutInflater().inflate(R.layout.ajustes_layout, null);
+		alert.setView(v);
+		ListView lista = (ListView)v.findViewById(R.id.listaAbout);
+		lista.setAdapter(new AdapterAbout(activity, redes, logos));
+		lista.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+					long arg3) {
+				switch(pos){
+					case 0:
+						String urlFace = "http://www.google.com";
+						Intent i = new Intent(Intent.ACTION_VIEW);
+						i.setData(Uri.parse(urlFace));
+						startActivity(i);
+						break;
+					case 1:
+						String urlTweet = "http://www.google.com";
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setData(Uri.parse(urlTweet));
+						startActivity(intent);
+						break;
+					case 2:
+						Intent email = new Intent(Intent.ACTION_SEND);
+						email.setType("text/html");
+						email.putExtra(Intent.EXTRA_EMAIL, new String[]{"appj@cl1cky.com"});		  
+						startActivity(Intent.createChooser(email, activity.getString(R.string.txt_mail)));
+						break;	
+				}
+			}
+		});
+		
+		alert.setPositiveButton(R.string.btn_ok, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+
+			}
+		});
+		alert.create().show();
+	}
+	
 	public void onListItemClick(ListView list,View view, int position, long id){
 		super.onListItemClick(list, view, position, id);
 		Intent i;
@@ -103,6 +156,7 @@ public class AjustesFragment extends ListFragment {
 			}
 			break;
 		case 2:
+			showAbout();
 			break;
 		case 3:
 			i = new Intent(activity,PrivacidadActivity.class);
