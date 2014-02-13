@@ -293,6 +293,7 @@ onListItemClicConf,AjustesNotListener{
 		
 		Intent i = new Intent(MainActivity.this,DetallesActivity.class);
 		Bundle args = new Bundle();
+		args.putString("categoria",lugar.getCategory());
 		args.putString("lugarId", lugar.getLugarId());
 		args.putString("nombre", lugar.getName());
 		args.putString("descripcion", lugar.getDesc());

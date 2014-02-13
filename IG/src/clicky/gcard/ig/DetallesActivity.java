@@ -6,6 +6,7 @@ import java.util.List;
 
 import clicky.gcard.ig.adapters.ComentarioAdapter;
 import clicky.gcard.ig.datos.Comentario;
+import clicky.gcard.ig.datos.Lugares;
 
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -46,6 +48,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -55,10 +58,10 @@ import android.widget.Toast;
 public class DetallesActivity extends ActionBarActivity {
         
         //Datos del lugar
-        private String lugarId,nombre,descripcion,direccion,estado;
+        private String lugarId,nombre,descripcion,direccion,estado,categoria;
         private float calificacion;
         private double lat,longitud;
-
+      
         private LinearLayout layout;
         private TextView txtNombre,txtDesc,txtDir,txtEdo;
         private RatingBar ratingLugar;
@@ -86,7 +89,7 @@ public class DetallesActivity extends ActionBarActivity {
                 setUpSomething();
                 
                 layout = (LinearLayout)findViewById(R.id.comentarios);
-             //   txtNombre = (TextView)findViewById(R.id.txtNombre);
+                ImageView imga = (ImageView)findViewById(R.id.imgtipo);
                 txtDesc = (TextView)findViewById(R.id.txtDesc);
                 txtDir = (TextView)findViewById(R.id.txtDir);
                 txtEdo = (TextView)findViewById(R.id.txtEdo);
@@ -98,12 +101,12 @@ public class DetallesActivity extends ActionBarActivity {
                // listComments = (ListView)findViewById(R.id.listComments);
                 /*
                 txtNombre.setText(nombre);
+                */
+                
+                imga.setImageResource(setupCategory(categoria));
                 txtDesc.setText(descripcion);
                 txtDir.setText(direccion);
-                */
-                txtDesc.setText("Capital de Inglaterra y Reino Unido, el más grande de los estados" +
-                		" de ese país, por que YOLO");
-                txtDir.setText("Calle #69, Colonia, Delegación");
+          
                 txtEdo.setText(estado);
                 
                 ratingLugar.setRating(calificacion);
@@ -141,10 +144,53 @@ public class DetallesActivity extends ActionBarActivity {
                 setUpBar();
         }
 
+        private int setupCategory(String cat){
+        	int id = 0;
+        
+        		if(cat.equals("Bares y Antros")){
+        			id = R.drawable.nsantro;
+
+        		}else{
+        			if(cat.equals("Comida")){
+        				id=R.drawable.nsrestaurante;
+        			
+        			}else{
+        				if(cat.equals("Cafeteria")){
+        					id=R.drawable.nscafe;
+        			
+        				}else{
+        					if(cat.equals("Hotel")){
+        						id=R.drawable.nshotel;
+        	
+        					}else{
+        						if(cat.equals("Cultural")){
+        							id=R.drawable.nscultural;
+        			
+        						}else{
+        							if(cat.equals("Tienda")){
+        								id=R.drawable.nstienda;
+        			
+        							}else{
+        								if(cat.equals("Cuidado Personal")){
+        									id=R.drawable.nscpersonal;
+        		
+        								}
+        							}
+        						}
+        					}
+        				}
+        			}
+        		}
+        		
+        	return id;
+        }
+        
         public void setUpSomething(){
                 Intent i = getIntent();
                 Bundle b = i.getBundleExtra("datos");
                 if(b!=null){
+                		categoria = b.getString("categoria");
+                		Log.i("Cat", categoria);
                         lugarId = b.getString("lugarId");
                         nombre = b.getString("nombre");
                         descripcion = b.getString("descripcion");

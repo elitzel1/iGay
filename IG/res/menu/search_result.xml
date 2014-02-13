@@ -12,6 +12,8 @@
         android:title="@string/action_search"
         yourapp:showAsAction="collapseActionView|always"
         yourapp:actionViewClass="android.support.v7.widget.SearchView"
+        android:showAsAction="collapseActionView|always"
+        android:actionViewClass="android.widget.SearchView"
         />
 
 </menu>
