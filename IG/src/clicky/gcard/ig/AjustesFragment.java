@@ -1,7 +1,6 @@
 package clicky.gcard.ig;
 
 import com.parse.ParseUser;
-
 import clicky.gcard.ig.adapters.AdapterAbout;
 import clicky.gcard.ig.adapters.AdapterListaNotificaciones;
 import android.app.Activity;
@@ -89,6 +88,7 @@ public class AjustesFragment extends ListFragment {
 		});
 		alert.create().show();
 	}
+	
 	
 	private void showAbout(){
 		AlertDialog.Builder alert = new AlertDialog.Builder(activity);

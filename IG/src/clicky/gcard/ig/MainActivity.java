@@ -33,6 +33,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -340,7 +341,8 @@ onListItemClicConf,AjustesNotListener{
 		for(int i=0;i<arr.length;i++){
 			if(arr[i]==true){
 				num.add(lugares[i]);
-			}
+				Log.i("Filtro", "lugar: "+lugares[i]);
+			} 
 	
 		}
 		mapFragment.filter(num);
