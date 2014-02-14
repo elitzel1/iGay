@@ -11,7 +11,7 @@
     <string name="img_detalle">Imagen de lugar</string>
     <string name="hint">Lugar</string>
     <string name="dfil">Selección</string>
-    <string name="aceptar">Aceptar</string>
+    <string name="aceptar">Submit</string>
     <string name="cancelar">Cancelar</string>
     <string name="search">Búsqueda</string>
 

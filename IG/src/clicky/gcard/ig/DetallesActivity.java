@@ -47,7 +47,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,6 +94,7 @@ public class DetallesActivity extends ActionBarActivity {
                 
                 btnCom = (Button)findViewById(R.id.btnComment);
                 btnMas = (Button)findViewById(R.id.btnComentarios);
+                btnMas.setVisibility(View.GONE);
                // listComments = (ListView)findViewById(R.id.listComments);
                 /*
                 txtNombre.setText(nombre);
@@ -232,7 +232,7 @@ public class DetallesActivity extends ActionBarActivity {
         }
         
         private void setComment(final Dialog dialog,String text,float calif){
-                ParseObject comment = new ParseObject("Comentarios");
+                ParseObject comment = ParseObject.create("Comentarios");
                 
                 comment.put("usuario", ParseUser.createWithoutData(ParseUser.class, user.getObjectId()));
                 comment.put("userName", user.getUsername());
@@ -281,7 +281,7 @@ public class DetallesActivity extends ActionBarActivity {
         	ParseQuery<ParseObject> query = ParseQuery.getQuery("Comentarios");
                          
         	query.whereEqualTo("idLugar", ParseObject.createWithoutData("Lugares",lugarId));
-            query.setLimit(4);
+            query.setLimit(5);
         	// Run the query  
         	query.findInBackground(new FindCallback<ParseObject>() {
                  
@@ -290,36 +290,35 @@ public class DetallesActivity extends ActionBarActivity {
         			layout.removeView(footer);
         			if (e == null) {
                               
+        				int pos = postList.size();
         				// If there are results, update the list of posts
                         // and notify the adapter
-                        lugaresList.clear();
-                        for (ParseObject post : postList) {
-                                Comentario coment = new Comentario();
-                                coment.setCommentId(post.getObjectId());
-                                coment.setComment(post.getString("comentario"));
-                                coment.setUser(post.getString("userName"));
-                                if(post.getString("fbId") != null)
-                                	coment.setFbId(post.getString("fbId"));
-                                coment.setCalif((float)post.getDouble("calificacion"));
-                                if(isactive){
-                                        if(post.getString("userName").equals(user.getUsername())){
-                                                userComment = coment;
-                                        }
-                                }
-                                addCommentView(coment);
-                                //lugaresList.add(coment);
+                        if(postList.size() == 5){
+                        	pos = 4;
+                        	btnMas.setVisibility(View.VISIBLE);
                         }
-                        //listComments.removeFooterView(footer);
-                    // Pass the results into ListViewAdapter.java
-                    //adapter = new ComentarioAdapter(getApplicationContext(), lugaresList);
-                    // Binds the Adapter to the ListView
-                    //listComments.setAdapter(adapter);
-                      } else {
-                        Log.d("Post retrieval", "Error: " + e.getMessage());
-                      }
-                    }
+                        for (int i = 0; i < pos; i++) {
+                        	ParseObject post = postList.get(i);
+                        	Comentario coment = new Comentario();
+                            coment.setCommentId(post.getObjectId());
+                            coment.setComment(post.getString("comentario"));
+                            coment.setUser(post.getString("userName"));
+                            if(post.getString("fbId") != null)
+                            	coment.setFbId(post.getString("fbId"));
+                            coment.setCalif((float)post.getDouble("calificacion"));
+                            if(isactive){
+                            	if(post.getString("userName").equals(user.getUsername())){
+                            		userComment = coment;
+                                }
+                            }
+                            addCommentView(coment);
+                        }
+        			} else {
+        				Log.d("Post retrieval", "Error: " + e.getMessage());
+        			}
+            	}
                                      
-                  });
+              });
         }
         
         private void updateCalif(final Dialog dialog){

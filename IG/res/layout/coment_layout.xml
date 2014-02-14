@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        style="@style/purpleRating"
         android:layout_gravity="center" />
 
     <EditText
@@ -29,6 +30,6 @@
         android:layout_margin="10dp"
         android:background="@color/morado_inicio"
         android:textColor="@color/blanco"
-        android:text="Aceptar" />
+        android:text="@string/aceptar" />
 
 </LinearLayout>
