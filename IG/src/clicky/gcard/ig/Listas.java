@@ -38,6 +38,7 @@ private TopLugaresAdapter adapterTop = null;
 private List<Lugares> lugaresList = null;
 private int tipo = -1;
 private ParseQuery<ParseObject> query;
+private boolean cancelled = false;
 
 
 OnListListener callback;
@@ -194,25 +195,26 @@ OnListListener callback;
 			
 			@Override
 			public void done(List<ParseObject> lugares, ParseException e) {
-				getListView().removeFooterView(footer);
-				for (ParseObject lugar : lugares){
-					Lugares item = new Lugares();
-					item.setLugarId((String) lugar.getObjectId());
-					item.setName((String) lugar.get("nombre"));
-					item.setCategory((String) lugar.get("categoria"));
-					item.setCalif((float)lugar.getDouble("calificacion"));
-					item.setDesc((String) lugar.get("descripcion"));
-					item.setDir( lugar.getString("direccion"));
-					item.setEdo(lugar.getString("estado"));
-					item.setImagen(lugar.getParseFile("imagen"));
-					item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
-							lugar.getParseGeoPoint("localizacion").getLongitude()));
-					lugaresList.add(item);
-				}
-				adapterList = new ListaLugaresAdapter(activity, lugaresList);
-	            // Binds the Adapter to the ListView
-	            getListView().setAdapter(adapterList);
-				
+				if(e == null && !cancelled){
+					getListView().removeFooterView(footer);
+					for (ParseObject lugar : lugares){
+						Lugares item = new Lugares();
+						item.setLugarId((String) lugar.getObjectId());
+						item.setName((String) lugar.get("nombre"));
+						item.setCategory((String) lugar.get("categoria"));
+						item.setCalif((float)lugar.getDouble("calificacion"));
+						item.setDesc((String) lugar.get("descripcion"));
+						item.setDir( lugar.getString("direccion"));
+						item.setEdo(lugar.getString("estado"));
+						item.setImagen(lugar.getParseFile("imagen"));
+						item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
+								lugar.getParseGeoPoint("localizacion").getLongitude()));
+						lugaresList.add(item);
+					}
+					adapterList = new ListaLugaresAdapter(activity, lugaresList);
+		            // Binds the Adapter to the ListView
+		            getListView().setAdapter(adapterList);
+				}	
 			}
 		});
 	}
@@ -232,35 +234,36 @@ OnListListener callback;
 			
 			@Override
 			public void done(List<ParseObject> top, ParseException e) {
-				getListView().removeFooterView(footer);
-				for (ParseObject lugar : top){
-					Lugares item = new Lugares();
-					ParseObject res = lugar.getParseObject("lugarId");
-					
-					item.setLugarId((String) res.getObjectId());
-					item.setName( res.getString("nombre"));
-					item.setCategory( res.getString("categoria"));
-					item.setCalif((float)res.getDouble("calificacion"));
-					item.setDesc( res.getString("descripcion"));
-					item.setDir( res.getString("direccion"));
-					item.setEdo(res.getString("estado"));
-					item.setImagen(res.getParseFile("imagen"));
-					item.setGeo(new LatLng(res.getParseGeoPoint("localizacion").getLatitude(),
-							res.getParseGeoPoint("localizacion").getLongitude()));
-					lugaresList.add(item);
+				if(e == null && !cancelled){
+					getListView().removeFooterView(footer);
+					for (ParseObject lugar : top){
+						Lugares item = new Lugares();
+						ParseObject res = lugar.getParseObject("lugarId");
+						
+						item.setLugarId((String) res.getObjectId());
+						item.setName( res.getString("nombre"));
+						item.setCategory( res.getString("categoria"));
+						item.setCalif((float)res.getDouble("calificacion"));
+						item.setDesc( res.getString("descripcion"));
+						item.setDir( res.getString("direccion"));
+						item.setEdo(res.getString("estado"));
+						item.setImagen(res.getParseFile("imagen"));
+						item.setGeo(new LatLng(res.getParseGeoPoint("localizacion").getLatitude(),
+								res.getParseGeoPoint("localizacion").getLongitude()));
+						lugaresList.add(item);
+					}
+					adapterTop = new TopLugaresAdapter(activity, lugaresList);
+		            // Binds the Adapter to the ListView
+		            getListView().setAdapter(adapterTop);
 				}
-				adapterTop = new TopLugaresAdapter(activity, lugaresList);
-	            // Binds the Adapter to the ListView
-	            getListView().setAdapter(adapterTop);
-			}
-				
+			}	
 		});
 	}
 	
-
+	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		callback = null;
-		query.cancel();
+		cancelled = true;
 	}
 }

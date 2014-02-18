@@ -59,6 +59,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	private TextView txtNombre;
 	private RatingBar calif;
 	private Animation showDetalle,hideDetalle;
+	private boolean cancelled = false;
 	
 	
 	public interface OnButtonListener{
@@ -303,24 +304,26 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> lugares, ParseException e) {
-				if(lugares.isEmpty()){
-					Toast.makeText(getActivity(), "No se encontraron lugares cerca de ti", Toast.LENGTH_SHORT).show();
-				}else{
-					for (ParseObject lugar : lugares){
-	                    Lugares item = new Lugares();
-	                    item.setLugarId((String) lugar.getObjectId());
-	                    item.setName((String) lugar.get("nombre"));
-	                    item.setCategory((String) lugar.get("categoria"));
-	                    item.setCalif((float)lugar.getDouble("calificacion"));
-	                    item.setEdo(lugar.getString("estado"));
-	                    item.setDesc((String) lugar.get("descripcion"));
-	                    item.setDir((String) lugar.get("direccion"));
-	                    item.setImagen(lugar.getParseFile("imagen"));
-	                    item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
-	                                    lugar.getParseGeoPoint("localizacion").getLongitude()));
-	                    lugaresList.add(item);
+				if(e == null && !cancelled){
+					if(lugares.isEmpty()){
+						Toast.makeText(getActivity(), "No se encontraron lugares cerca de ti", Toast.LENGTH_SHORT).show();
+					}else{
+						for (ParseObject lugar : lugares){
+		                    Lugares item = new Lugares();
+		                    item.setLugarId((String) lugar.getObjectId());
+		                    item.setName((String) lugar.get("nombre"));
+		                    item.setCategory((String) lugar.get("categoria"));
+		                    item.setCalif((float)lugar.getDouble("calificacion"));
+		                    item.setEdo(lugar.getString("estado"));
+		                    item.setDesc((String) lugar.get("descripcion"));
+		                    item.setDir((String) lugar.get("direccion"));
+		                    item.setImagen(lugar.getParseFile("imagen"));
+		                    item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
+		                                    lugar.getParseGeoPoint("localizacion").getLongitude()));
+		                    lugaresList.add(item);
+						}
+						setUpMarker(lugaresList);
 					}
-					setUpMarker(lugaresList);
 				}
 			}
 
@@ -379,6 +382,12 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		
 		
 		
+	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		cancelled = true;
 	}
 	
 
