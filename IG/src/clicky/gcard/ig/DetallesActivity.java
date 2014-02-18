@@ -4,25 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import clicky.gcard.ig.adapters.ComentarioAdapter;
 import clicky.gcard.ig.datos.Comentario;
-import clicky.gcard.ig.datos.Lugares;
 
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.ProfilePictureView;
-import com.facebook.widget.WebDialog;
-import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,13 +33,11 @@ import com.parse.SaveCallback;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -62,7 +53,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,7 +74,6 @@ public class DetallesActivity extends ActionBarActivity {
         private ParseUser user;
         private Comentario userComment = null;
         private boolean isactive=false;
-        private ComentarioAdapter adapter = null;
         private List<Comentario> lugaresList = null;
         private View footer;
 
@@ -428,10 +417,14 @@ public class DetallesActivity extends ActionBarActivity {
             // Handle presses on the action bar items
             switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.getParentActivityIntent(this);
+            	Intent intent = NavUtils.getParentActivityIntent(this); 
+            	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+            	NavUtils.navigateUpTo(this, intent);
+               // NavUtils.getParentActivityIntent(this);
                  return true;
          case R.id.menu_item_share:
          	Log.i("Share", "Menu");
+         	//publishFeedDialog();
          	showShareDialog();
                     return true;
                 default:
@@ -447,17 +440,18 @@ public class DetallesActivity extends ActionBarActivity {
                     FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
 
         	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this).setName(nombre).setCaption(categoria)
-        			.setDescription(descripcion)
+        			.setDescription(descripcion).setPicture("http://obrazky.4ever.sk/data/674xX/stavby/mesta/tokio,-nocne-mesto,-svetla-158076.jpg")
             .setLink("https://maps.google.com/?q="+lat+"+"+longitud)
-        	//		.setRef("geo:"+lat+","+longitud+"?q="+lat+","+longitud+"&z=15")
             .build();
         	uiHelper.trackPendingDialogCall(shareDialog.present());
         	}
         	else{
         	//	publishFeedDialog();
         	}
+        	
+        	
         }
-        
+        /*
         private void publishFeedDialog(){
         	Bundle params = new Bundle();
             params.putString("name", "Facebook SDK for Android");
@@ -507,6 +501,8 @@ public class DetallesActivity extends ActionBarActivity {
                 .build();
             feedDialog.show();
         }
+        */
+        
         
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
