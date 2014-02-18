@@ -37,6 +37,7 @@ private ListaLugaresAdapter adapterList = null;
 private TopLugaresAdapter adapterTop = null;
 private List<Lugares> lugaresList = null;
 private int tipo = -1;
+private ParseQuery<ParseObject> query;
 
 
 OnListListener callback;
@@ -185,7 +186,7 @@ OnListListener callback;
 		lugaresList.clear();
 		getListView().addFooterView(footer);
 		setListAdapter(null);
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+		query = new ParseQuery<ParseObject>(
                 "Lugares");
         query.orderByAscending("createdAt");
         query.whereEqualTo("categoria", category);
@@ -203,6 +204,7 @@ OnListListener callback;
 					item.setDesc((String) lugar.get("descripcion"));
 					item.setDir( lugar.getString("direccion"));
 					item.setEdo(lugar.getString("estado"));
+					item.setImagen(lugar.getParseFile("imagen"));
 					item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 							lugar.getParseGeoPoint("localizacion").getLongitude()));
 					lugaresList.add(item);
@@ -221,7 +223,7 @@ OnListListener callback;
 		getListView().addFooterView(footer);
 		setListAdapter(null);
 		
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+		query = new ParseQuery<ParseObject>(
                 "Top5");
         query.orderByAscending("posicion");
         query.include("lugarId");
@@ -242,6 +244,7 @@ OnListListener callback;
 					item.setDesc( res.getString("descripcion"));
 					item.setDir( res.getString("direccion"));
 					item.setEdo(res.getString("estado"));
+					item.setImagen(res.getParseFile("imagen"));
 					item.setGeo(new LatLng(res.getParseGeoPoint("localizacion").getLatitude(),
 							res.getParseGeoPoint("localizacion").getLongitude()));
 					lugaresList.add(item);
@@ -258,5 +261,6 @@ OnListListener callback;
 	public void onDestroy(){
 		super.onDestroy();
 		callback = null;
+		query.cancel();
 	}
 }

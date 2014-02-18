@@ -315,6 +315,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	                    item.setEdo(lugar.getString("estado"));
 	                    item.setDesc((String) lugar.get("descripcion"));
 	                    item.setDir((String) lugar.get("direccion"));
+	                    item.setImagen(lugar.getParseFile("imagen"));
 	                    item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 	                                    lugar.getParseGeoPoint("localizacion").getLongitude()));
 	                    lugaresList.add(item);

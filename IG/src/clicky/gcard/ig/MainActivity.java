@@ -1,8 +1,10 @@
 package clicky.gcard.ig;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import clicky.gcard.ig.AjustesFragment.onListItemClicConf;
@@ -17,6 +19,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -301,6 +304,7 @@ onListItemClicConf,AjustesNotListener{
 		args.putFloat("calificacion", lugar.getCalif());
 		args.putDouble("latitud", lugar.getGeo().latitude);
 		args.putDouble("longitud", lugar.getGeo().longitude);
+		args.putString("imagen", lugar.getImagen());
 		i.putExtra("datos", args);
 		
 		startActivity(i);

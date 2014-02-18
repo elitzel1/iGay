@@ -6,6 +6,8 @@ import java.util.List;
 
 import clicky.gcard.ig.adapters.ComentarioAdapter;
 import clicky.gcard.ig.datos.Comentario;
+import clicky.gcard.ig.datos.Lugares;
+import clicky.gcard.ig.utils.ImageLoader;
 
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,9 +22,12 @@ import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -46,6 +51,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -54,7 +60,7 @@ import android.widget.Toast;
 public class DetallesActivity extends ActionBarActivity {
         
         //Datos del lugar
-        private String lugarId,nombre,descripcion,direccion,estado;
+        private String lugarId,nombre,descripcion,direccion,estado,imagen;
         private float calificacion;
         private double lat,longitud;
 
@@ -62,9 +68,10 @@ public class DetallesActivity extends ActionBarActivity {
         private TextView txtNombre,txtDesc,txtDir,txtEdo;
         private RatingBar ratingLugar;
         private Button btnCom,btnMas;
-       // private ListView listComments;
+       	private ImageView imgLugar;
         private GoogleMap mapa;
 
+        private ImageLoader imgLoader;
         private ParseUser user;
         private Comentario userComment = null;
         private boolean isactive=false;
@@ -84,8 +91,11 @@ public class DetallesActivity extends ActionBarActivity {
             helper.initActionBar(this);
                 setUpSomething();
                 
+                imgLoader = new ImageLoader(this);
+                
                 layout = (LinearLayout)findViewById(R.id.comentarios);
              //   txtNombre = (TextView)findViewById(R.id.txtNombre);
+                imgLugar = (ImageView)findViewById(R.id.image_header);
                 txtDesc = (TextView)findViewById(R.id.txtDesc);
                 txtDir = (TextView)findViewById(R.id.txtDir);
                 txtEdo = (TextView)findViewById(R.id.txtEdo);
@@ -107,6 +117,10 @@ public class DetallesActivity extends ActionBarActivity {
                 txtEdo.setText(estado);
                 
                 ratingLugar.setRating(calificacion);
+                
+                if(imagen != null){
+                	imgLoader.DisplayImage(imagen, imgLugar);
+                }
                 
                 footer = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 		.inflate(R.layout.loading_item, null, false);
@@ -142,22 +156,23 @@ public class DetallesActivity extends ActionBarActivity {
         }
 
         public void setUpSomething(){
-                Intent i = getIntent();
-                Bundle b = i.getBundleExtra("datos");
-                if(b!=null){
-                        lugarId = b.getString("lugarId");
-                        nombre = b.getString("nombre");
-                        descripcion = b.getString("descripcion");
-                        direccion = b.getString("direccion");
-                        estado = b.getString("estado");
-                        calificacion = b.getFloat("calificacion");
-                        lat = b.getDouble("latitud");
-                        longitud = b.getDouble("longitud");
-                }
-        
-                user = ParseUser.getCurrentUser();
-                if(user!=null)
-                        isactive=true;
+            Intent i = getIntent();
+            Bundle b = i.getBundleExtra("datos");
+            if(b!=null){
+                    lugarId = b.getString("lugarId");
+                    nombre = b.getString("nombre");
+                    descripcion = b.getString("descripcion");
+                    direccion = b.getString("direccion");
+                    estado = b.getString("estado");
+                    calificacion = b.getFloat("calificacion");
+                    lat = b.getDouble("latitud");
+                    longitud = b.getDouble("longitud");
+                    imagen = b.getString("imagen");
+            }
+    
+            user = ParseUser.getCurrentUser();
+            if(user!=null)
+                    isactive=true;
         }
         
         public void setUpBar(){
