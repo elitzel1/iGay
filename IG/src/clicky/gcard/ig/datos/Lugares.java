@@ -1,8 +1,12 @@
 package clicky.gcard.ig.datos;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.ParseClassName;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 
-public class Lugares {
+@ParseClassName("Lugares")
+public class Lugares extends ParseObject {
 	
 	private String lugarId;
 	private String name;
@@ -12,6 +16,9 @@ public class Lugares {
 	private String dir;
 	private float calif;
 	private LatLng geo;
+	private String imagen;
+	
+	public Lugares(){}
 	
 	public float getCalif() {
 		return calif;
@@ -60,6 +67,18 @@ public class Lugares {
 	}
 	public void setEdo(String edo) {
 		this.edo = edo;
+	}
+	
+	public ParseFile getPic() {
+        return getParseFile("imagen");
+    }
+
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(ParseFile imagen) {
+		this.imagen = imagen.getUrl();
 	}
 
 }

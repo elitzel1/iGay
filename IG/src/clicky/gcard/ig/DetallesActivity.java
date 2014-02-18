@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import clicky.gcard.ig.datos.Comentario;
+import clicky.gcard.ig.datos.Lugares;
+import clicky.gcard.ig.utils.ImageLoader;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -60,17 +62,20 @@ import android.widget.Toast;
 public class DetallesActivity extends ActionBarActivity {
         
         //Datos del lugar
-        private String lugarId,nombre,descripcion,direccion,estado,categoria;
+
+        private String lugarId,nombre,descripcion,direccion,estado,categoria,imagen;
+
         private float calificacion;
         private double lat,longitud;
       
         private LinearLayout layout;
-        private TextView txtNombre,txtDesc,txtDir,txtEdo;
+        private TextView txtDesc,txtDir,txtEdo;
         private RatingBar ratingLugar;
         private Button btnCom,btnMas;
-       // private ListView listComments;
+       	private ImageView imgLugar;
         private GoogleMap mapa;
 
+        private ImageLoader imgLoader;
         private ParseUser user;
         private Comentario userComment = null;
         private boolean isactive=false;
@@ -91,12 +96,19 @@ public class DetallesActivity extends ActionBarActivity {
             setContentView(helper.createView(this));
             helper.initActionBar(this);
                 setUpSomething();
-                
+
                 uiHelper = new UiLifecycleHelper(this, callback);
                 uiHelper.onCreate(savedInstanceState);
+
+                imgLoader = new ImageLoader(this);
                 
                 layout = (LinearLayout)findViewById(R.id.comentarios);
+
                 ImageView imga = (ImageView)findViewById(R.id.imgtipo);
+
+             //   txtNombre = (TextView)findViewById(R.id.txtNombre);
+                imgLugar = (ImageView)findViewById(R.id.image_header);
+
                 txtDesc = (TextView)findViewById(R.id.txtDesc);
                 txtDir = (TextView)findViewById(R.id.txtDir);
                 txtEdo = (TextView)findViewById(R.id.txtEdo);
@@ -106,13 +118,24 @@ public class DetallesActivity extends ActionBarActivity {
                 btnCom = (Button)findViewById(R.id.btnComment);
                 btnMas = (Button)findViewById(R.id.btnComentarios);
                 btnMas.setVisibility(View.GONE);
+
+                
+
                 imga.setImageResource(setupCategory(categoria));
+               // listComments = (ListView)findViewById(R.id.listComments);
+                /*
+                txtNombre.setText(nombre);
+*/
                 txtDesc.setText(descripcion);
                 txtDir.setText(direccion);
           
                 txtEdo.setText(estado);
                 
                 ratingLugar.setRating(calificacion);
+                
+                if(imagen != null){
+                	imgLoader.DisplayImage(imagen, imgLugar);
+                }
                 
                 footer = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 		.inflate(R.layout.loading_item, null, false);
@@ -145,7 +168,7 @@ public class DetallesActivity extends ActionBarActivity {
                 
                 setUpBar();
         }
-
+        
         private int setupCategory(String cat){
         	int id = 0;
         
@@ -188,6 +211,7 @@ public class DetallesActivity extends ActionBarActivity {
         }
         
         public void setUpSomething(){
+
                 Intent i = getIntent();
                 Bundle b = i.getBundleExtra("datos");
                 if(b!=null){
@@ -201,11 +225,13 @@ public class DetallesActivity extends ActionBarActivity {
                         calificacion = b.getFloat("calificacion");
                         lat = b.getDouble("latitud");
                         longitud = b.getDouble("longitud");
+                        imagen = b.getString("imagen");
                 }
         
-                user = ParseUser.getCurrentUser();
-                if(user!=null)
-                        isactive=true;
+    
+            user = ParseUser.getCurrentUser();
+            if(user!=null)
+                    isactive=true;
         }
         
         public void setUpBar(){
@@ -278,8 +304,10 @@ public class DetallesActivity extends ActionBarActivity {
         }
         
         private void setComment(final Dialog dialog,String text,float calif){
+
       
                 ParseObject comment = ParseObject.create("Comentarios");
+
                 comment.put("usuario", ParseUser.createWithoutData(ParseUser.class, user.getObjectId()));
                 comment.put("userName", user.getUsername());
                 if(user.get("fbId") != null)
@@ -321,13 +349,13 @@ public class DetallesActivity extends ActionBarActivity {
         });
         }
         
-        private void updatePostList() {
+      private void updatePostList() {
         	layout.addView(footer);
         	// Create query for objects of type "Post"
         	ParseQuery<ParseObject> query = ParseQuery.getQuery("Comentarios");
                          
         	query.whereEqualTo("idLugar", ParseObject.createWithoutData("Lugares",lugarId));
-        	  query.setLimit(5);
+            query.setLimit(5);
         	// Run the query  
         	query.findInBackground(new FindCallback<ParseObject>() {
                  
@@ -335,37 +363,38 @@ public class DetallesActivity extends ActionBarActivity {
         		public void done(List<ParseObject> postList, ParseException e) {
         			layout.removeView(footer);
         			if (e == null) {
+                              
         				int pos = postList.size();
         				// If there are results, update the list of posts
                         // and notify the adapter
-        				   if(postList.size() == 5){
-        					  pos = 4;
-        					  btnMas.setVisibility(View.VISIBLE);
-        				}
-        				   for (int i = 0; i < pos; i++) {
-        					   ParseObject post = postList.get(i);
-        					   Comentario coment = new Comentario();
-        					   coment.setCommentId(post.getObjectId());
-        					   coment.setComment(post.getString("comentario"));
-        					   coment.setUser(post.getString("userName"));
-        					   if(post.getString("fbId") != null)
-        						   coment.setFbId(post.getString("fbId"));
-        					   coment.setCalif((float)post.getDouble("calificacion"));
-        					   if(isactive){
-        						   if(post.getString("userName").equals(user.getUsername())){
-        							   userComment = coment;
-        						   }
-        					   }
-        					   addCommentView(coment);
+                        if(postList.size() == 5){
+                        	pos = 4;
+                        	btnMas.setVisibility(View.VISIBLE);
                         }
-                       
+                        for (int i = 0; i < pos; i++) {
+                        	ParseObject post = postList.get(i);
+                        	Comentario coment = new Comentario();
+                            coment.setCommentId(post.getObjectId());
+                            coment.setComment(post.getString("comentario"));
+                            coment.setUser(post.getString("userName"));
+                            if(post.getString("fbId") != null)
+                            	coment.setFbId(post.getString("fbId"));
+                            coment.setCalif((float)post.getDouble("calificacion"));
+                            if(isactive){
+                            	if(post.getString("userName").equals(user.getUsername())){
+                            		userComment = coment;
+                                }
+                            }
+                            addCommentView(coment);
+                        }
         			} else {
         				Log.d("Post retrieval", "Error: " + e.getMessage());
         			}
-        		}
+            	}
                                      
-                  });
+              });
         }
+
         
         private void updateCalif(final Dialog dialog){
                 HashMap<String, Object> params = new HashMap<String, Object>();
