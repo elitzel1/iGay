@@ -3,6 +3,7 @@
 
     <string name="app_name">J</string>
     <string name="action_settings">Ajustes</string>
+    <string name="action_share">Compartir</string>
     <string name="hello_world">Hello world!</string>
     <string name="facebookId">624622577604521</string>
     <string name="version">Versión 1.0</string>
@@ -78,6 +79,8 @@
     <string name="masinfo">Más Información</string>
     
     <string name="about">Acerca de</string>
+    <string name="txt_comments">Comentarios</string>
+    <string name="txt_no_comments">No hay comentarios, sé el primero en calificar este lugar</string>
     
 
 </resources>

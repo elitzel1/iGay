@@ -29,7 +29,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +51,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	LatLng coordenadas;
 	OnButtonListener mCallback;
 	private List<Lugares> lugaresList = null;
-	private HashMap<String, Lugares> markersList = new HashMap<String, Lugares>();
+	static private HashMap<String, Lugares> markersList = new HashMap<String, Lugares>();
 	private Lugares lugar;
 	private boolean visible = false;
 	private LinearLayout detalles;
@@ -182,7 +181,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	setUpGPS();
 	if(coordenadas!=null){
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
-		getLugares(coordenadas, 8);
+		getLugares(coordenadas, 5);
 	}
 			Log.i("", "");
 			if(mapa!=null)
@@ -203,7 +202,7 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	 */
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
-		
+		markersList.clear();
 		Log.i("Markers", ""+listaLugares.size());
 		
 		for(int i = 0; i < listaLugares.size(); i++){
@@ -344,51 +343,11 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		setUpMarker(filtroLugares);
 	}
 	
-	public class MarkerAnsyc extends AsyncTask<Lugares,String,String>{
 
-	
-		@Override
-	    protected void onPreExecute() {
-			mapa.clear();
-			    }
-		
-
-
-		@Override
-		protected String doInBackground(Lugares... arg0) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-			
-		
-		
-		
-		
-		
-		
-		@Override
-		  protected void onProgressUpdate(String...id) {
-		//	setupMarker(id[0],lat,lng);
-			 
-		  }
-		
-		@Override
-		protected void onPostExecute(String result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			//setupMarker(result, coor_est);
-			
-		}
-		
-		
-		
-	}
 	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		cancelled = true;
 	}
-	
-
 }

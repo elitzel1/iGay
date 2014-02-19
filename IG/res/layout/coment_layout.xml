@@ -9,7 +9,7 @@
         android:id="@+id/ratingBar1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginTop="15dp"
         style="@style/purpleRating"
         android:layout_gravity="center" />
 
@@ -17,6 +17,7 @@
         android:id="@+id/editCommentario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textMultiLine" >
 
@@ -27,8 +28,8 @@
         android:id="@+id/btnAceptar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@color/morado_inicio"
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_morado"
         android:textColor="@color/blanco"
         android:text="@string/aceptar" />
 

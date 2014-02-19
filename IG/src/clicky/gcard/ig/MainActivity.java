@@ -1,10 +1,8 @@
 package clicky.gcard.ig;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import clicky.gcard.ig.AjustesFragment.onListItemClicConf;
@@ -19,7 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -36,6 +33,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -296,6 +294,7 @@ onListItemClicConf,AjustesNotListener{
 		
 		Intent i = new Intent(MainActivity.this,DetallesActivity.class);
 		Bundle args = new Bundle();
+		args.putString("categoria",lugar.getCategory());
 		args.putString("lugarId", lugar.getLugarId());
 		args.putString("nombre", lugar.getName());
 		args.putString("descripcion", lugar.getDesc());
@@ -343,7 +342,8 @@ onListItemClicConf,AjustesNotListener{
 		for(int i=0;i<arr.length;i++){
 			if(arr[i]==true){
 				num.add(lugares[i]);
-			}
+				Log.i("Filtro", "lugar: "+lugares[i]);
+			} 
 	
 		}
 		mapFragment.filter(num);

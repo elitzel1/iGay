@@ -1,14 +1,15 @@
 package clicky.gcard.ig;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import clicky.gcard.ig.adapters.ComentarioAdapter;
 import clicky.gcard.ig.datos.Comentario;
-import clicky.gcard.ig.datos.Lugares;
 import clicky.gcard.ig.utils.ImageLoader;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,12 +23,9 @@ import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
-import com.parse.GetDataCallback;
 import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -42,9 +40,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -60,12 +60,14 @@ import android.widget.Toast;
 public class DetallesActivity extends ActionBarActivity {
         
         //Datos del lugar
-        private String lugarId,nombre,descripcion,direccion,estado,imagen;
+
+        private String lugarId,nombre,descripcion,direccion,estado,categoria,imagen;
+
         private float calificacion;
         private double lat,longitud;
-
+      
         private LinearLayout layout;
-        private TextView txtNombre,txtDesc,txtDir,txtEdo;
+        private TextView txtDesc,txtDir,txtEdo,txtVacio;
         private RatingBar ratingLugar;
         private Button btnCom,btnMas;
        	private ImageView imgLugar;
@@ -75,10 +77,11 @@ public class DetallesActivity extends ActionBarActivity {
         private ParseUser user;
         private Comentario userComment = null;
         private boolean isactive=false;
-        private ComentarioAdapter adapter = null;
-        private List<Comentario> lugaresList = null;
         private View footer;
 
+        ShareActionProvider mShareActionProvider;
+        private UiLifecycleHelper uiHelper;
+        
         
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -90,30 +93,42 @@ public class DetallesActivity extends ActionBarActivity {
             setContentView(helper.createView(this));
             helper.initActionBar(this);
                 setUpSomething();
-                
+
+                uiHelper = new UiLifecycleHelper(this, callback);
+                uiHelper.onCreate(savedInstanceState);
+
                 imgLoader = new ImageLoader(this);
                 
                 layout = (LinearLayout)findViewById(R.id.comentarios);
+
+                ImageView imga = (ImageView)findViewById(R.id.imgtipo);
+
              //   txtNombre = (TextView)findViewById(R.id.txtNombre);
                 imgLugar = (ImageView)findViewById(R.id.image_header);
+
                 txtDesc = (TextView)findViewById(R.id.txtDesc);
                 txtDir = (TextView)findViewById(R.id.txtDir);
                 txtEdo = (TextView)findViewById(R.id.txtEdo);
+                txtVacio = (TextView)findViewById(R.id.vacio);
                 
                 ratingLugar = (RatingBar)findViewById(R.id.rateLugar);
                 
                 btnCom = (Button)findViewById(R.id.btnComment);
                 btnMas = (Button)findViewById(R.id.btnComentarios);
+                
+                txtVacio.setVisibility(View.GONE);
                 btnMas.setVisibility(View.GONE);
+
+                
+
+                imga.setImageResource(setupCategory(categoria));
                // listComments = (ListView)findViewById(R.id.listComments);
                 /*
                 txtNombre.setText(nombre);
+*/
                 txtDesc.setText(descripcion);
                 txtDir.setText(direccion);
-                */
-                txtDesc.setText("Capital de Inglaterra y Reino Unido, el más grande de los estados" +
-                		" de ese país, por que YOLO");
-                txtDir.setText("Calle #69, Colonia, Delegación");
+          
                 txtEdo.setText(estado);
                 
                 ratingLugar.setRating(calificacion);
@@ -125,12 +140,9 @@ public class DetallesActivity extends ActionBarActivity {
                 footer = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 		.inflate(R.layout.loading_item, null, false);
                 
-                lugaresList = new ArrayList<Comentario>();
-                
                 setUpMap();
-                
+              
                 updatePostList();
-                
                 btnCom.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -154,31 +166,62 @@ public class DetallesActivity extends ActionBarActivity {
                 
                 setUpBar();
         }
+        
+        private int setupCategory(String cat){
+        	int id = 0;
+        
+    		if(cat.equals("Bares y Antros")){
+    			id = R.drawable.nsantro;
 
+    		}else if(cat.equals("Comida")){
+				id=R.drawable.nsrestaurante;
+    			
+    		}else if(cat.equals("Cafeteria")){
+    			id=R.drawable.nscafe;
+    			
+    		}else if(cat.equals("Hotel")){
+        			id=R.drawable.nshotel;
+   
+				}else if(cat.equals("Cultural")){
+				id=R.drawable.nscultural;
+    			
+			}else if(cat.equals("Tienda")){
+				id=R.drawable.nstienda;
+		
+			}else if(cat.equals("Cuidado Personal")){
+				id=R.drawable.nscpersonal;
+    		
+			}
+        		
+        	return id;
+        }
+        
         public void setUpSomething(){
-            Intent i = getIntent();
-            Bundle b = i.getBundleExtra("datos");
-            if(b!=null){
-                    lugarId = b.getString("lugarId");
-                    nombre = b.getString("nombre");
-                    descripcion = b.getString("descripcion");
-                    direccion = b.getString("direccion");
-                    estado = b.getString("estado");
-                    calificacion = b.getFloat("calificacion");
-                    lat = b.getDouble("latitud");
-                    longitud = b.getDouble("longitud");
-                    imagen = b.getString("imagen");
-            }
+
+	        Intent i = getIntent();
+	        Bundle b = i.getBundleExtra("datos");
+	        if(b!=null){
+	    		categoria = b.getString("categoria");
+	    		//Log.i("Cat", categoria);
+	            lugarId = b.getString("lugarId");
+	            nombre = b.getString("nombre");
+	            descripcion = b.getString("descripcion");
+	            direccion = b.getString("direccion");
+	            estado = b.getString("estado");
+	            calificacion = b.getFloat("calificacion");
+	            lat = b.getDouble("latitud");
+	            longitud = b.getDouble("longitud");
+	            imagen = b.getString("imagen");
+	        }
     
             user = ParseUser.getCurrentUser();
             if(user!=null)
-                    isactive=true;
+            	isactive=true;
         }
         
         public void setUpBar(){
                 ActionBar bar = getSupportActionBar();
                 bar.setTitle(nombre);
-        //        bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
                 bar.setDisplayHomeAsUpEnabled(true);
                 
         }
@@ -187,7 +230,6 @@ public class DetallesActivity extends ActionBarActivity {
         
         private void setUpMap(){
 
-                
                 mapa =((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.mapaLugar)).getMap();
                 mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,longitud),15));
                 mapa.getUiSettings().setAllGesturesEnabled(false);
@@ -247,8 +289,10 @@ public class DetallesActivity extends ActionBarActivity {
         }
         
         private void setComment(final Dialog dialog,String text,float calif){
+
+      
                 ParseObject comment = ParseObject.create("Comentarios");
-                
+
                 comment.put("usuario", ParseUser.createWithoutData(ParseUser.class, user.getObjectId()));
                 comment.put("userName", user.getUsername());
                 if(user.get("fbId") != null)
@@ -272,25 +316,25 @@ public class DetallesActivity extends ActionBarActivity {
         }
         
         private void updateComment(final Dialog dialog,final String text,final float calif){
-                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Comentarios");
-        query.getInBackground(userComment.getCommentId(), new GetCallback<ParseObject>() {
-                public void done(final ParseObject object, ParseException e) {
-                        if (e == null) {
-                        object.put("comentario", text);
-                        object.put("calificacion", calif);
-                        object.saveInBackground(new SaveCallback() {
-                                public void done(ParseException e) {
-                                        updateCalif(dialog);
-                                }
+        	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Comentarios");
+        	query.getInBackground(userComment.getCommentId(), new GetCallback<ParseObject>() {
+        		public void done(final ParseObject object, ParseException e) {
+        			if (e == null) {
+        				object.put("comentario", text);
+        				object.put("calificacion", calif);
+        				object.saveInBackground(new SaveCallback() {
+        					public void done(ParseException e) {
+        						updateCalif(dialog);
+                            }
                         });
-                        }else { 
-                                e.printStackTrace();
-                        }
-                }
-        });
+                    }else { 
+                    	e.printStackTrace();
+                    }
+        		}
+        	});
         }
         
-        private void updatePostList() {
+      private void updatePostList() {
         	layout.addView(footer);
         	// Create query for objects of type "Post"
         	ParseQuery<ParseObject> query = ParseQuery.getQuery("Comentarios");
@@ -312,6 +356,8 @@ public class DetallesActivity extends ActionBarActivity {
                         	pos = 4;
                         	btnMas.setVisibility(View.VISIBLE);
                         }
+                        if(pos == 0)
+                        	txtVacio.setVisibility(View.VISIBLE);
                         for (int i = 0; i < pos; i++) {
                         	ParseObject post = postList.get(i);
                         	Comentario coment = new Comentario();
@@ -335,22 +381,23 @@ public class DetallesActivity extends ActionBarActivity {
                                      
               });
         }
+
         
         private void updateCalif(final Dialog dialog){
-                HashMap<String, Object> params = new HashMap<String, Object>();
-                params.put("lugar", lugarId);
-                ParseCloud.callFunctionInBackground("comentario", params , new FunctionCallback<Object>() {
-                        @Override  
-                        public void done(Object result, ParseException e) {
-                            if (e == null) {
-                                    dialog.dismiss();
-                                    ratingLugar.setRating(Float.valueOf(result.toString()));
-                                    //updatePostList();
-                            }else{
-                                    Log.i("Error", e.toString());
-                            }
-                          }
-                        });
+	        HashMap<String, Object> params = new HashMap<String, Object>();
+	        params.put("lugar", lugarId);
+	        ParseCloud.callFunctionInBackground("comentario", params , new FunctionCallback<Object>() {
+	        	@Override  
+	            public void done(Object result, ParseException e) {
+	        		if (e == null) {
+	        			dialog.dismiss();
+	                    ratingLugar.setRating(Float.valueOf(result.toString()));
+	                    //updatePostList();
+	                }else{
+	                	Log.i("Error", e.toString());
+	                }
+	        	}
+	    	});
         }
         
         private void addCommentView(Comentario comentario){
@@ -370,21 +417,158 @@ public class DetallesActivity extends ActionBarActivity {
             
             layout.addView(view);
         }
+        
+        
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
-                // Inflate the menu; this adds items to the action bar if it is present.
-                getMenuInflater().inflate(R.menu.detalles, menu);
-                return true;
+        	 // Inflate the menu items for use in the action bar
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.detalles, menu);
+            return super.onCreateOptionsMenu(menu); 
+        }
+        
+        
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            // Handle presses on the action bar items
+            switch (item.getItemId()) {
+            	case android.R.id.home:
+            		Intent intent = NavUtils.getParentActivityIntent(this); 
+            		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+            		NavUtils.navigateUpTo(this, intent);
+            		// NavUtils.getParentActivityIntent(this);
+            		return true;
+            	case R.id.menu_item_share:
+            		Log.i("Share", "Menu");
+            		//publishFeedDialog();
+            		showShareDialog();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
 
-        public boolean onOptionItemSelected (MenuItem item){
-                switch(item.getItemId()){
-                case android.R.id.home:
-                
-                       NavUtils.getParentActivityIntent(this);
-                        
-                        return true;
+        
+        private void showShareDialog(){
+
+        	Log.i("Share", "showShareDialog");
+        	if (FacebookDialog.canPresentShareDialog(getApplicationContext(), 
+                    FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+
+        	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this).setName(nombre).setCaption(categoria)
+        			.setDescription(descripcion).setPicture("http://obrazky.4ever.sk/data/674xX/stavby/mesta/tokio,-nocne-mesto,-svetla-158076.jpg")
+            .setLink("https://maps.google.com/?q="+lat+"+"+longitud)
+            .build();
+        	uiHelper.trackPendingDialogCall(shareDialog.present());
+        	}
+        	else{
+        	//	publishFeedDialog();
+        	}
+        	
+        	
+        }
+        /*
+        private void publishFeedDialog(){
+        	Bundle params = new Bundle();
+            params.putString("name", "Facebook SDK for Android");
+            params.putString("caption", "Build great social apps and get more installs.");
+            params.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
+            params.putString("link", "https://developers.facebook.com/android");
+            params.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+
+            
+            WebDialog feedDialog = (
+                new WebDialog.FeedDialogBuilder(getBaseContext(),
+                    Session.getActiveSession(),
+                    params))
+                .setOnCompleteListener(new OnCompleteListener() {
+
+                    @Override
+                    public void onComplete(Bundle values,FacebookException error) {
+                        if (error == null) {
+                            // When the story is posted, echo the success
+                            // and the post Id.
+                            final String postId = values.getString("post_id");
+                            if (postId != null) {
+                                Toast.makeText(getBaseContext(),
+                                    "Posted story, id: "+postId,
+                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                // User clicked the Cancel button
+                                Toast.makeText(getBaseContext().getApplicationContext(), 
+                                    "Publish cancelled", 
+                                    Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (error instanceof FacebookOperationCanceledException) {
+                            // User clicked the "x" button
+                            Toast.makeText(getBaseContext().getApplicationContext(), 
+                                "Publish cancelled", 
+                                Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Generic, ex: network error
+                            Toast.makeText(getBaseContext().getApplicationContext(), 
+                                "Error posting story", 
+                                Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+			
+                })
+                .build();
+            feedDialog.show();
+        }
+        */
+        
+        
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
+                @Override
+                public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+                    Log.e("Activity", String.format("Error: %s", error.toString()));
                 }
-                return super.onOptionsItemSelected(item);
+
+                @Override
+                public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+                    Log.i("Activity", "Success!");
+                }
+            });
+        }
+        
+        private Session.StatusCallback callback = new Session.StatusCallback() {
+
+
+            @Override
+            public void call(Session session, SessionState state,
+                    Exception exception) {
+                // TODO Auto-generated method stub
+
+            }
+        };
+        
+        @Override
+        protected void onResume() {
+            super.onResume();
+            uiHelper.onResume();
+        }
+
+        @Override
+        protected void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            uiHelper.onSaveInstanceState(outState);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            uiHelper.onPause();
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            uiHelper.onDestroy();
         }
 }
