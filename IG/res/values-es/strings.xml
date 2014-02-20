@@ -38,6 +38,13 @@
         <item>Lesbico</item>
         <item>Transexual</item>
     </string-array>
+    <string-array name="ajustes">
+        <item>Configuración de Notificaciones</item>
+        <item>Redes sociales</item>
+        <item>Acerca de</item>
+        <item>Aviso de Privacidad</item>
+        <item>Finalizar sesión</item>
+    </string-array>
 
     <string name="filtrar">Filtrar</string>
     <string name="drawer_open">Abrir navigation drawer</string>
@@ -81,6 +88,8 @@
     <string name="about">Acerca de</string>
     <string name="txt_comments">Comentarios</string>
     <string name="txt_no_comments">No hay comentarios, sé el primero en calificar este lugar</string>
+    <string name="empty_notif">No tienes notificaciones</string>
+    <string name="btn_notif">Ver Más</string>
     
 
 </resources>

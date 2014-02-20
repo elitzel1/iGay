@@ -3,12 +3,14 @@ package clicky.gcard.ig.adapters;
 import java.util.List;
 
 import android.content.Context;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import clicky.gcard.ig.R;
 import clicky.gcard.ig.datos.Notificacion;
@@ -30,7 +32,7 @@ public class NotificacionesAdapter extends BaseAdapter {
     public class ViewHolder {
         TextView title;
         TextView desc;
-        TextView link;
+        Button link;
         TextView fecha;
     }
  
@@ -57,7 +59,7 @@ public class NotificacionesAdapter extends BaseAdapter {
             // Locate the TextView in listview_item.xml
             holder.title = (TextView) view.findViewById(R.id.txtTitulo);
             holder.desc = (TextView) view.findViewById(R.id.txtDesc);
-            holder.link = (TextView) view.findViewById(R.id.txtLink);
+            holder.link = (Button) view.findViewById(R.id.txtLink);
             holder.fecha = (TextView) view.findViewById(R.id.txtFecha);
             
             view.setTag(holder);
@@ -68,11 +70,17 @@ public class NotificacionesAdapter extends BaseAdapter {
         holder.title.setText(lugaresList.get(position).getTitulo());
         holder.desc.setText(lugaresList.get(position).getDesc());
         
-        String text = "<a href='"+lugaresList.get(position).getLink()+"'>Ver Más</a>";
-        holder.link.setMovementMethod(LinkMovementMethod.getInstance());
-        holder.link.setText(Html.fromHtml(text));
-        
         holder.fecha.setText(lugaresList.get(position).getFecha());
+        
+        holder.link.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(lugaresList.get(position).getLink()));
+				mContext.startActivity(i);
+			}
+		});
         
         return view;
     }

@@ -1,16 +1,19 @@
 package clicky.gcard.ig.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+@SuppressLint("SimpleDateFormat")
 public class NotificationsReceiver extends BroadcastReceiver {
 	
 	private static final String TAG = "MyCustomReceiver";
@@ -25,7 +28,8 @@ public class NotificationsReceiver extends BroadcastReceiver {
       JSONObject notification = new JSONObject();
 
       Calendar calendar = Calendar.getInstance();
-      String fecha = calendar.get(Calendar.DAY_OF_MONTH)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.YEAR);
+      SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+      String fecha = format.format(calendar.getTime());
       
       notification.put("titulo", json.getString("alert"));
       notification.put("descripcion", json.getString("desc"));
@@ -38,7 +42,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
       Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
 
     } catch (JSONException e) {
-      Log.d(TAG, "JSONException: " + e.getMessage());
+    	Log.d(TAG, "JSONException: " + e.getMessage());
     }
   }
 }

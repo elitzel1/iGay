@@ -15,22 +15,24 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class NotificacionesFragment extends ListFragment{
 	
+	private TextView vacio;
 	private View view;
 	private NotificacionesAdapter adapter;
 	private List<Notificacion> notificationList = null;
 	
 	private Activity activity;
-	
-	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
@@ -45,6 +47,7 @@ public class NotificacionesFragment extends ListFragment{
 				group.removeView(view);
 		}
 		
+		vacio = (TextView)view.findViewById(R.id.empty);
 		AdView adView = (AdView)view.findViewById(R.id.adView);
 	    AdRequest adRequest = new AdRequest.Builder().build();
 	    adView.loadAd(adRequest);
@@ -65,6 +68,10 @@ public class NotificacionesFragment extends ListFragment{
        
 		notificationList = new ArrayList<Notificacion>();
 		
+		NotificationManager notificationManager = (NotificationManager) activity
+	            .getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancelAll();
+		
 	}
 	
 	@Override
@@ -77,24 +84,28 @@ public class NotificacionesFragment extends ListFragment{
 	private void getNotificaciones(){
 		JSONArray array = NotificationsFile.getNotifications(activity, "notificaciones");
 		
-		for(int i = 0; i < array.length(); i++){
-			try {
-				JSONObject object = array.getJSONObject(i);
-				Notificacion notification = new Notificacion();
-				
-				notification.setTitulo(object.getString("titulo"));
-				notification.setDesc(object.getString("descripcion"));
-				notification.setLink(object.getString("link"));
-				notification.setFecha(object.getString("fecha"));
-				
-				notificationList.add(notification);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if(array.length() == 0)
+			vacio.setVisibility(View.VISIBLE);
+		else{
+			for(int i = 0; i < array.length(); i++){
+				try {
+					JSONObject object = array.getJSONObject(i);
+					Notificacion notification = new Notificacion();
+					
+					notification.setTitulo(object.getString("titulo"));
+					notification.setDesc(object.getString("descripcion"));
+					notification.setLink(object.getString("link"));
+					notification.setFecha(object.getString("fecha"));
+					
+					notificationList.add(notification);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			adapter = new NotificacionesAdapter(activity, notificationList);
+			getListView().setAdapter(adapter);
 		}
-		adapter = new NotificacionesAdapter(activity, notificationList);
-		getListView().setAdapter(adapter);
 	}
 
 	

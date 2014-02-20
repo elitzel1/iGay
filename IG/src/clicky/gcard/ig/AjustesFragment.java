@@ -22,8 +22,7 @@ import android.widget.ListView;
 
 public class AjustesFragment extends ListFragment {
 
-	String values[] = new String[]{"Configuración de Notificaciones",
-			"Redes sociales","Acerca de","Privacidad","Finalizar sesión"};
+	String values[];
 	
 	String redes[] = new String[]{"AppJ","@AppJ","appj@cl1cky.com"};
 	int logos[] = new int[]{R.drawable.facebook_icon,R.drawable.twitter_icon,android.R.drawable.ic_dialog_email};
@@ -46,6 +45,7 @@ public class AjustesFragment extends ListFragment {
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		values = getResources().getStringArray(R.array.ajustes);
 		setListAdapter(new AdapterListaNotificaciones(getActivity(),values));
 	}
 	

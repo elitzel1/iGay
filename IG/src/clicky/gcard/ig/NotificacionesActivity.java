@@ -30,8 +30,6 @@ public class NotificacionesActivity extends ListFragment{
 	
 	private Activity activity;
 	
-	
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
 		if(view==null){
