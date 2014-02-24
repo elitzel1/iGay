@@ -74,7 +74,7 @@ public class DetallesActivity extends ActionBarActivity {
         private Button btnCom,btnMas;
        	private ImageView imgLugar;
         private GoogleMap mapa;
-
+        private int FLAG_MENU=0;
         private ImageLoader imgLoader;
         private ParseUser user;
         private Comentario userComment = null;
@@ -106,7 +106,6 @@ public class DetallesActivity extends ActionBarActivity {
 
                 ImageView imga = (ImageView)findViewById(R.id.imgtipo);
 
-             //   txtNombre = (TextView)findViewById(R.id.txtNombre);
                 imgLugar = (ImageView)findViewById(R.id.image_header);
 
                 txtDesc = (TextView)findViewById(R.id.txtDesc);
@@ -122,10 +121,6 @@ public class DetallesActivity extends ActionBarActivity {
                 
 
                 imga.setImageResource(setupCategory(categoria));
-               // listComments = (ListView)findViewById(R.id.listComments);
-                /*
-                txtNombre.setText(nombre);
-*/
                 txtDesc.setText(descripcion);
                 txtDir.setText(direccion);
           
@@ -437,6 +432,11 @@ public class DetallesActivity extends ActionBarActivity {
         	 // Inflate the menu items for use in the action bar
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.detalles, menu);
+            
+            if(FLAG_MENU==1){
+            	MenuItem item = menu.findItem(R.id.menu_item_share);
+            	item.setVisible(false);
+            }
             return super.onCreateOptionsMenu(menu); 
         }
         
@@ -469,12 +469,14 @@ public class DetallesActivity extends ActionBarActivity {
                     FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
 
         	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this).setName(nombre).setCaption(categoria)
-        			.setDescription(descripcion).setPicture("http://obrazky.4ever.sk/data/674xX/stavby/mesta/tokio,-nocne-mesto,-svetla-158076.jpg")
+        			.setDescription(descripcion).setPicture(imagen)
             .setLink("https://maps.google.com/?q="+lat+"+"+longitud)
             .build();
         	uiHelper.trackPendingDialogCall(shareDialog.present());
         	}
         	else{
+        		FLAG_MENU = 1;
+        		invalidateOptionsMenu();
         	//	publishFeedDialog();
         	}
         	

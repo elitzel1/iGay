@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class FragmentResult extends ListFragment{
 
@@ -53,16 +54,9 @@ OnSelectItem callback;
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
 		lugaresList = new ArrayList<Lugares>();
 		footer = ((LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_item,
 				null,false);
-		
-		Log.i("ListView", "lala");
-		
-			
-		
-		
 	}
 	
 	public void onStart(){
@@ -93,6 +87,7 @@ OnSelectItem callback;
 			@Override
 			public void done(List<ParseObject> lugares, ParseException e) {
 				getListView().removeFooterView(footer);
+				if(lugares.size()>0){
 				for (ParseObject lugar : lugares){
 					Lugares item = new Lugares();
 					item.setLugarId((String) lugar.getObjectId());
@@ -108,6 +103,10 @@ OnSelectItem callback;
 				adapter = new ListaLugaresAdapter(activity, lugaresList);
 	            // Binds the Adapter to the ListView
 	            getListView().setAdapter(adapter);
+				}
+				else
+					//Log.i("Search", "No se encontraron resultados");
+					Toast.makeText(activity.getApplicationContext(), getResources().getString(R.string.search), Toast.LENGTH_SHORT).show();
 				
 			}
 		});

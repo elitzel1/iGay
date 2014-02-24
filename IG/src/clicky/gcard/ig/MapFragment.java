@@ -183,23 +183,10 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
 		getLugares(coordenadas, 5);
 	}
-			Log.i("", "");
-			if(mapa!=null)
-				
-				Log.i("Mapa", "No nulo");
-				//setUpMarker();
-		
+
 	}
 	
-	/**
-	 * Antros y Bares 0
-	 * Comida 1
-	 * Cafeteria 2
-	 * Hotel 3
-	 * Cultural 4
-	 * Tienda 5
-	 * Cuidado personal 6
-	 */
+
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		markersList.clear();

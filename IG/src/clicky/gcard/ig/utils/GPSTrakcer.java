@@ -117,19 +117,22 @@ public class GPSTrakcer extends Service implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
+		Log.i("Location", "Locacion nueva:"+location.getLatitude()+" "+getLongitude());
 		lat = location.getLatitude();
 		log = location.getLongitude();
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
+
+		Log.i("Location", "No Nuevo proveedor: "+provider);
 		
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
+
+		Log.i("Location", "Nuevo proveedor: "+provider);
 		
 	}
 

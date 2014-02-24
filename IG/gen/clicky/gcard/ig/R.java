@@ -1751,7 +1751,7 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
-        public static final int about=0x7f0b0069;
+        public static final int about=0x7f0b006a;
         public static final int aceptar=0x7f0b0049;
         public static final int action_search=0x7f0b004f;
         public static final int action_settings=0x7f0b0041;
@@ -1905,6 +1905,7 @@ containing a value of this type.
         public static final int img_log=0x7f0b0045;
         public static final int masinfo=0x7f0b0068;
         public static final int search=0x7f0b004b;
+        public static final int searchfail=0x7f0b0069;
         public static final int title_activity_detalles=0x7f0b0067;
         public static final int title_activity_search_result=0x7f0b0050;
         public static final int txt_forgot_pass=0x7f0b0065;

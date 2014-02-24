@@ -76,6 +76,7 @@
     
     <string name="title_activity_detalles">DetallesActivity</string>
     <string name="masinfo">Más Información</string>
+    <string name="searchfail">No se han encontrado resultados</string>
     
     <string name="about">Acerca de</string>
     
