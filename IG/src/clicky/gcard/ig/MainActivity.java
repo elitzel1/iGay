@@ -67,6 +67,8 @@ onListItemClicConf,AjustesNotListener{
 		if(!Utiliy.verificaConexion(this))
 			Toast.makeText(this, "No hay conexión de internet", Toast.LENGTH_LONG).show();
 		
+		
+		
 		GPSTrakcer gps = new GPSTrakcer(this);
 		if(!gps.isGPSEnable())
 			gps.showAlert();
@@ -388,5 +390,10 @@ onListItemClicConf,AjustesNotListener{
 
 	/************/
 	
-
+	public void updateLocation(View v){
+		if(mapFragment.MANAGER==1)
+			mapFragment.setUpGPS();
+		else
+			mapFragment.newLocation();
+	}
 }

@@ -8,7 +8,9 @@ import clicky.gcard.ig.datos.Lugares;
 import clicky.gcard.ig.utils.GPSTrakcer;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -29,6 +31,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.Dialog;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +47,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MapFragment extends Fragment implements OnMarkerClickListener {
+public class MapFragment extends Fragment implements OnMarkerClickListener,
+GooglePlayServicesClient.ConnectionCallbacks,
+GooglePlayServicesClient.OnConnectionFailedListener {
+	
 	public String TAG = "MAPA";
 	private GoogleMap mapa;
 	View view;
@@ -59,19 +65,36 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 	private RatingBar calif;
 	private Animation showDetalle,hideDetalle;
 	private boolean cancelled = false;
-	
-	
+	LocationClient mLocationClient;
+	static public int MANAGER = 0;
 	public interface OnButtonListener{
 		public void onArticleSelected(Lugares lugar);
 	}
 	
-	private void setUpGPS(){
+	
+	/**Si no se tiene los Servicios de Google Activados**/
+	public void setUpGPS(){
 		GPSTrakcer gps = new GPSTrakcer(getActivity().getBaseContext());
+		gps.getLocation();
 		if(gps.canGetLocation())
 		{
 			coordenadas = new LatLng(gps.getLatitude(), gps.getLongitude());
-			Log.i("LALA", ""+gps.getLatitude() + " "+gps.getLongitude());
+			mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
+	    	getLugares(new LatLng(coordenadas.latitude, coordenadas.longitude), 5);
+			  
 		}
+	}
+	
+
+	/**Si no se tiene los Servicios de Google Activados**/
+	public void newLocation(){
+		 Location mCurrentLocation;
+		    mCurrentLocation = mLocationClient.getLastLocation();
+		    if(mCurrentLocation!=null){  
+		    	coordenadas = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+		    	mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()),12.5f));
+		    	getLugares(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 5);
+		    }
 	}
 	
 	public void onCreate(Bundle savedInstanceState){
@@ -101,17 +124,14 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		//LatLng coordenadas;
 		// Getting Google Play availability status
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity().getBaseContext());
- 
         // Showing status
         if(status!=ConnectionResult.SUCCESS){ // Google Play Services are not available
- 
-            int requestCode = 10;
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, getActivity(), requestCode);
-            dialog.show();
- 
+        	MANAGER = 1;
         }
         else{
         	Log.i("Servicios", "Activados");
+             mLocationClient = new LocationClient(getActivity(), this, this);
+             mLocationClient.connect();
         }
 		/*************************/
 		
@@ -154,15 +174,12 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		}catch(ClassCastException c){}
 		
 	}
+	
 	public void onResume(){
 		super.onResume();
 		ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 		actionBar.setTitle("J");
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		if(coordenadas==null)
-		setUpGPS();
-		
-		
 	}
 	
 	
@@ -170,7 +187,6 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 
 	mapa =((SupportMapFragment)getFragmentManager().findFragmentById(R.id.mapp)).getMap();
 	
-	mapa.setMyLocationEnabled(true);
 	mapa.setOnMapClickListener(new OnMapClickListener() {
 		@Override
 		public void onMapClick(LatLng point) {
@@ -178,24 +194,21 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		}
 	});
 	
-	setUpGPS();
-	if(coordenadas!=null){
-		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(coordenadas.latitude, coordenadas.longitude),12.5f));
-		getLugares(coordenadas, 5);
-	}
-
+	if(MANAGER ==1)
+		setUpGPS();
+	
 	}
 	
 
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		markersList.clear();
+		Marker mark = mapa.addMarker(new MarkerOptions()
+		.position(coordenadas).
+		icon(BitmapDescriptorFactory.fromResource(R.drawable.pinubicacion)));
 		Log.i("Markers", ""+listaLugares.size());
-		
 		for(int i = 0; i < listaLugares.size(); i++){
-
 			getCategoryId(listaLugares, i);
-			
 		}
 		mapa.setOnMarkerClickListener(this);
 		Log.i("Markers", "Marcadores: "+markersList.size());
@@ -254,8 +267,6 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		}
 	}
 	
-	
-
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		lugar = markersList.get(marker.getId());
@@ -330,11 +341,43 @@ public class MapFragment extends Fragment implements OnMarkerClickListener {
 		setUpMarker(filtroLugares);
 	}
 	
-
+	@Override
+	public void onStart() {
+        super.onStart();
+        // Connect the client.
+        mLocationClient.connect();
+    }
+    /*
+     * Called when the Activity is no longer visible.
+     */
+    @Override
+	public void onStop() {
+        // Disconnecting the client invalidates it.
+        mLocationClient.disconnect();
+        super.onStop();
+    }
 	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		cancelled = true;
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		newLocation();
+		
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+		
 	}
 }
