@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
-
 public class GPSTrakcer extends Service implements LocationListener {
 
 	private final Context context;
@@ -25,30 +24,24 @@ public class GPSTrakcer extends Service implements LocationListener {
 	double lat;
 	double log;
 	
-//	private static final long MIN_DISTANCE =10; //10 metros
-//	private static final long MIN_TIME = 1000*60*1; //UN MINUTO
 	
 	protected LocationManager locationManager;
 	
 	public GPSTrakcer (Context context){
 		this.context = context;
-		getLocation();
+		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
+		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+			isGPSEnable=true;
 	}
 	
 	public Location getLocation(){
-		
-		
-		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
-		
-		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-			isGPSEnable=true;
+
 		
 		Criteria criteria = new Criteria();
-		String provider = locationManager.getBestProvider(criteria, true);
+		String provider = locationManager.getBestProvider(criteria, false);
 		location = locationManager.getLastKnownLocation(provider);
 		
 		if(location!=null){
-			Log.i("Location", provider);
 			canGetLocation=true;
 			lat=location.getLatitude();
 			log=location.getLongitude();
@@ -109,27 +102,28 @@ public class GPSTrakcer extends Service implements LocationListener {
 	}
 	
 	
-	@Override
-	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void onLocationChanged(Location location) {
+		Log.i("Location", "Locacion nueva:"+location.getLatitude()+" "+getLongitude());
 		lat = location.getLatitude();
 		log = location.getLongitude();
+		
+		this.location = location;
+		
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
+
+		Log.i("Location", "No Nuevo proveedor: "+provider);
 		
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
+
+		Log.i("Location", "Nuevo proveedor: "+provider);
 		
 	}
 
@@ -137,6 +131,12 @@ public class GPSTrakcer extends Service implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -1,6 +1,7 @@
 package clicky.gcard.ig;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -87,6 +88,7 @@ public class NotificacionesFragment extends ListFragment{
 		if(array.length() == 0)
 			vacio.setVisibility(View.VISIBLE);
 		else{
+			int mes = (Calendar.getInstance().get(Calendar.MONTH)) + 1;
 			for(int i = 0; i < array.length(); i++){
 				try {
 					JSONObject object = array.getJSONObject(i);
@@ -96,8 +98,12 @@ public class NotificacionesFragment extends ListFragment{
 					notification.setDesc(object.getString("descripcion"));
 					notification.setLink(object.getString("link"));
 					notification.setFecha(object.getString("fecha"));
+					notification.setOpened(object.getBoolean("abierto"));
+					notification.setRecent(object.getBoolean("reciente"));
 					
-					notificationList.add(notification);
+					int mesNotif = Integer.valueOf(object.getString("fecha").substring(3, 5));
+					if( (mesNotif+1) >= mes)
+						notificationList.add(notification);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -108,5 +114,29 @@ public class NotificacionesFragment extends ListFragment{
 		}
 	}
 
+	@Override
+	public void onDetach(){
+		super.onDetach();
+		JSONArray newArray = new JSONArray();
+		for(int i = 0; i < notificationList.size(); i++){
+			Notificacion notif = notificationList.get(i);
+			JSONObject notification = new JSONObject();
+			
+			try {
+				notification.put("titulo", notif.getTitulo());
+				notification.put("descripcion", notif.getDesc());
+				notification.put("link", notif.getLink());
+				notification.put("fecha", notif.getFecha());
+				notification.put("abierto", notif.isOpened());
+				notification.put("reciente", notif.isRecent());
+				newArray.put(notification);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		NotificationsFile.saveNotification(activity, "notificaciones", newArray.toString());
+	}
 	
 }

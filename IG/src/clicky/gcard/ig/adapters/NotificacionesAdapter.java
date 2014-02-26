@@ -51,10 +51,46 @@ public class NotificacionesAdapter extends BaseAdapter {
         return position;
     }
  
-    public View getView(final int position, View view, ViewGroup parent) {
-        final ViewHolder holder;
+    public View getView(int position, View view, ViewGroup parent) {
+        if(lugaresList.get(position).isOpened()){
+        	if(lugaresList.get(position).isRecent()){
+        		view = null;
+        	}
+        	return getOpened(view, parent, position);
+        }else{
+        	return getClosed(view, parent, position);
+        }
+    }
+    
+    public View getClosed(View view, ViewGroup parent,final int position){
+    	final ViewHolder holder;
         if (view == null) {
             holder = new ViewHolder();
+        	view = inflater.inflate(R.layout.new_notificaciones_item, null);
+        	holder.title = (TextView) view.findViewById(R.id.txtLink);
+            
+            view.setTag(holder);
+        } else {
+            holder = (ViewHolder) view.getTag();
+        }
+
+    	holder.title.setOnClickListener(new OnClickListener() {
+				
+    		@Override
+    		public void onClick(View v) {
+    			lugaresList.get(position).setOpened(true);
+    			lugaresList.get(position).setRecent(true);
+				notifyDataSetChanged();
+    		}
+    	});
+        return view;
+    }
+    
+    public View getOpened(View view, ViewGroup parent,final int position){
+    	final ViewHolder holder;
+        if (view == null) {
+            holder = new ViewHolder();
+            lugaresList.get(position).setRecent(false);
             view = inflater.inflate(R.layout.notificaciones_item, null);
             // Locate the TextView in listview_item.xml
             holder.title = (TextView) view.findViewById(R.id.txtTitulo);
@@ -66,14 +102,14 @@ public class NotificacionesAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        // Set the results into TextView
+
         holder.title.setText(lugaresList.get(position).getTitulo());
         holder.desc.setText(lugaresList.get(position).getDesc());
         
         holder.fecha.setText(lugaresList.get(position).getFecha());
-        
+	        
         holder.link.setOnClickListener(new OnClickListener() {
-			
+				
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
@@ -81,7 +117,6 @@ public class NotificacionesAdapter extends BaseAdapter {
 				mContext.startActivity(i);
 			}
 		});
-        
         return view;
     }
 }

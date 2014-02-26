@@ -2,9 +2,7 @@ package clicky.gcard.ig;
 
 
 import java.util.ArrayList;
-
 import com.parse.ParseUser;
-
 import clicky.gcard.ig.AjustesFragment.onListItemClicConf;
 import clicky.gcard.ig.DialogAjustesNot.AjustesNotListener;
 import clicky.gcard.ig.DialogFiltro.NoticeDialogInterface;
@@ -69,6 +67,8 @@ onListItemClicConf,AjustesNotListener{
 		if(!Utiliy.verificaConexion(this))
 			Toast.makeText(this, "No hay conexión de internet", Toast.LENGTH_LONG).show();
 		
+		
+		
 		GPSTrakcer gps = new GPSTrakcer(this);
 		if(!gps.isGPSEnable())
 			gps.showAlert();
@@ -121,9 +121,6 @@ onListItemClicConf,AjustesNotListener{
 		drawerMenu.setAdapter(new AdapterDrawer(getSupportActionBar()
 				.getThemedContext(), R.layout.item_drawable, options,imageId));
 		drawerMenu.setBackgroundResource(R.drawable.fondomenu);
-	
-				//http://www.androidbegin.com/tutorial/implementing-actionbarsherlock-side-menu-navigation-drawer-in-android/
-		
 		
 		// Set actionBarDrawerToggle as the DrawerListener
 		drawer.setDrawerListener(toggle);
@@ -181,7 +178,7 @@ onListItemClicConf,AjustesNotListener{
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		
+		MenuItem item=null;
 		//Verificar que sea version 3.0 o mayor
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 	     
@@ -196,10 +193,18 @@ onListItemClicConf,AjustesNotListener{
 		}
 		
 		if(FRAGMENT_ID==1){
-			MenuItem item = menu.findItem(R.id.action_filtrar);
+			item = menu.findItem(R.id.action_filtrar);
 			item.setEnabled(false);
 			item.setVisible(false);
-		}
+		}else{
+		if(FRAGMENT_ID==2){
+			item = menu.findItem(R.id.action_filtrar);
+			item.setEnabled(false);
+			item.setVisible(false);
+			item = menu.findItem(R.id.action_search);
+			item.setEnabled(false);
+			item.setVisible(false);
+		}}
 		return true;
 	}
 	
@@ -208,8 +213,6 @@ onListItemClicConf,AjustesNotListener{
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-//		if(position == drawerMenu.getCheckedItemPosition())
-//			return;
 		Bundle extras = null;
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction trans = manager.beginTransaction();
@@ -221,12 +224,14 @@ onListItemClicConf,AjustesNotListener{
 			setUpActionBar();
 			break;
 		case 1:
+			FRAGMENT_ID=1; //ID para modificar el menú
 			extras = new Bundle();
 			fragment = new Listas();
 			extras.putInt("tipo", 0);
 			fragment.setArguments(extras);
 			break;
 		case 2:
+			FRAGMENT_ID=1; //ID para modificar el menú
 			extras = new Bundle();
 			fragment = new Listas();
 			extras.putInt("tipo", 1);
@@ -235,6 +240,7 @@ onListItemClicConf,AjustesNotListener{
 		case 3:
 			
 		if(ParseUser.getCurrentUser() != null){
+			FRAGMENT_ID = 2;
 			fragment = new NotificacionesFragment();
 		}else{
 			showAlert();
@@ -242,7 +248,7 @@ onListItemClicConf,AjustesNotListener{
 			
 			break;
 		case 4:
-			
+			FRAGMENT_ID = 2;
 			fragment = new AjustesFragment();
 			break;
 		default:
@@ -257,7 +263,6 @@ onListItemClicConf,AjustesNotListener{
 			try{
 			trans.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 			getSupportActionBar().setTitle(options[position]);
-			FRAGMENT_ID=1; //ID para modificar el menú
 			}catch(NullPointerException e){}
 			
 		}
@@ -320,17 +325,25 @@ onListItemClicConf,AjustesNotListener{
 	
 	
 	public void enableToggle(){
-		
 		toggle.setDrawerIndicatorEnabled(true);
-		if(drawerMenu.getCheckedItemPosition()>=0)
-		getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
+		Fragment fra = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+		
+		if(drawerMenu.getCheckedItemPosition()>=0){
+			if(fra!=null&&fra.getClass().toString().contains("clicky.gcard.ig.MapFragment")){
+				getSupportActionBar().setTitle("J");
+				Log.i("Back Fragment", ""+fra.getClass().toString());
+			}else
+			getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
+		}
 		else
 			getSupportActionBar().setTitle("J");
 	}
 	@Override
 	public void onBackPressed(){
 		super.onBackPressed();
+
 		enableToggle();
+		
 	}
 
 	/****Métodos de DialogFragment****/
@@ -377,5 +390,10 @@ onListItemClicConf,AjustesNotListener{
 
 	/************/
 	
-
+	public void updateLocation(View v){
+		if(mapFragment.MANAGER==1)
+			mapFragment.setUpGPS();
+		else
+			mapFragment.newLocation();
+	}
 }

@@ -30,6 +30,7 @@
         android:layout_below="@+id/txtUser"
         android:textColor="@color/gris_fuerte"
         android:layout_alignLeft="@+id/txtUser"
+        android:layout_toLeftOf="@+id/rateComentario"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <RatingBar

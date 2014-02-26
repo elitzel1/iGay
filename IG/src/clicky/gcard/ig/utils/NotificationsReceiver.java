@@ -35,9 +35,18 @@ public class NotificationsReceiver extends BroadcastReceiver {
       notification.put("descripcion", json.getString("desc"));
       notification.put("link", json.getString("link"));
       notification.put("fecha", fecha);
+      notification.put("abierto", false);
+      notification.put("reciente", false);
 
-      array.put(notification);
-      NotificationsFile.saveNotification(context, "notificaciones", array.toString());
+      JSONArray newArray = new JSONArray();
+      newArray.put(notification);
+      if(array.length() != 0){
+    	  for(int i = 0; i < array.length(); i++){
+    		  JSONObject notif = array.getJSONObject(i);
+			  newArray.put(notif);
+    	  }
+      }
+      NotificationsFile.saveNotification(context, "notificaciones", newArray.toString());
  
       Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
 

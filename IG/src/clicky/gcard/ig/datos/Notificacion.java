@@ -3,6 +3,7 @@ package clicky.gcard.ig.datos;
 public class Notificacion {
 	
 	private String titulo,desc,link,fecha;
+	private boolean opened,recent;
 
 	public String getTitulo() {
 		return titulo;
@@ -34,6 +35,22 @@ public class Notificacion {
 
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
+	}
+
+	public boolean isOpened() {
+		return opened;
+	}
+
+	public void setOpened(boolean opened) {
+		this.opened = opened;
+	}
+
+	public boolean isRecent() {
+		return recent;
+	}
+
+	public void setRecent(boolean recent) {
+		this.recent = recent;
 	}
 
 	
