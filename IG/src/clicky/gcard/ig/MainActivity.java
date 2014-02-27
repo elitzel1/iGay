@@ -355,7 +355,6 @@ onListItemClicConf,AjustesNotListener{
 		for(int i=0;i<arr.length;i++){
 			if(arr[i]==true){
 				num.add(lugares[i]);
-				Log.i("Filtro", "lugar: "+lugares[i]);
 			} 
 	
 		}

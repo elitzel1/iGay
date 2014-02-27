@@ -30,7 +30,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
-import android.app.Dialog;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -203,7 +202,8 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		markersList.clear();
-		Marker mark = mapa.addMarker(new MarkerOptions()
+		
+		mapa.addMarker(new MarkerOptions()
 		.position(coordenadas).
 		icon(BitmapDescriptorFactory.fromResource(R.drawable.pinubicacion)));
 		Log.i("Markers", ""+listaLugares.size());

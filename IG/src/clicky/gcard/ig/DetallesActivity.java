@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import clicky.gcard.ig.datos.Comentario;
-import clicky.gcard.ig.datos.Lugares;
 import clicky.gcard.ig.utils.ImageLoader;
 
 import com.facebook.Session;
@@ -79,7 +78,8 @@ public class DetallesActivity extends ActionBarActivity {
         private ParseUser user;
         private Comentario userComment = null;
         private boolean isactive=false;
-        private List<Comentario> lugaresList = null;
+        @SuppressWarnings("unused")
+		private List<Comentario> lugaresList = null;
         private View footer;
 
         ShareActionProvider mShareActionProvider;
@@ -93,8 +93,8 @@ public class DetallesActivity extends ActionBarActivity {
                 .actionBarBackground(new ColorDrawable(getResources().getColor(R.color.moradof)))
                 .headerLayout(R.layout.header_fa)
                 .contentLayout(R.layout.detail_layout);
-            setContentView(helper.createView(this));
-            helper.initActionBar(this);
+                setContentView(helper.createView(this));
+                helper.initActionBar(this);
                 setUpSomething();
 
                 uiHelper = new UiLifecycleHelper(this, callback);
@@ -449,13 +449,10 @@ public class DetallesActivity extends ActionBarActivity {
             	Intent intent = NavUtils.getParentActivityIntent(this); 
             	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP); 
             	NavUtils.navigateUpTo(this, intent);
-               // NavUtils.getParentActivityIntent(this);
                  return true;
          case R.id.menu_item_share:
-         	Log.i("Share", "Menu");
-         	//publishFeedDialog();
-         	showShareDialog();
-                    return true;
+         		showShareDialog();
+                return true;
                 default:
                     return super.onOptionsItemSelected(item);
             }
@@ -477,63 +474,10 @@ public class DetallesActivity extends ActionBarActivity {
         	else{
         		FLAG_MENU = 1;
         		invalidateOptionsMenu();
-        	//	publishFeedDialog();
         	}
         	
         	
-        }
-        /*
-        private void publishFeedDialog(){
-        	Bundle params = new Bundle();
-            params.putString("name", "Facebook SDK for Android");
-            params.putString("caption", "Build great social apps and get more installs.");
-            params.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
-            params.putString("link", "https://developers.facebook.com/android");
-            params.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
-
-            
-            WebDialog feedDialog = (
-                new WebDialog.FeedDialogBuilder(getBaseContext(),
-                    Session.getActiveSession(),
-                    params))
-                .setOnCompleteListener(new OnCompleteListener() {
-
-                    @Override
-                    public void onComplete(Bundle values,FacebookException error) {
-                        if (error == null) {
-                            // When the story is posted, echo the success
-                            // and the post Id.
-                            final String postId = values.getString("post_id");
-                            if (postId != null) {
-                                Toast.makeText(getBaseContext(),
-                                    "Posted story, id: "+postId,
-                                    Toast.LENGTH_SHORT).show();
-                            } else {
-                                // User clicked the Cancel button
-                                Toast.makeText(getBaseContext().getApplicationContext(), 
-                                    "Publish cancelled", 
-                                    Toast.LENGTH_SHORT).show();
-                            }
-                        } else if (error instanceof FacebookOperationCanceledException) {
-                            // User clicked the "x" button
-                            Toast.makeText(getBaseContext().getApplicationContext(), 
-                                "Publish cancelled", 
-                                Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Generic, ex: network error
-                            Toast.makeText(getBaseContext().getApplicationContext(), 
-                                "Error posting story", 
-                                Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-			
-                })
-                .build();
-            feedDialog.show();
-        }
-        */
-        
+        }        
         
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
