@@ -8,17 +8,21 @@ import android.view.MenuItem;
 
 public class PrivacidadActivity extends ActionBarActivity{
 	
+	private String name;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.privacidad_layout);
+		
+		name = getIntent().getExtras().getString("name");
 		
 		setUpBar();
 	}
 	
 	public void setUpBar(){
 		ActionBar bar = getSupportActionBar();
-		bar.setTitle("Privacidad");
+		bar.setTitle(name);
 		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
 		bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.moradof)));
 		bar.setDisplayHomeAsUpEnabled(true);

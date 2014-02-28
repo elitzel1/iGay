@@ -22,6 +22,8 @@ public class NotificacionesAdapter extends BaseAdapter {
     LayoutInflater inflater;
     private List<Notificacion> lugaresList = null;
     protected int count;
+    final private int CLOSED = 0;
+    final private int OPENED = 1;
  
     public NotificacionesAdapter(Context context, List<Notificacion> lugaresList) {
         mContext = context;
@@ -29,6 +31,9 @@ public class NotificacionesAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(mContext);
     }
  
+    public class ViewHolderClosed{
+    	TextView open;
+    }
     public class ViewHolder {
         TextView title;
         TextView desc;
@@ -50,31 +55,51 @@ public class NotificacionesAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    
+    @Override
+    public int getViewTypeCount(){
+        return 2; 
+    }
+    
+    @Override
+    public int getItemViewType(int position) {
+    	if(lugaresList.get(position).isOpened())
+    		return OPENED;
+    	else
+    		return CLOSED;
+    				
+    }
  
     public View getView(int position, View view, ViewGroup parent) {
+    	int tipo = getItemViewType(position);
         if(lugaresList.get(position).isOpened()){
         	if(lugaresList.get(position).isRecent()){
         		view = null;
         	}
-        	return getOpened(view, parent, position);
-        }else{
-        	return getClosed(view, parent, position);
+        }
+        switch(tipo){
+        	case OPENED:
+        		return getOpened(view, parent, position);
+        	case CLOSED:
+        		return getClosed(view, parent, position);
+        	default:
+        		return null;
         }
     }
     
     public View getClosed(View view, ViewGroup parent,final int position){
-    	final ViewHolder holder;
+    	final ViewHolderClosed holder;
         if (view == null) {
-            holder = new ViewHolder();
+            holder = new ViewHolderClosed();
         	view = inflater.inflate(R.layout.new_notificaciones_item, null);
-        	holder.title = (TextView) view.findViewById(R.id.txtLink);
+        	holder.open = (TextView) view.findViewById(R.id.txtLink);
             
             view.setTag(holder);
         } else {
-            holder = (ViewHolder) view.getTag();
+            holder = (ViewHolderClosed) view.getTag();
         }
 
-    	holder.title.setOnClickListener(new OnClickListener() {
+    	holder.open.setOnClickListener(new OnClickListener() {
 				
     		@Override
     		public void onClick(View v) {

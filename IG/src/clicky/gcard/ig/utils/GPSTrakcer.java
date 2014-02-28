@@ -1,5 +1,6 @@
 package clicky.gcard.ig.utils;
 
+import clicky.gcard.ig.R;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -77,10 +78,10 @@ public class GPSTrakcer extends Service implements LocationListener {
 	
 	public void showAlert(){
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-		alertDialog.setTitle("GPS Settings");
-		alertDialog.setMessage("Para un mejor funcionamiento ¿Deseas activar tu GPS?");
+		alertDialog.setTitle(R.string.alert_gps);
+		alertDialog.setMessage(R.string.alert_txtgps);
 		
-		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+		alertDialog.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -89,7 +90,7 @@ public class GPSTrakcer extends Service implements LocationListener {
 			}
 		});
 		
-		alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		alertDialog.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

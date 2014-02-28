@@ -64,15 +64,6 @@ onListItemClicConf,AjustesNotListener{
 		/*** Drawer **/
 		setUpDrawer();
 		
-		if(!Utiliy.verificaConexion(this))
-			Toast.makeText(this, "No hay conexión de internet", Toast.LENGTH_LONG).show();
-		
-		
-		
-		GPSTrakcer gps = new GPSTrakcer(this);
-		if(!gps.isGPSEnable())
-			gps.showAlert();
-
 		if (savedInstanceState != null) 
 			return;
 		
@@ -80,6 +71,27 @@ onListItemClicConf,AjustesNotListener{
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction()
 				.add(R.id.content_frame, mapFragment);
 		trans.commit();
+		
+		//if opened from notification
+		Intent intent = getIntent(); 
+		Bundle extras = intent.getExtras(); 
+		try{
+			String jsonData = extras.getString( "com.parse.Data" );
+			if(!jsonData.isEmpty()){
+				FragmentManager manager = getSupportFragmentManager();
+				FragmentTransaction transs = manager.beginTransaction();
+				NotificacionesFragment fragment = new NotificacionesFragment();
+				transs.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+			}
+		}catch(NullPointerException e){
+			if(!Utiliy.verificaConexion(this))
+				Toast.makeText(this, "No hay conexión de internet", Toast.LENGTH_LONG).show();
+			
+			GPSTrakcer gps = new GPSTrakcer(this);
+			if(!gps.isGPSEnable())
+				gps.showAlert();
+			
+		}
 	}
 
 	/**Action Bar**/

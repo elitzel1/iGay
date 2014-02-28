@@ -28,6 +28,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
 public class Listas extends ListFragment implements OnNavigationListener{
@@ -39,8 +41,11 @@ private ListaLugaresAdapter adapterList = null;
 private TopLugaresAdapter adapterTop = null;
 private List<Lugares> lugaresList = null;
 private int tipo = -1;
+private int page = 0;
 private ParseQuery<ParseObject> query;
+private String categoria;
 private boolean cancelled = false;
+private boolean more = false;
 
 
 OnListListener callback;
@@ -67,6 +72,7 @@ OnListListener callback;
 		AdView adView = (AdView)view.findViewById(R.id.adView);
 	    AdRequest adRequest = new AdRequest.Builder().build();
 	    adView.loadAd(adRequest);
+	    
 		return view;
 	}
 
@@ -83,8 +89,8 @@ OnListListener callback;
         tipo = getArguments() != null ? getArguments().getInt("tipo") : null;
 				
 		SpinnerAdapterSpecial s_adapter = new SpinnerAdapterSpecial(getActivity().getBaseContext(),getResources().getStringArray(R.array.categorias));
-		setUpBar(s_adapter);		
-       
+		setUpBar(s_adapter);	
+		
 	}
 	
 	@Override
@@ -99,6 +105,27 @@ OnListListener callback;
 		this.activity=activity;
 	}
 	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState){
+		super.onActivityCreated(savedInstanceState);
+		
+		getListView().setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				if (scrollState == SCROLL_STATE_IDLE) {
+					if(getListView().getLastVisiblePosition() <= lugaresList.size() && more){
+						loadMore(categoria);
+					}
+				}
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+			}
+		});
+	}
 	private void setUpBar(SpinnerAdapterSpecial adapter){
 		
 		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
@@ -121,42 +148,49 @@ OnListListener callback;
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		  switch (itemPosition) {
           case 0://Bares y Antros
+        	  categoria = "Bares y Antros";
         	  if(tipo == 0)
         		  updateTop("Bares y Antros");
         	  else
         		  updateCategorias("Bares y Antros");
               break;
           case 1: //"Comida"
+        	  categoria = "Comida";
         	  if(tipo == 0)
         		  updateTop("Comida");
         	  else
         		  updateCategorias("Comida");
         	  break;
           case 2:// "Cafeteria"
+        	  categoria = "Cafeteria";
         	  if(tipo == 0)
         		  updateTop("Cafeteria");
         	  else
         		  updateCategorias("Cafeteria");
         	  break;
           case 3: //"Hotel
+        	  categoria = "Hotel";
         	  if(tipo == 0)
         		  updateTop("Hotel");
         	  else
         		  updateCategorias("Hotel");
         	  break;
           case 4: //"Cultural"
+        	  categoria = "Cultural";
         	  if(tipo == 0)
         		  updateTop("Cultural");
         	  else
         		  updateCategorias("Cultural");
               break;
           case 5:// "Tienda"
+        	  categoria = "Tienda";
         	  if(tipo == 0)
         		  updateTop("Tienda");
         	  else
         		  updateCategorias("Tienda");
         	  break;
           case 6://"Cuidado Personal"
+        	  categoria = "Cuidado Personal";
         	  if(tipo == 0)
         		  updateTop("Cuidado Personal");
         	  else
@@ -185,14 +219,24 @@ OnListListener callback;
                 "Lugares");
         query.orderByAscending("createdAt");
         query.whereEqualTo("categoria", category);
+        query.setLimit(11);
         query.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
         query.findInBackground(new FindCallback<ParseObject>() {
 			
 			@Override
 			public void done(List<ParseObject> lugares, ParseException e) {
 				if(e == null && !cancelled){
-					getListView().removeFooterView(footer);
-					for (ParseObject lugar : lugares){
+					int size;
+					if(lugares.size() == 11){
+						more = true;
+						size = 10;
+					}else{
+						more = false;
+						size = lugares.size();
+						getListView().removeFooterView(footer);
+					}
+					for (int i = 0; i < size; i++){
+						ParseObject lugar = lugares.get(i);
 						Lugares item = new Lugares();
 						item.setLugarId((String) lugar.getObjectId());
 						item.setName((String) lugar.get("nombre"));
@@ -256,6 +300,48 @@ OnListListener callback;
 		});
 	}
 	
+	private void loadMore(String category){
+		page++;
+		query = new ParseQuery<ParseObject>(
+                "Lugares");
+        query.orderByAscending("createdAt");
+        query.whereEqualTo("categoria", category);
+        query.setSkip(10*page);
+        query.setLimit(11);
+        query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> lugares, ParseException e) {
+				if(e == null && !cancelled){
+					int size;
+					if(lugares.size() == 11){
+						more = true;
+						size = 10;
+					}else{
+						more = false;
+						size = lugares.size();
+						getListView().removeFooterView(footer);
+					}
+					for (int i = 0; i < size; i++){
+						ParseObject lugar = lugares.get(i);
+						Lugares item = new Lugares();
+						item.setLugarId((String) lugar.getObjectId());
+						item.setName((String) lugar.get("nombre"));
+						item.setCategory((String) lugar.get("categoria"));
+						item.setCalif((float)lugar.getDouble("calificacion"));
+						item.setDesc((String) lugar.get("descripcion"));
+						item.setDir( lugar.getString("direccion"));
+						item.setEdo(lugar.getString("estado"));
+						item.setImagen(lugar.getParseFile("imagen").getUrl());
+						item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
+								lugar.getParseGeoPoint("localizacion").getLongitude()));
+						lugaresList.add(item);
+					}
+					adapterList.notifyDataSetChanged();
+				}	
+			}
+		});
+	}
 	@Override
 	public void onDestroy(){
 		super.onDestroy();

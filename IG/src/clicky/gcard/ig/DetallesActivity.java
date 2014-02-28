@@ -26,6 +26,7 @@ import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -182,7 +183,7 @@ public class DetallesActivity extends ActionBarActivity {
     		}else if(cat.equals("Hotel")){
         			id=R.drawable.nshotel;
    
-				}else if(cat.equals("Cultural")){
+			}else if(cat.equals("Cultural")){
 				id=R.drawable.nscultural;
     			
 			}else if(cat.equals("Tienda")){
@@ -215,7 +216,7 @@ public class DetallesActivity extends ActionBarActivity {
 	        }
     
             user = ParseUser.getCurrentUser();
-            if(user!=null)
+            if(user != null)
             	isactive=true;
         }
         
@@ -223,7 +224,6 @@ public class DetallesActivity extends ActionBarActivity {
                 ActionBar bar = getSupportActionBar();
                 bar.setTitle(nombre);
                 bar.setDisplayHomeAsUpEnabled(true);
-                
         }
         
         
@@ -441,7 +441,8 @@ public class DetallesActivity extends ActionBarActivity {
             	case R.id.menu_item_share:
             		Log.i("Share", "Menu");
             		//publishFeedDialog();
-            		showShareDialog();
+            		if(ParseFacebookUtils.isLinked(user))
+            			showShareDialog();
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

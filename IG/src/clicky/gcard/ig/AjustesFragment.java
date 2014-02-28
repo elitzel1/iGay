@@ -26,6 +26,7 @@ public class AjustesFragment extends ListFragment {
 	
 	String redes[] = new String[]{"AppJ","@AppJ","appj@cl1cky.com"};
 	int logos[] = new int[]{R.drawable.facebook_icon,R.drawable.twitter_icon,android.R.drawable.ic_dialog_email};
+	static final int UNLINKED = 1;
 	
 	private Activity activity;
 	private ParseUser user;
@@ -64,6 +65,16 @@ public class AjustesFragment extends ListFragment {
         	mCallback=(onListItemClicConf)activity;
         }catch(ClassCastException e){
         	Log.i("", "");
+        }
+	}
+	
+	@Override
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent data){
+        if (resultCode == Activity.RESULT_OK && requestCode == UNLINKED){
+        	ParseUser.logOut();
+			Intent i = new Intent(activity,LoginActivity.class);
+			startActivity(i);
+			activity.finish();
         }
 	}
 	
@@ -150,7 +161,8 @@ public class AjustesFragment extends ListFragment {
 		case 1:
 			if(user != null){
 				i = new Intent(activity,RedesSocialesActivity.class);
-				startActivity(i);
+				i.putExtra("name", values[position]);
+				startActivityForResult(i, UNLINKED);
 			}else{
 				showAlert();
 			}
@@ -160,6 +172,7 @@ public class AjustesFragment extends ListFragment {
 			break;
 		case 3:
 			i = new Intent(activity,PrivacidadActivity.class);
+			i.putExtra("name", values[position]);
 			startActivity(i);
 			break;
 		case 4:

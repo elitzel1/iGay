@@ -66,6 +66,7 @@
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_more_comments">Más comentarios</string>
+    <string name="btn_settings">Ajustes</string>
     
     <string name="hint_user">Usuario</string>
     <string name="hint_pass">Contraseña</string>
@@ -76,9 +77,12 @@
     <string name="alert_no_login">Necesitas registrarte o iniciar sesión</string>
     <string name="alert_email">Se ha enviado un email a su correo</string>
     <string name="alert_no_email">No tenemos ese correo</string>
+    <string name="alert_logout">Se cerrará tu sesión</string>
+    <string name="alert_gps">Ajustes de GPS</string>
+    <string name="alert_txtgps">Para un mejor funcionamiento ¿Deseas activar tu GPS?</string>
 
-    <string name="txt_linked">Vinculado con Facebook</string>
-    <string name="txt_share_facebook">Comparte tu comentario en Facebook</string>
+    <string name="txt_linked">Desvincular Facebook</string>
+    <string name="txt_unlink">Vincular con Facebook</string>
     <string name="txt_forgot_pass">Ingrese su correo para restaurar su cuenta</string>
     <string name="txt_mail">Selecciona un cliente de correo:</string>
     

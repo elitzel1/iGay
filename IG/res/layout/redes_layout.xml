@@ -4,23 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <CheckBox
-        android:id="@+id/checkLinked"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnFacebook"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/txt_linked" />
-
-    <CheckBox
-        android:id="@+id/checkComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_share_facebook" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_margin="8dp"
+        android:textColor="@color/blanco"
+        android:background="@drawable/com_facebook_button_blue"
+        android:text="@string/txt_unlink" />
 
 </LinearLayout>

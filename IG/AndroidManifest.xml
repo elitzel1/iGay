@@ -95,9 +95,9 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="clicky.gcard.ig.utils.NotificationsReceiver" >
+        <receiver android:name="clicky.gcard.ig.utils.NotificationsReceiver" android:exported="false">
             <intent-filter>
-                <action android:name="notification" />
+                <action android:name="clicky.gcard.ig.notification" />
             </intent-filter>
         </receiver>
 

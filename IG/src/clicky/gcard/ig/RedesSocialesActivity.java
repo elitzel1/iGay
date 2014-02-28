@@ -9,52 +9,48 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
-public class RedesSocialesActivity extends ActionBarActivity implements OnCheckedChangeListener{
+public class RedesSocialesActivity extends ActionBarActivity implements OnClickListener{
 	
-	private CheckBox checkLinked,checkPost;
+	private Button btnFacebook;
 	private ParseUser user;
 	private ProgressDialog loading;
+	private String name;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.redes_layout);
-		
+		name = getIntent().getExtras().getString("name");
 		setUpBar();
 		
 		user = ParseUser.getCurrentUser();
 		
-		checkLinked = (CheckBox)findViewById(R.id.checkLinked);
-		checkPost = (CheckBox)findViewById(R.id.checkComment);
+		btnFacebook = (Button)findViewById(R.id.btnFacebook);
+		btnFacebook.setOnClickListener(this);
 		
 		if(ParseFacebookUtils.isLinked(user)){
-			checkLinked.setChecked(true);
-			checkPost.setOnCheckedChangeListener(this);
+			btnFacebook.setText(R.string.txt_linked);
 		}
-		
-		checkPost.setChecked(getPreference());
-		
-		checkLinked.setOnCheckedChangeListener(this);
 		
 	}
 	
 	public void setUpBar(){
 		ActionBar bar = getSupportActionBar();
-		bar.setTitle("RedesSociales");
+		bar.setTitle(name);
 		bar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
 		bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.moradof)));
 		bar.setDisplayHomeAsUpEnabled(true);
@@ -72,61 +68,6 @@ public class RedesSocialesActivity extends ActionBarActivity implements OnChecke
 	
 	}
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if(buttonView == checkLinked){
-			if(isChecked){
-				if (!ParseFacebookUtils.isLinked(user)) {
-					loading = new ProgressDialog(this);
-					loading.setMessage("Wait a moment...");
-					loading.setCancelable(false);
-					loading.show();
-					ParseFacebookUtils.link(user, this, new SaveCallback() {
-						@Override
-						public void done(ParseException ex) {
-							if (ParseFacebookUtils.isLinked(user)) {
-								makeMeRequest();
-								Log.d("MyApp", "Woohoo, user logged in with Facebook!");
-							}
-						}
-					});
-				}
-			}else{
-				loading = new ProgressDialog(this);
-				loading.setMessage("Wait a moment...");
-				loading.setCancelable(false);
-				loading.show();
-				ParseFacebookUtils.unlinkInBackground(user, new SaveCallback() {
-					@Override
-					public void done(ParseException ex) {
-						loading.dismiss();
-						savePreferences("comment", false);
-						if (ex == null) {
-							Log.d("MyApp", "The user is no longer associated with their Facebook account.");
-							finish();
-						}
-					}
-				});
-			}
-		}else if(buttonView == checkPost){
-			savePreferences("comment", isChecked);
-		}
-		
-	}
-	
-	private void savePreferences(String key, boolean value) {
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		Editor editor = sharedPreferences.edit();
-		editor.putBoolean(key, value);
-		editor.commit();
-	}
-	
-	private boolean getPreference(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		return sharedPreferences.getBoolean("comment", false);
-	}
-	
 	private void makeMeRequest() {
 		Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
 				new Request.GraphUserCallback() {
@@ -159,6 +100,65 @@ public class RedesSocialesActivity extends ActionBarActivity implements OnChecke
 				});
 		request.executeAsync();
 
+	}
+
+	private void unlinkFacebook(){
+		loading = new ProgressDialog(this);
+		loading.setMessage("Wait a moment...");
+		loading.setCancelable(false);
+		loading.show();
+		ParseFacebookUtils.unlinkInBackground(user, new SaveCallback() {
+			@Override
+			public void done(ParseException ex) {
+				loading.dismiss();
+				if (ex == null) {
+					Log.d("MyApp", "The user is no longer associated with their Facebook account.");
+					setResult(RESULT_OK);
+					finish();
+				}
+			}
+		});
+	}
+	
+	private void showAlert(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setMessage(R.string.alert_logout);
+		alert.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				unlinkFacebook();
+			}
+		});
+		alert.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		alert.create().show();
+	}
+	
+	@Override
+	public void onClick(View v) {
+		if (!ParseFacebookUtils.isLinked(user)) {
+			loading = new ProgressDialog(this);
+			loading.setMessage("Wait a moment...");
+			loading.setCancelable(false);
+			loading.show();
+			ParseFacebookUtils.link(user, this, new SaveCallback() {
+				@Override
+				public void done(ParseException ex) {
+					if (ParseFacebookUtils.isLinked(user)) {
+						makeMeRequest();
+						Log.d("MyApp", "Woohoo, user logged in with Facebook!");
+					}
+				}
+			});
+		}else{
+			showAlert();
+		}
 	}
 	
 }
