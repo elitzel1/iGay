@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import clicky.gcard.ig.R;
 import clicky.gcard.ig.datos.Notificacion;
@@ -32,7 +33,7 @@ public class NotificacionesAdapter extends BaseAdapter {
     }
  
     public class ViewHolderClosed{
-    	TextView open;
+    	ImageView open;
     }
     public class ViewHolder {
         TextView title;
@@ -92,7 +93,7 @@ public class NotificacionesAdapter extends BaseAdapter {
         if (view == null) {
             holder = new ViewHolderClosed();
         	view = inflater.inflate(R.layout.new_notificaciones_item, null);
-        	holder.open = (TextView) view.findViewById(R.id.txtLink);
+        	holder.open = (ImageView) view.findViewById(R.id.sobre);
             
             view.setTag(holder);
         } else {

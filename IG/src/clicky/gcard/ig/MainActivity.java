@@ -112,11 +112,16 @@ onListItemClicConf,AjustesNotListener{
 				R.string.drawer_open, R.string.drawer_close){
 			
 			  public void onDrawerClosed(View arg0) {
-				  ActionBar actionBar = getSupportActionBar();
-				  if(drawerMenu.getCheckedItemPosition()>0)
-			        actionBar.setTitle(options[drawerMenu.getCheckedItemPosition()]);
+				  Fragment fra = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+					if(drawerMenu.getCheckedItemPosition()>=0){
+						if(fra!=null&&fra.getClass().toString().contains("clicky.gcard.ig.MapFragment")){
+							getSupportActionBar().setTitle("ota");
+						}else
+							  getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
+					}
 				  else
-					  actionBar.setTitle("ota");
+					  getSupportActionBar().setTitle("ota");
 			    }
 			    public void onDrawerOpened(View arg0) {
 		    	ActionBar actionBar = getSupportActionBar();
@@ -339,17 +344,20 @@ onListItemClicConf,AjustesNotListener{
 	public void enableToggle(){
 		toggle.setDrawerIndicatorEnabled(true);
 		Fragment fra = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-		
+
 		if(drawerMenu.getCheckedItemPosition()>=0){
 			if(fra!=null&&fra.getClass().toString().contains("clicky.gcard.ig.MapFragment")){
+				FRAGMENT_ID=0;
 				getSupportActionBar().setTitle("J");
-				Log.i("Back Fragment", ""+fra.getClass().toString());
 			}else
 			getSupportActionBar().setTitle(options[drawerMenu.getCheckedItemPosition()]);
 		}
 		else
 			getSupportActionBar().setTitle("J");
+
+		invalidateOptionsMenu();
 	}
+	
 	@Override
 	public void onBackPressed(){
 		super.onBackPressed();

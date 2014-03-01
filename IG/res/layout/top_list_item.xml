@@ -32,4 +32,13 @@
         android:isIndicator="true"
         style="@style/purpleRatingSmall"/>
 
+    <TextView
+        android:id="@+id/txtEstados"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="22dp"
+        android:layout_toLeftOf="@+id/rateLugar"
+         />
+
 </RelativeLayout>
