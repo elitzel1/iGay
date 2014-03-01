@@ -132,7 +132,7 @@ public final class R {
 		public static final int abc_split_action_bar_is_narrow = 0x7f070002;
 	}
 	public static final class color {
-		public static final int abc_search_url_text_holo = 0x7f08001d;
+		public static final int abc_search_url_text_holo = 0x7f08001e;
 		public static final int abc_search_url_text_normal = 0x7f080000;
 		public static final int abc_search_url_text_pressed = 0x7f080002;
 		public static final int abc_search_url_text_selected = 0x7f080001;
@@ -272,12 +272,12 @@ public final class R {
 		public static final int end = 0x7f060013;
 		public static final int expand_activities_button = 0x7f06002b;
 		public static final int expanded_menu = 0x7f060031;
-		public static final int fab__container = 0x7f060071;
-		public static final int fab__content_top_margin = 0x7f060072;
-		public static final int fab__gradient = 0x7f06006e;
-		public static final int fab__header_container = 0x7f06006d;
-		public static final int fab__listview_background = 0x7f06006f;
-		public static final int fab__scroll_view = 0x7f060070;
+		public static final int fab__container = 0x7f060072;
+		public static final int fab__content_top_margin = 0x7f060073;
+		public static final int fab__gradient = 0x7f06006f;
+		public static final int fab__header_container = 0x7f06006e;
+		public static final int fab__listview_background = 0x7f060070;
+		public static final int fab__scroll_view = 0x7f060071;
 		public static final int home = 0x7f060014;
 		public static final int homeAsUp = 0x7f060005;
 		public static final int icon = 0x7f06002f;
@@ -345,7 +345,7 @@ public final class R {
 		public static final int fab__header_container = 0x7f03002c;
 		public static final int fab__listview_container = 0x7f03002d;
 		public static final int fab__scrollview_container = 0x7f03002e;
-		public static final int support_simple_spinner_dropdown_item = 0x7f030043;
+		public static final int support_simple_spinner_dropdown_item = 0x7f030044;
 	}
 	public static final class string {
 		public static final int abc_action_bar_home_description = 0x7f0b0001;

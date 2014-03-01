@@ -96,6 +96,7 @@ OnSelectItem callback;
 					item.setCalif((float)lugar.getDouble("calificacion"));
 					item.setDesc((String) lugar.get("descripcion"));
 					item.setDir((String) lugar.get("direccion"));
+					item.setEdo((String)lugar.get("estado"));
 					item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 							lugar.getParseGeoPoint("localizacion").getLongitude()));
 					lugaresList.add(item);

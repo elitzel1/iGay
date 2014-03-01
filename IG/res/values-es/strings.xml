@@ -3,6 +3,7 @@
 
     <string name="app_name">J</string>
     <string name="action_settings">Ajustes</string>
+    <string name="action_share">Compartir</string>
     <string name="hello_world">Hello world!</string>
     <string name="facebookId">624622577604521</string>
     <string name="version">Versión 1.0</string>
@@ -36,6 +37,13 @@
         <item>Gay</item>
         <item>Lesbico</item>
         <item>Transexual</item>
+    </string-array>
+    <string-array name="ajustes">
+        <item>Configuración de Notificaciones</item>
+        <item>Redes sociales</item>
+        <item>Acerca de</item>
+        <item>Aviso de Privacidad</item>
+        <item>Finalizar sesión</item>
     </string-array>
 
     <string name="filtrar">Filtrar</string>
@@ -79,6 +87,10 @@
     <string name="searchfail">No se han encontrado resultados</string>
     
     <string name="about">Acerca de</string>
+    <string name="txt_comments">Comentarios</string>
+    <string name="txt_no_comments">No hay comentarios, sé el primero en calificar este lugar</string>
+    <string name="empty_notif">No tienes notificaciones</string>
+    <string name="btn_notif">Ver Más</string>
     
 
 </resources>

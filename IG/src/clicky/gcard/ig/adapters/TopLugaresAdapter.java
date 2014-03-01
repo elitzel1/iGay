@@ -30,6 +30,7 @@ public class TopLugaresAdapter extends BaseAdapter {
     public class ViewHolder {
     	TextView pos;
         TextView name;
+        TextView estado;
         RatingBar calificacion;
     }
  
@@ -56,9 +57,11 @@ public class TopLugaresAdapter extends BaseAdapter {
             // Locate the TextView in listview_item.xml
             holder.pos = (TextView) view.findViewById(R.id.txtPos);
             holder.name = (TextView) view.findViewById(R.id.txtNombre);
+            holder.estado =(TextView)view.findViewById(R.id.txtEstados);
             holder.calificacion = (RatingBar) view.findViewById(R.id.rateLugar);
             holder.pos.setTextColor(Color.BLACK);
             holder.name.setTextColor(Color.BLACK);
+            
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -66,6 +69,7 @@ public class TopLugaresAdapter extends BaseAdapter {
         // Set the results into TextView
         holder.pos.setText(String.valueOf( (position+1) ) );
         holder.name.setText(lugaresList.get(position).getName());
+        holder.estado.setText(lugaresList.get(position).getEdo());
         holder.calificacion.setRating(lugaresList.get(position).getCalif());
  
         return view;

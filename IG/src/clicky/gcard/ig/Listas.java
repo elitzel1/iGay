@@ -10,6 +10,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseQuery.CachePolicy;
+
 import clicky.gcard.ig.adapters.ListaLugaresAdapter;
 import clicky.gcard.ig.adapters.SpinnerAdapterSpecial;
 import clicky.gcard.ig.adapters.TopLugaresAdapter;
@@ -79,32 +81,24 @@ OnListListener callback;
                 .inflate(R.layout.loading_item, null, false);
         
         tipo = getArguments() != null ? getArguments().getInt("tipo") : null;
+				
+		SpinnerAdapterSpecial s_adapter = new SpinnerAdapterSpecial(getActivity().getBaseContext(),getResources().getStringArray(R.array.categorias));
+		setUpBar(s_adapter);		
        
 	}
 	
-	 @Override
-	    public void onAttach(Activity activity) {
-	        super.onAttach(activity);
+	@Override
+    public void onAttach(Activity activity) {
+		super.onAttach(activity);
 	        
-	        try{
-	        	callback = (OnListListener) activity;
-	        }catch(ClassCastException e){
-	        	throw new ClassCastException(activity.toString()+ "Excepción");
-	        }
-	        this.activity=activity;
-	 }
-
-		
-		
-	 @Override
-	 public void onStart(){
-		 super.onStart();
-		 
-		 SpinnerAdapterSpecial s_adapter = new SpinnerAdapterSpecial(getActivity().getBaseContext(),getResources().getStringArray(R.array.categorias));
-	     setUpBar(s_adapter);
-	     
-	 }
-	 
+		try{
+			callback = (OnListListener) activity;
+        }catch(ClassCastException e){
+        	throw new ClassCastException(activity.toString()+ "Excepción");
+        }
+		this.activity=activity;
+	}
+	
 	private void setUpBar(SpinnerAdapterSpecial adapter){
 		
 		ActionBar bar = ((ActionBarActivity)activity).getSupportActionBar();
@@ -191,6 +185,7 @@ OnListListener callback;
                 "Lugares");
         query.orderByAscending("createdAt");
         query.whereEqualTo("categoria", category);
+        query.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
         query.findInBackground(new FindCallback<ParseObject>() {
 			
 			@Override
@@ -206,7 +201,7 @@ OnListListener callback;
 						item.setDesc((String) lugar.get("descripcion"));
 						item.setDir( lugar.getString("direccion"));
 						item.setEdo(lugar.getString("estado"));
-						item.setImagen(lugar.getParseFile("imagen"));
+						item.setImagen(lugar.getParseFile("imagen").getUrl());
 						item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 								lugar.getParseGeoPoint("localizacion").getLongitude()));
 						lugaresList.add(item);
@@ -230,6 +225,7 @@ OnListListener callback;
         query.orderByAscending("posicion");
         query.include("lugarId");
         query.whereEqualTo("categoria", categoria);
+        query.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
         query.findInBackground(new FindCallback<ParseObject>() {
 			
 			@Override
@@ -247,7 +243,7 @@ OnListListener callback;
 						item.setDesc( res.getString("descripcion"));
 						item.setDir( res.getString("direccion"));
 						item.setEdo(res.getString("estado"));
-						item.setImagen(res.getParseFile("imagen"));
+						item.setImagen(res.getParseFile("imagen").getUrl());
 						item.setGeo(new LatLng(res.getParseGeoPoint("localizacion").getLatitude(),
 								res.getParseGeoPoint("localizacion").getLongitude()));
 						lugaresList.add(item);

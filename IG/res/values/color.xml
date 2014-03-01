@@ -9,4 +9,5 @@
     <color name="negro">#000000</color>
     <color name="transparent_color">#00000000</color>
     <color name="morado_inicio">#9D40C4</color>
+    <color name="morado_transparente">#889D40C4</color>
 </resources>

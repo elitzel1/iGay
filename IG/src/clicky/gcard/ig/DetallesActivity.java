@@ -1,6 +1,5 @@
 package clicky.gcard.ig;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,7 +67,7 @@ public class DetallesActivity extends ActionBarActivity {
         private double lat,longitud;
       
         private LinearLayout layout;
-        private TextView txtDesc,txtDir,txtEdo;
+        private TextView txtDesc,txtDir,txtEdo,txtVacio;
         private RatingBar ratingLugar;
         private Button btnCom,btnMas;
        	private ImageView imgLugar;
@@ -111,16 +110,20 @@ public class DetallesActivity extends ActionBarActivity {
                 txtDesc = (TextView)findViewById(R.id.txtDesc);
                 txtDir = (TextView)findViewById(R.id.txtDir);
                 txtEdo = (TextView)findViewById(R.id.txtEdo);
+                txtVacio = (TextView)findViewById(R.id.vacio);
                 
                 ratingLugar = (RatingBar)findViewById(R.id.rateLugar);
                 
                 btnCom = (Button)findViewById(R.id.btnComment);
                 btnMas = (Button)findViewById(R.id.btnComentarios);
+                
+                txtVacio.setVisibility(View.GONE);
                 btnMas.setVisibility(View.GONE);
 
                 
 
                 imga.setImageResource(setupCategory(categoria));
+
                 txtDesc.setText(descripcion);
                 txtDir.setText(direccion);
           
@@ -134,8 +137,6 @@ public class DetallesActivity extends ActionBarActivity {
                 
                 footer = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 		.inflate(R.layout.loading_item, null, false);
-                
-                lugaresList = new ArrayList<Comentario>();
                 
                 setUpMap();
               
@@ -167,9 +168,9 @@ public class DetallesActivity extends ActionBarActivity {
         private int setupCategory(String cat){
         	int id = 0;
         
-        		if(cat.equals("Bares y Antros")){
-        			id = R.drawable.nsantro;
 
+    		if(cat.equals("Bares y Antros")){
+    			id = R.drawable.nsantro;
         		}else{
         			if(cat.equals("Comida")){
         				id=R.drawable.nsrestaurante;
@@ -201,8 +202,7 @@ public class DetallesActivity extends ActionBarActivity {
         				}
         			}
         		}
-        		
-        	return id;
+	return id;
         }
         
         public void setUpSomething(){
@@ -223,10 +223,10 @@ public class DetallesActivity extends ActionBarActivity {
                         imagen = b.getString("imagen");
                 }
         
-    
+ 
             user = ParseUser.getCurrentUser();
             if(user!=null)
-                    isactive=true;
+            	isactive=true;
         }
         
         public void setUpBar(){
@@ -326,22 +326,22 @@ public class DetallesActivity extends ActionBarActivity {
         }
         
         private void updateComment(final Dialog dialog,final String text,final float calif){
-                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Comentarios");
-        query.getInBackground(userComment.getCommentId(), new GetCallback<ParseObject>() {
-                public void done(final ParseObject object, ParseException e) {
-                        if (e == null) {
-                        object.put("comentario", text);
-                        object.put("calificacion", calif);
-                        object.saveInBackground(new SaveCallback() {
-                                public void done(ParseException e) {
-                                        updateCalif(dialog);
-                                }
+        	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Comentarios");
+        	query.getInBackground(userComment.getCommentId(), new GetCallback<ParseObject>() {
+        		public void done(final ParseObject object, ParseException e) {
+        			if (e == null) {
+        				object.put("comentario", text);
+        				object.put("calificacion", calif);
+        				object.saveInBackground(new SaveCallback() {
+        					public void done(ParseException e) {
+        						updateCalif(dialog);
+                            }
                         });
-                        }else { 
-                                e.printStackTrace();
-                        }
-                }
-        });
+                    }else { 
+                    	e.printStackTrace();
+                    }
+        		}
+        	});
         }
         
       private void updatePostList() {
@@ -366,6 +366,8 @@ public class DetallesActivity extends ActionBarActivity {
                         	pos = 4;
                         	btnMas.setVisibility(View.VISIBLE);
                         }
+                        if(pos == 0)
+                        	txtVacio.setVisibility(View.VISIBLE);
                         for (int i = 0; i < pos; i++) {
                         	ParseObject post = postList.get(i);
                         	Comentario coment = new Comentario();
@@ -392,20 +394,20 @@ public class DetallesActivity extends ActionBarActivity {
 
         
         private void updateCalif(final Dialog dialog){
-                HashMap<String, Object> params = new HashMap<String, Object>();
-                params.put("lugar", lugarId);
-                ParseCloud.callFunctionInBackground("comentario", params , new FunctionCallback<Object>() {
-                        @Override  
-                        public void done(Object result, ParseException e) {
-                            if (e == null) {
-                                    dialog.dismiss();
-                                    ratingLugar.setRating(Float.valueOf(result.toString()));
-                                    //updatePostList();
-                            }else{
-                                    Log.i("Error", e.toString());
-                            }
-                          }
-                        });
+	        HashMap<String, Object> params = new HashMap<String, Object>();
+	        params.put("lugar", lugarId);
+	        ParseCloud.callFunctionInBackground("comentario", params , new FunctionCallback<Object>() {
+	        	@Override  
+	            public void done(Object result, ParseException e) {
+	        		if (e == null) {
+	        			dialog.dismiss();
+	                    ratingLugar.setRating(Float.valueOf(result.toString()));
+	                    //updatePostList();
+	                }else{
+	                	Log.i("Error", e.toString());
+	                }
+	        	}
+	    	});
         }
         
         private void addCommentView(Comentario comentario){
@@ -440,19 +442,39 @@ public class DetallesActivity extends ActionBarActivity {
             return super.onCreateOptionsMenu(menu); 
         }
         
+//        
+//        @Override
+//        public boolean onOptionsItemSelected(MenuItem item) {
+//            // Handle presses on the action bar items
+//            switch (item.getItemId()) {
+//            case android.R.id.home:
+//            	Intent intent = NavUtils.getParentActivityIntent(this); 
+//            	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+//            	NavUtils.navigateUpTo(this, intent);
+//                 return true;
+//         case R.id.menu_item_share:
+//         		showShareDialog();
+//                return true;
+//
+//            return super.onCreateOptionsMenu(menu); 
+//        }
+        
         
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             // Handle presses on the action bar items
             switch (item.getItemId()) {
-            case android.R.id.home:
-            	Intent intent = NavUtils.getParentActivityIntent(this); 
-            	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-            	NavUtils.navigateUpTo(this, intent);
-                 return true;
-         case R.id.menu_item_share:
-         		showShareDialog();
-                return true;
+            	case android.R.id.home:
+            		Intent intent = NavUtils.getParentActivityIntent(this); 
+            		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+            		NavUtils.navigateUpTo(this, intent);
+            		// NavUtils.getParentActivityIntent(this);
+            		return true;
+            	case R.id.menu_item_share:
+            		Log.i("Share", "Menu");
+            		//publishFeedDialog();
+            		showShareDialog();
+                    return true;
                 default:
                     return super.onOptionsItemSelected(item);
             }
@@ -466,6 +488,7 @@ public class DetallesActivity extends ActionBarActivity {
                     FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
 
         	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this).setName(nombre).setCaption(categoria)
+
         			.setDescription(descripcion).setPicture(imagen)
             .setLink("https://maps.google.com/?q="+lat+"+"+longitud)
             .build();
@@ -478,7 +501,7 @@ public class DetallesActivity extends ActionBarActivity {
         	
         	
         }        
-        
+             
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);

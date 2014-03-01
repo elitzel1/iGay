@@ -202,7 +202,6 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	public void setUpMarker(List<Lugares> listaLugares){
 		mapa.clear();
 		markersList.clear();
-		
 		mapa.addMarker(new MarkerOptions()
 		.position(coordenadas).
 		icon(BitmapDescriptorFactory.fromResource(R.drawable.pinubicacion)));
@@ -222,42 +221,30 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 			Log.i("Markers", "Antros: "+i);
 			id = R.drawable.pinantro;
 
-		}else{
-			if(cat.equals("Comida")){
-				Log.i("Markers", "Comida: "+i);
-				id=R.drawable.pinrestaurante;
+		}else if(cat.equals("Comida")){
+			Log.i("Markers", "Comida: "+i);
+			id=R.drawable.pinrestaurante;
 			
-			}else{
-				if(cat.equals("Cafeteria")){
-					Log.i("Markers", "Cafeteria: "+i);
-					id=R.drawable.pincafe;
+		}else if(cat.equals("Cafeteria")){
+			Log.i("Markers", "Cafeteria: "+i);
+			id=R.drawable.pincafe;
 			
-				}else{
-					if(cat.equals("Hotel")){
-						Log.i("Markers", "Hotel: "+i);
-						id=R.drawable.pinhotel;
-	
-					}else{
-						if(cat.equals("Cultural")){
-							Log.i("Markers", "Cultural: "+i);
-							id=R.drawable.pincultural;
-			
-						}else{
-							if(cat.equals("Tienda")){
-								Log.i("Markers", "Tienda: "+i);
-								id=R.drawable.pintienda;
-			
-							}else{
-								if(cat.equals("Cuidado Personal")){
-									Log.i("Markers", "CP: "+i);
-									id=R.drawable.pincpersonal;
+		}else if(cat.equals("Hotel")){
+			Log.i("Markers", "Hotel: "+i);
+			id=R.drawable.pinhotel;
+
+		}else if(cat.equals("Cultural")){
+			Log.i("Markers", "Cultural: "+i);
+			id=R.drawable.pincultural;
 		
-								}
-							}
-						}
-					}
-				}
-			}
+		}else if(cat.equals("Tienda")){
+			Log.i("Markers", "Tienda: "+i);
+			id=R.drawable.pintienda;
+			
+		}else if(cat.equals("Cuidado Personal")){
+			Log.i("Markers", "CP: "+i);
+			id=R.drawable.pincpersonal;
+		
 		}
 		
 		if(id!=0){
@@ -314,7 +301,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		                    item.setEdo(lugar.getString("estado"));
 		                    item.setDesc((String) lugar.get("descripcion"));
 		                    item.setDir((String) lugar.get("direccion"));
-		                    item.setImagen(lugar.getParseFile("imagen"));
+		                    item.setImagen(lugar.getParseFile("imagen").getUrl());
 		                    item.setGeo(new LatLng(lugar.getParseGeoPoint("localizacion").getLatitude(),
 		                                    lugar.getParseGeoPoint("localizacion").getLongitude()));
 		                    lugaresList.add(item);
