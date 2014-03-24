@@ -244,8 +244,8 @@ public final class R {
 		public static final int abc_textfield_searchview_holo_light = 0x7f020054;
 		public static final int abc_textfield_searchview_right_holo_dark = 0x7f020055;
 		public static final int abc_textfield_searchview_right_holo_light = 0x7f020056;
-		public static final int fab__gradient = 0x7f020093;
-		public static final int fab__gradient_light = 0x7f020094;
+		public static final int fab__gradient = 0x7f020096;
+		public static final int fab__gradient_light = 0x7f020097;
 	}
 	public static final class id {
 		public static final int action_bar = 0x7f060021;

@@ -50,15 +50,14 @@
 
  </LinearLayout>
 
- <Button
+ <ImageView
      android:id="@+id/button1"
-     android:onClick="updateLocation"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:layout_alignParentRight="true"
      android:layout_alignParentTop="true"
      android:layout_marginTop="42dp"
-     android:text="Button" />
-
+     android:src="@drawable/ubicacion"
+     android:onClick="updateLocation" />
 
  </RelativeLayout>
