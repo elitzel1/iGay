@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import clicky.gcard.ig.R;
@@ -28,7 +29,7 @@ public class TopLugaresAdapter extends BaseAdapter {
     }
  
     public class ViewHolder {
-    	TextView pos;
+    	ImageView pos;
         TextView name;
         TextView estado;
         RatingBar calificacion;
@@ -55,11 +56,10 @@ public class TopLugaresAdapter extends BaseAdapter {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.top_list_item, null);
             // Locate the TextView in listview_item.xml
-            holder.pos = (TextView) view.findViewById(R.id.txtPos);
+            holder.pos = (ImageView) view.findViewById(R.id.txtPos);
             holder.name = (TextView) view.findViewById(R.id.txtNombre);
             holder.estado =(TextView)view.findViewById(R.id.txtEstados);
             holder.calificacion = (RatingBar) view.findViewById(R.id.rateLugar);
-            holder.pos.setTextColor(Color.BLACK);
             holder.name.setTextColor(Color.BLACK);
             
             view.setTag(holder);
@@ -67,10 +67,30 @@ public class TopLugaresAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         // Set the results into TextView
-        holder.pos.setText(String.valueOf( (position+1) ) );
         holder.name.setText(lugaresList.get(position).getName());
         holder.estado.setText(lugaresList.get(position).getEdo());
         holder.calificacion.setRating(lugaresList.get(position).getCalif());
+        
+        switch(position){
+        	case 0:
+        		holder.pos.setImageResource(R.drawable.uno);
+        		break;
+        	case 1:
+        		holder.pos.setImageResource(R.drawable.dos);
+        		break;
+        	case 2:
+        		holder.pos.setImageResource(R.drawable.tres);
+        		break;
+        	case 3:
+        		holder.pos.setImageResource(R.drawable.cuatro);
+        		break;	
+        	case 4:
+        		holder.pos.setImageResource(R.drawable.cinco);
+        		break;
+        	default:
+        		holder.pos.setImageResource(R.drawable.uno);
+        		break;
+        }
  
         return view;
     }

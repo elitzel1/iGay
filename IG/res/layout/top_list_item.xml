@@ -6,12 +6,12 @@
     android:padding="16dp"
     android:orientation="vertical" >
     
-    <TextView 
+    <ImageView 
         android:id="@+id/txtPos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:contentDescription="@string/img_pos"/>
 
     <TextView
         android:id="@+id/txtNombre"

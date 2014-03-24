@@ -58,6 +58,6 @@
      android:layout_alignParentRight="true"
      android:layout_alignParentTop="true"
      android:layout_marginTop="42dp"
-     android:text="Button" />
+     android:background="@drawable/btn_ubicacion" />
 
  </RelativeLayout>
