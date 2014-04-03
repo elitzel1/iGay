@@ -20,19 +20,6 @@
     	android:onClick="btnAction"
         android:contentDescription="@string/img_log"/>
     
-    <Button
-        android:id="@+id/btnFacebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/botones"
-        android:layout_centerHorizontal="true"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:onClick="btnAction"
-        android:background="@drawable/com_facebook_button_blue"
-        android:textColor="@android:color/white"
-        android:text="@string/btn_face" />
-    
     <LinearLayout 
         android:id="@+id/botones"
         android:layout_width="match_parent"
@@ -120,6 +107,17 @@
 	        android:paddingLeft="5dp"
 	        android:background="@color/transparent_color"
 	        android:text="@string/btn_forget"/>
+	    
+	    <Button
+	        android:id="@+id/btnFacebook"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingRight="5dp"
+	        android:onClick="btnAction"
+	        android:background="@drawable/com_facebook_button_blue"
+	        android:textColor="@android:color/white"
+	        android:text="@string/btn_face" />
 	
 	    <Button
 	        android:id="@+id/btnLog"
@@ -184,6 +182,17 @@
 	        android:hint="@string/hint_confirm"
 	        android:textColor="@color/morado_inicio"
 	        android:inputType="textPassword" />
+	    
+	    <Button
+	        android:id="@+id/btnFacebook"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingRight="5dp"
+	        android:onClick="btnAction"
+	        android:background="@drawable/com_facebook_button_blue"
+	        android:textColor="@android:color/white"
+	        android:text="@string/btn_face" />
 	
 	    <Button
 	        android:id="@+id/btnReg"
